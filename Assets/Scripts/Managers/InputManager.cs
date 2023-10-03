@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class InputManager : MonoBehaviour
+public class InputManager : MonoSingleton<InputManager>
 {
     PlayerInputActions _playerinputActions;
 
@@ -15,7 +15,6 @@ public class InputManager : MonoBehaviour
     {
         _playerinputActions = new PlayerInputActions();
         _playerinputActions.Player.Enable();
-        
     }
 
     void OnEnable()
