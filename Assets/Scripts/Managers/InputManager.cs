@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class InputManager : MonoSingleton<InputManager>
@@ -11,14 +10,12 @@ public class InputManager : MonoSingleton<InputManager>
 
 
 
-    void Awake()
-    {
-        _playerinputActions = new PlayerInputActions();
-        _playerinputActions.Player.Enable();
-    }
+
 
     void OnEnable()
     {
+        _playerinputActions = new PlayerInputActions();
+        _playerinputActions.Player.Enable();
         _playerinputActions.Player.Move.performed += MovePerformed;
         _playerinputActions.Player.Move.canceled += MoveCanceled;
         _playerinputActions.Player.Look.performed += LookPerformed;
