@@ -127,6 +127,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Tap"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Minimap Default"",
+                    ""type"": ""Button"",
+                    ""id"": ""dad78449-129e-44a8-83f5-fe3987ccee01"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Tap"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -162,6 +171,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Minimap Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c5e163e3-0ca3-47f8-9bba-8cb0faa2986d"",
+                    ""path"": ""<Keyboard>/home"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minimap Default"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -175,6 +195,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_MinimapZoom = m_UI.FindAction("Minimap Zoom", throwIfNotFound: true);
+        m_UI_MinimapDefault = m_UI.FindAction("Minimap Default", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -291,11 +312,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_MinimapZoom;
+    private readonly InputAction m_UI_MinimapDefault;
     public struct UIActions
     {
         private @PlayerInputActions m_Wrapper;
         public UIActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @MinimapZoom => m_Wrapper.m_UI_MinimapZoom;
+        public InputAction @MinimapDefault => m_Wrapper.m_UI_MinimapDefault;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -308,6 +331,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @MinimapZoom.started += instance.OnMinimapZoom;
             @MinimapZoom.performed += instance.OnMinimapZoom;
             @MinimapZoom.canceled += instance.OnMinimapZoom;
+            @MinimapDefault.started += instance.OnMinimapDefault;
+            @MinimapDefault.performed += instance.OnMinimapDefault;
+            @MinimapDefault.canceled += instance.OnMinimapDefault;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -315,6 +341,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @MinimapZoom.started -= instance.OnMinimapZoom;
             @MinimapZoom.performed -= instance.OnMinimapZoom;
             @MinimapZoom.canceled -= instance.OnMinimapZoom;
+            @MinimapDefault.started -= instance.OnMinimapDefault;
+            @MinimapDefault.performed -= instance.OnMinimapDefault;
+            @MinimapDefault.canceled -= instance.OnMinimapDefault;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -340,5 +369,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnMinimapZoom(InputAction.CallbackContext context);
+        void OnMinimapDefault(InputAction.CallbackContext context);
     }
 }

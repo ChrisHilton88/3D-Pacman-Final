@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,6 +22,7 @@ public class MinimapZoom : MonoBehaviour
         _playerInputActions = new PlayerInputActions();
         _playerInputActions.UI.Enable();
         _playerInputActions.UI.MinimapZoom.started += MinimapZoomStarted;
+        _playerInputActions.UI.MinimapDefault.started += MinimapDefaultStarted;
     }
 
     void Start()
@@ -32,6 +34,7 @@ public class MinimapZoom : MonoBehaviour
         _lerpCoroutine = null;
     }
 
+    #region Events
     void MinimapZoomStarted(InputAction.CallbackContext context)
     {
         if (_lerpCoroutine == null)     // If coroutine reference is NULL - assign and run the coroutine
@@ -51,16 +54,31 @@ public class MinimapZoom : MonoBehaviour
             return;     
     }
 
+    void MinimapDefaultStarted(InputAction.CallbackContext context)
+    {
+        if(_lerpCoroutine == null)
+        {
+            if (context.ReadValue<float>() == 1)
+            {
+                ZoomDefaultHomePosition();
+            }
+            else
+                return;
+        }
+    }
+    #endregion
+
+    // Zoom in
     (float newFOV, float previousFOV) ZoomIn()     
     {
         int previousFovIndex = _currentFOVIndex;        
         _currentFOVIndex = (_currentFOVIndex + 1) % _zoomLevel.Length;
-        Debug.Log("Remainder value: " + (_currentFOV + 1) % _zoomLevel.Length);     
-        _cam.fieldOfView = _zoomLevel[_currentFOVIndex];        
-
+        _cam.fieldOfView = _zoomLevel[_currentFOVIndex];
+        Debug.Log(_zoomLevel[_currentFOVIndex]);
         return (_zoomLevel[_currentFOVIndex], _zoomLevel[previousFovIndex]);        
     }
-
+    
+    // Zoom out
     (float newFOV, float previousFOV) ZoomOut()
     {
         int previousFovIndex = _currentFOVIndex;
@@ -70,6 +88,14 @@ public class MinimapZoom : MonoBehaviour
         return (_zoomLevel[_currentFOVIndex], _zoomLevel[previousFovIndex]);
     }
 
+    // Return the Minimap view to the default FOV 0f 60 instantly
+    void ZoomDefaultHomePosition()
+    {
+        _currentFOVIndex = 0;
+        _cam.fieldOfView = _zoomLevel[_currentFOVIndex];
+    }
+
+    // Smooth out the transition between FOV's
     IEnumerator LerpThroughFOVS(float currentFOV, float targetFOV)
     {
         float interpolationProgress = 0;        // Starting time for progress
@@ -79,7 +105,7 @@ public class MinimapZoom : MonoBehaviour
             interpolationProgress += Time.deltaTime / _lerpDuration;
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, interpolationProgress);
             _cam.fieldOfView = newFOV;
-            yield return null;      // Wait 1 frame
+            yield return null;      
         }
 
         _lerpCoroutine = null;
@@ -88,6 +114,7 @@ public class MinimapZoom : MonoBehaviour
     void OnDisable()
     {
         _playerInputActions.UI.MinimapZoom.performed -= MinimapZoomStarted;
+        _playerInputActions.UI.MinimapDefault.started -= MinimapDefaultStarted;
         _playerInputActions.UI.Disable();
     }
 }

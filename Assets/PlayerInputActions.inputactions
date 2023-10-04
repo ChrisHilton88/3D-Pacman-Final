@@ -105,6 +105,15 @@
                     "processors": "",
                     "interactions": "Tap",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Minimap Default",
+                    "type": "Button",
+                    "id": "dad78449-129e-44a8-83f5-fe3987ccee01",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Tap",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -140,6 +149,17 @@
                     "action": "Minimap Zoom",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c5e163e3-0ca3-47f8-9bba-8cb0faa2986d",
+                    "path": "<Keyboard>/home",
+                    "interactions": "Tap",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Minimap Default",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
