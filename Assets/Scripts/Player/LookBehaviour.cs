@@ -6,7 +6,7 @@ public class LookBehaviour : MonoBehaviour
     public float _sensitivityModifierX;
     public float _sensitivityModifierY;
 
-    private float _maxPitch = 10;
+    private float _maxPitch = 25;
 
     private float xRotation;
     private float yRotation;
