@@ -7,7 +7,9 @@ public class UIManager : MonoSingleton<UIManager>
 {
     [SerializeField] private TextMeshProUGUI _totalPellets;
     [SerializeField] private TextMeshProUGUI _playerPellets;
+    [SerializeField] private TextMeshProUGUI _totalScore;
     [SerializeField] private PelletManager _pelletManager;
+    [SerializeField] private ScoreManager _scoreManager;
 
 
     void OnEnable()
@@ -31,6 +33,7 @@ public class UIManager : MonoSingleton<UIManager>
         yield return new WaitForEndOfFrame();
         _totalPellets.text = "Remaining Pellets: " + _pelletManager.TotalPellets.ToString();        
         _playerPellets.text = "Player Pellets: " + _pelletManager.PlayerPellets.ToString();
+        _totalScore.text = "Total Score: " + _scoreManager.TotalScore.ToString();
     }
 
     IEnumerator PelletDisplayRoutine()
@@ -38,6 +41,7 @@ public class UIManager : MonoSingleton<UIManager>
         yield return new WaitForEndOfFrame();
         _totalPellets.text = "Remaining Pellets: " + _pelletManager.TotalPellets.ToString();
         _playerPellets.text = "Player Pellets: " + _pelletManager.PlayerPellets.ToString();
+        _totalScore.text = "Total Score: " + _scoreManager.TotalScore.ToString();
     }
 
     void OnDisable()
