@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 CalculateMovement()
     {
         Vector3 forwardDirection = transform.forward * _moveDirection.z + transform.right * _moveDirection.x;
-        // (0, 0, 1) * 0
         Vector3 movementVector = forwardDirection * _speed * Time.deltaTime;
         _cc.Move(movementVector);
         return movementVector;
