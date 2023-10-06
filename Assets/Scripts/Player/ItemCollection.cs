@@ -16,13 +16,15 @@ public class ItemCollection : MonoBehaviour
         if(other.tag != null)       // If other.tag string exists in the Dictionary
         {
             onItemCollected?.Invoke(value);     // Pass value through the event to subscribers
-            Debug.Log("Key for tag: " + tagToFind + ": " + key);
-            Debug.Log("Value for tag: " + tagToFind + ": " + value);
+            Debug.Log("Key for tag: " + key);
+            Debug.Log("Value for tag: " + value);
         }
         else
         {
-            Debug.LogWarning("Tag not found in dictionary: " + other.tag);
+            Debug.LogWarning("Tag not found:: " + other.tag);
         }
+
+        other.gameObject.SetActive(false);  
     }
 
     (string key, int value) GetKeyAndValueInDictionary(string tagToFind)

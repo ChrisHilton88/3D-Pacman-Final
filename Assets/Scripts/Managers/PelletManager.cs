@@ -1,18 +1,20 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 // Respsonsible for all things related to the Pellet GameObject
-public class PelletManager : MonoSingleton<PelletManager>   
+public class PelletManager : MonoSingleton<PelletManager>
 {
     private int _maxPellets = 240;
     private int _pelletIncrement = 1;
     private static int _totalPellets;       // Global variable which holds reference to the total pool of pellets
     private int _playerPellets;
+   
 
     #region Properties
     public int TotalPellets
     {
-        get { return _totalPellets; }   
-        private set { _totalPellets = value;}
+        get { return _totalPellets; }
+        private set { _totalPellets = value; }
     }
     public int PlayerPellets
     {
@@ -39,10 +41,10 @@ public class PelletManager : MonoSingleton<PelletManager>
         {
             TotalPellets -= _pelletIncrement;
             PlayerPellets += _pelletIncrement;
-            Debug.Log(TotalPellets);
-            Debug.Log(PlayerPellets);   
         }
         else
             Debug.Log("No more pellets");
     }
+
+    
 }
