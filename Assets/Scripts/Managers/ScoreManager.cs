@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreManager : MonoSingleton<ScoreManager>
 {
     private int _increment = 10;
     private static int _totalScore;
@@ -13,10 +13,15 @@ public class ScoreManager : MonoBehaviour
     }
 
     private Dictionary<string, int> _bonusItemsDictionary = new Dictionary<string, int>();   
+    public Dictionary<string, int> BonusItemsDictionary
+    {
+        get { return _bonusItemsDictionary; }
+        private set { _bonusItemsDictionary = value; }
+    }
 
     void OnEnable()
     {
-        PelletCollection.onPelletCollected += UpdateTotalScore;
+        ItemCollection.onItemCollected += UpdateTotalScore;
     }
 
     void Start()
@@ -39,13 +44,13 @@ public class ScoreManager : MonoBehaviour
         _bonusItemsDictionary["Blue Key"] = 5000;
     }
 
-    void UpdateTotalScore()
+    void UpdateTotalScore(int value)
     {
-        _totalScore += _increment;
+        TotalScore += value;
     }
 
     void OnDisable()
     {
-        PelletCollection.onPelletCollected -= UpdateTotalScore;
+        ItemCollection.onItemCollected -= UpdateTotalScore;
     }
 }

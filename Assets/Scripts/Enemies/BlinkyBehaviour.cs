@@ -16,7 +16,7 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void OnEnable()
     {
-        PelletCollection.onPelletCollected += PelletCollected;
+        ItemCollection.onItemCollected += PelletCollected;
     }
 
     void Start()
@@ -43,7 +43,7 @@ public class BlinkyBehaviour : MonoBehaviour
     }
 
     // Event
-    void PelletCollected()
+    void PelletCollected(int value)
     {
         IncrementAgentSpeed();
     }
@@ -57,6 +57,6 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void OnDisable()
     {
-        PelletCollection.onPelletCollected -= PelletCollected; 
+        ItemCollection.onItemCollected -= PelletCollected; 
     }
 }

@@ -25,7 +25,7 @@ public class PelletManager : MonoSingleton<PelletManager>
 
     void OnEnable()
     {
-        PelletCollection.onPelletCollected += PelletCollected;
+        ItemCollection.onItemCollected += PelletCollected;
     }
 
     void Start()
@@ -33,7 +33,7 @@ public class PelletManager : MonoSingleton<PelletManager>
         TotalPellets = _maxPellets;
     }
 
-    void PelletCollected()
+    void PelletCollected(int value)
     {
         if (TotalPellets > 0)
         {

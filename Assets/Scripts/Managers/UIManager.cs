@@ -14,7 +14,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     void OnEnable()
     {
-        PelletCollection.onPelletCollected += UpdateTotalPelletDisplay;
+        ItemCollection.onItemCollected += UpdateUIDisplay;
     }
 
     void Start()
@@ -22,9 +22,18 @@ public class UIManager : MonoSingleton<UIManager>
         StartCoroutine(InitialiseUIValues());   
     }
 
-    void UpdateTotalPelletDisplay()
+    void UpdateUIDisplay(int value)
     {
-        StartCoroutine(PelletDisplayRoutine()); 
+        // Check if it is a Pellet through the value parameter
+        // If it is run this
+        if (value == 10)     // meaning a "Pellet"
+        {
+            StartCoroutine(PelletDisplayRoutine());
+        }
+        else
+        {
+            StartCoroutine(BonusItemDisplayeRoutine());
+        }
     }
 
     // There was a delay in loading initial values so it needs to be one of the last things
@@ -36,16 +45,26 @@ public class UIManager : MonoSingleton<UIManager>
         _totalScore.text = "Total Score: " + _scoreManager.TotalScore.ToString();
     }
 
+    // Update display if the player collects a Pellet
     IEnumerator PelletDisplayRoutine()
     {
         yield return new WaitForEndOfFrame();
         _totalPellets.text = "Remaining Pellets: " + _pelletManager.TotalPellets.ToString();
         _playerPellets.text = "Player Pellets: " + _pelletManager.PlayerPellets.ToString();
         _totalScore.text = "Total Score: " + _scoreManager.TotalScore.ToString();
+        Debug.Log("Updating Pellet Display & Total Score ONLY");
+    }
+
+    // Doesn't update Pellets as Bonus Items do not count towards the Total Pellets
+    IEnumerator BonusItemDisplayeRoutine()
+    {
+        yield return new WaitForEndOfFrame();
+        _totalScore.text = "Total Score: " + _scoreManager.TotalScore.ToString();
+        Debug.Log("Updating Total Score Display ONLY");
     }
 
     void OnDisable()
     {
-        PelletCollection.onPelletCollected -= UpdateTotalPelletDisplay;
+        ItemCollection.onItemCollected -= UpdateUIDisplay;
     }
 }
