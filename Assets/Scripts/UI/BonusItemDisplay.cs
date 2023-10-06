@@ -43,7 +43,7 @@ public class BonusItemDisplay : MonoBehaviour
             // TODO - Check what round it is so we can pass in the correct prefabs and timers. E.g. Round 1 displays Cherry first for 6 seconds
             //(GameObject prefab, float timer) = CheckRound();
 
-            StartCoroutine(DisplayBonusItemRoutine(prefab, timer));
+            //StartCoroutine(DisplayBonusItemRoutine(prefab, timer));
         }
         // Third, check if the players total is 170
         else if (PelletManager.Instance.PlayerPellets == _displaySecondBonusItem)
@@ -51,7 +51,7 @@ public class BonusItemDisplay : MonoBehaviour
             // Check if first item is still active in Hierarchy
             // If not - Display second item
 
-            StartCoroutine(DisplayBonusItemRoutine(prefab, timer));
+            //StartCoroutine(DisplayBonusItemRoutine(prefab, timer));
         }
     }
 

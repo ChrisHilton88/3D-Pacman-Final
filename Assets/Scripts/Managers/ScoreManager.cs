@@ -37,7 +37,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         _bonusItemsDictionary["Cherry"] = 100;
         _bonusItemsDictionary["Strawberry"] = 300;
         _bonusItemsDictionary["Orange"] = 500;
-        _bonusItemsDictionary["Red Apple"] = 700;
+        _bonusItemsDictionary["Apple"] = 700;
         _bonusItemsDictionary["Melon"] = 1000;
         _bonusItemsDictionary["Ship"] = 2000;
         _bonusItemsDictionary["Bell"] = 3000;
