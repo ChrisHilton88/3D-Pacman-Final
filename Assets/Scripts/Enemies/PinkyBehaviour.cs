@@ -1,18 +1,22 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent), typeof(CapsuleCollider), typeof(Animator))]
-public class BlinkyBehaviour : MonoBehaviour
+public class PinkyBehaviour : MonoBehaviour
 {
+
     private int _maxSpeed = 10;
 
     NavMeshAgent _agent;
     [SerializeField] private Transform _player;
     [SerializeField] private Transform _homePos;
+    [SerializeField] private Transform _forwardPos;
 
-    private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
+    private const float _speedIncrement = 0.02f;
 
+    // Blinky starts directly above the exit
+    // As soon as Blinky moves out of the doorway, Pinky can leave
+    // Pinky speed is the same as Blinky & Inky, which means that this AI can also subscrie to the pellet collecting event
 
     void OnEnable()
     {
@@ -21,15 +25,17 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();  
+        _agent = GetComponent<NavMeshAgent>();
     }
 
     void FixedUpdate()
     {
-        _agent.destination = _player.position;
+        Vector3 destination = _forwardPos.position;      // Destination is equal to the players forward position GameObject
+        _agent.destination = destination;       
+        Debug.DrawLine(transform.position, destination, Color.red);
     }
 
-    // Increments agents speed everytime a pellet is collected
+    // TODO - When Reset level takes place, reset enemy speed
     void IncrementAgentSpeed()
     {
         if (_agent.speed < _maxSpeed)
@@ -47,15 +53,8 @@ public class BlinkyBehaviour : MonoBehaviour
         IncrementAgentSpeed();
     }
 
-    // TODO - Player position doesn't need to be updated 60 times per second, limit this time.
-    // Start Coroutine when game starts
-    //IEnumerator UpdatePlayerPos()
-    //{
-
-    //}
-
     void OnDisable()
     {
-        ItemCollection.onItemCollected -= PelletCollected; 
+        ItemCollection.onItemCollected -= PelletCollected;
     }
 }

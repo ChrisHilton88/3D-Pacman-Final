@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RoundManager : MonoBehaviour
+public class RoundManager : MonoSingleton<RoundManager>
 {
     [SerializeField] private RoundData[] levels;        // Open in Inspector to assign values
     
@@ -17,5 +17,10 @@ public class RoundManager : MonoBehaviour
         {
             Debug.Log($"Round: {level.round}, Bonus: {level.bonus}, Time: {level.time}");
         }
+    }
+
+    public void UpdateRoundData()
+    {
+
     }
 }

@@ -25,7 +25,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     void UpdateUIDisplay(int value)
     {
-        if(value == 5)
+        if(value == ScoreManager.Instance.BonusItemsDictionary["Pellet"])
         {
             StartCoroutine(PelletDisplayRoutine());
         }
