@@ -4,8 +4,10 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent), typeof(CapsuleCollider), typeof(Animator))]
 public class PinkyBehaviour : MonoBehaviour
 {
-
     private int _maxSpeed = 10;
+
+    private bool _canStart;
+    public bool CanStart { get { return _canStart; } private set { _canStart = value; } }   
 
     NavMeshAgent _agent;
     [SerializeField] private Transform _player;
@@ -13,6 +15,8 @@ public class PinkyBehaviour : MonoBehaviour
     [SerializeField] private Transform _forwardPos;
 
     private const float _speedIncrement = 0.02f;
+
+    Vector3 newDestination;
 
     // Blinky starts directly above the exit
     // As soon as Blinky moves out of the doorway, Pinky can leave
@@ -25,14 +29,26 @@ public class PinkyBehaviour : MonoBehaviour
 
     void Start()
     {
+        _canStart = false;
         _agent = GetComponent<NavMeshAgent>();
     }
 
     void FixedUpdate()
     {
-        Vector3 destination = _forwardPos.position;      // Destination is equal to the players forward position GameObject
-        _agent.destination = destination;       
-        Debug.DrawLine(transform.position, destination, Color.red);
+        if(_canStart == true)
+        {
+            newDestination = _forwardPos.position;
+            Debug.DrawLine(transform.position, newDestination, Color.red);
+        }
+        else
+        {
+            return;
+            // Stay in the box
+            //newDestination = 
+            Debug.DrawLine(transform.position, newDestination, Color.red);
+        }
+
+        _agent.destination = newDestination;       
     }
 
     // TODO - When Reset level takes place, reset enemy speed
@@ -45,6 +61,12 @@ public class PinkyBehaviour : MonoBehaviour
             _agent.speed = _maxSpeed;
             return;
         }
+    }
+
+    // Once Blinky has moved outside of his start box - Set destination for Pinky to start moving
+    public void SetDestination()
+    {
+        CanStart = true;
     }
 
     // Event
