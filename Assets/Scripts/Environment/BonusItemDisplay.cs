@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 // Responsible for displaying the fruit on the map
 public class BonusItemDisplay : MonoBehaviour

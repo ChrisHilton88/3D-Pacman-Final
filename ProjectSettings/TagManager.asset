@@ -9,6 +9,13 @@ TagManager:
   - Pellet
   - Cherry
   - StartBox
+  - Apple
+  - Strawberry
+  - Melon
+  - Bell
+  - Key
+  - Ship
+  - Power Pellet
   layers:
   - Default
   - TransparentFX
