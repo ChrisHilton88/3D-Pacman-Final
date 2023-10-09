@@ -2,25 +2,87 @@ using UnityEngine;
 
 public class RoundManager : MonoSingleton<RoundManager>
 {
-    [SerializeField] private RoundData[] levels;        // Open in Inspector to assign values
-    
+    private int _currentRound;
+    public int CurrentRound
+    {
+        get { return _currentRound; }
+        private set { _currentRound = value; }
+    }
+    private int _maxRounds = 22;
+
+    private RoundData[] _levels = new RoundData[21];
+    public RoundData[] Levels
+    {
+        get { return _levels; }
+        set { _levels = value; }
+    }
 
     void Start()
     {
-        LoopThroughArray(); 
+        _currentRound = 1;  
+        SetInitialLevelValues();
     }
 
-    // TODO - Hard code all values, as making adjustments to the array can cause the values to be lost in the Inspector
-    void LoopThroughArray()
+    RoundData[] SetInitialLevelValues()
     {
-        foreach (RoundData level in levels)
+        new RoundData(1, GetBonusItemValue("Cherry"), 6);
+        new RoundData(2, GetBonusItemValue("StrawBerry"), 5);
+        new RoundData(3, GetBonusItemValue("Orange"), 4);
+        new RoundData(4, GetBonusItemValue("Orange"), 3);
+        new RoundData(5, GetBonusItemValue("Apple"), 2);
+        new RoundData(6, GetBonusItemValue("Apple"), 5);
+        new RoundData(7, GetBonusItemValue("Melon"), 2);
+        new RoundData(8, GetBonusItemValue("Melon"), 2);
+        new RoundData(9, GetBonusItemValue("Ship"), 1);
+        new RoundData(10, GetBonusItemValue("Ship"), 5);
+        new RoundData(11, GetBonusItemValue("Bell"), 2);
+        new RoundData(12, GetBonusItemValue("Bell"), 1);
+        new RoundData(13, GetBonusItemValue("Key"), 1);
+        new RoundData(14, GetBonusItemValue("Key"), 3);
+        new RoundData(15, GetBonusItemValue("Key"), 1);
+        new RoundData(16, GetBonusItemValue("Key"), 1);
+        new RoundData(17, GetBonusItemValue("Key"), 0);
+        new RoundData(18, GetBonusItemValue("Key"), 1);
+        new RoundData(19, GetBonusItemValue("Key"), 0);
+        new RoundData(20, GetBonusItemValue("Key"), 0);
+        new RoundData(21, GetBonusItemValue("Key"), 0);
+
+        return _levels;
+    }
+
+    string GetBonusItemValue(string itemName)
+    {
+        if (ScoreManager.Instance.BonusItemsDictionary.ContainsKey(itemName))
         {
-            Debug.Log($"Round: {level.round}, Bonus: {level.bonus}, Time: {level.time}");
+            return ScoreManager.Instance.BonusItemsDictionary[itemName].ToString();
+        }
+        else
+        {
+            return "Item not found";
         }
     }
 
-    public void UpdateRoundData()
+    public void IncrementRound()
     {
+        if (CurrentRound >= _maxRounds)
+            CurrentRound = 1;
+        else
+            CurrentRound++;
+    }
 
+    public RoundData CheckRound()
+    {
+        RoundData currentRoundData = null;
+
+        foreach (var roundData in _levels)
+        {
+            if (roundData.round == CurrentRound)
+            {
+                currentRoundData = roundData;
+                break;      // Exits loop once matching round data is found 
+            }
+        }
+
+        return currentRoundData;    
     }
 }

@@ -45,6 +45,4 @@ public class PelletManager : MonoSingleton<PelletManager>
         else
             Debug.Log("No more pellets");
     }
-
-    
 }

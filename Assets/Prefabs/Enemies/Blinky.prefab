@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6685547328515581379}
   m_Layer: 0
   m_Name: Blinky
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 8672461699607103665}
   - component: {fileID: 4655711257641894563}
   - component: {fileID: 7373328518875765187}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
