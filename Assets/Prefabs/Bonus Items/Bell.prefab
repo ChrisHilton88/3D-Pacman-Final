@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 2016441478487341890}
   - component: {fileID: 2016441478488610410}
   - component: {fileID: 2016441478489534484}
-  m_Layer: 6
+  - component: {fileID: 3382614343968715618}
+  m_Layer: 0
   m_Name: Bell
-  m_TagString: Untagged
+  m_TagString: Bell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016441478487602956}
-  m_LocalRotation: {x: -0.000000016660005, y: 7.4476023e-16, z: 0.000000044703484, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 2.5, z: -11}
   m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 1
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3382614343968715618
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016441478487602956}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.17356323, y: 0.17324074, z: 0.17356323}
+  m_Center: {x: -7.583727e-16, y: -0.08131921, z: -1.2519015e-17}

@@ -11,6 +11,7 @@ public class ItemCollection : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         string tagToFind = other.tag;       // Cache the other.tag reference
+        Debug.Log(tagToFind);
         (string key, int value) = GetKeyAndValueInDictionary(tagToFind);        // Cache the Tuple
 
         if(other.tag != null)       // If other.tag string exists in the Dictionary
@@ -28,7 +29,7 @@ public class ItemCollection : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Tag not found:: " + other.tag);
+            Debug.LogWarning("Tag not found: " + other.tag);
         }
 
         other.gameObject.SetActive(false);  

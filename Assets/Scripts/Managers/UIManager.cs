@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,10 +32,9 @@ public class UIManager : MonoSingleton<UIManager>
             return;
 
         StartCoroutine(PelletDisplayRoutine());
-        Debug.Log("Test 1");
     }
 
-    void UpdateLivesDisplay()
+    public void UpdateLivesDisplay()
     {
         StartCoroutine(PlayerLivesDisplayRoutine());
     }
@@ -60,7 +58,6 @@ public class UIManager : MonoSingleton<UIManager>
         for (int i = 0; i < _playerLifeIcons.Length; i++)       // This will always run 4 times each call
         {
             _playerLifeIcons[i].gameObject.SetActive(i < _playerLives.CurrentPlayerLives);      // element 0 gameobject setactive(0 < 3)
-            Debug.Log(_playerLifeIcons[i].gameObject.activeInHierarchy);
         }
 
         _updateLivesRoutine = null;

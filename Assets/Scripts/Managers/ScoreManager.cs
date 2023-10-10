@@ -1,10 +1,10 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ScoreManager : MonoSingleton<ScoreManager>
 {
-    private int _increment = 10;
+    private int _newPlayerLife = 10000;
     private static int _totalScore;
     public int TotalScore
     {
@@ -18,6 +18,10 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         get { return _bonusItemsDictionary; }
         private set { _bonusItemsDictionary = value; }
     }
+
+    [SerializeField] private PlayerLives _playerLives;
+
+
 
     void OnEnable()
     {
@@ -47,6 +51,12 @@ public class ScoreManager : MonoSingleton<ScoreManager>
     void UpdateTotalScore(int value)
     {
         TotalScore += value;
+
+        if(TotalScore >= _newPlayerLife)
+        {
+            _playerLives.GainLife();
+            UIManager.Instance.UpdateLivesDisplay();
+        }
     }
 
     void OnDisable()
