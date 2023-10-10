@@ -14,6 +14,7 @@ public class PinkyBehaviour : MonoBehaviour
     [SerializeField] private Transform _homePos;
     [SerializeField] private Transform _forwardPos;
 
+    private readonly Vector3 _startingPos = new Vector3(0.5f, 0, 0);
     private const float _speedIncrement = 0.02f;
 
     // Blinky starts directly above the exit
@@ -23,6 +24,7 @@ public class PinkyBehaviour : MonoBehaviour
     void OnEnable()
     {
         ItemCollection.OnItemCollected += PelletCollected;
+        EnemyCollision.OnEnemyCollision += RestartPosition;
     }
 
     void Start()
@@ -62,14 +64,21 @@ public class PinkyBehaviour : MonoBehaviour
         CanStart = true;
     }
 
-    // Event
+    #region Events
     void PelletCollected(int value)
     {
         IncrementAgentSpeed();
     }
 
+    void RestartPosition()
+    {
+        _agent.Warp(_startingPos);
+    }
+
+    #endregion
     void OnDisable()
     {
         ItemCollection.OnItemCollected -= PelletCollected;
+        EnemyCollision.OnEnemyCollision -= RestartPosition; 
     }
 }

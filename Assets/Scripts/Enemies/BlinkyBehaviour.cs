@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,12 +10,14 @@ public class BlinkyBehaviour : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private Transform _homePos;
 
+    private readonly Vector3 _startingPos = new Vector3(0.5f, 0, 8.5f);
     private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
 
 
     void OnEnable()
     {
         ItemCollection.OnItemCollected += PelletCollected;
+        EnemyCollision.OnEnemyCollision += RestartPosition;
     }
 
     void Start()
@@ -41,21 +42,21 @@ public class BlinkyBehaviour : MonoBehaviour
         }
     }
 
-    // Event
+    #region Events
     void PelletCollected(int value)
     {
         IncrementAgentSpeed();
     }
 
-    // TODO - Player position doesn't need to be updated 60 times per second, limit this time.
-    // Start Coroutine when game starts
-    //IEnumerator UpdatePlayerPos()
-    //{
-
-    //}
+    void RestartPosition()
+    {
+        _agent.Warp(_startingPos);
+    }
+    #endregion
 
     void OnDisable()
     {
         ItemCollection.OnItemCollected -= PelletCollected; 
+        EnemyCollision.OnEnemyCollision -= RestartPosition; 
     }
 }
