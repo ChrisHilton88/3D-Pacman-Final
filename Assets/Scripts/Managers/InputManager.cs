@@ -4,11 +4,8 @@ public class InputManager : MonoSingleton<InputManager>
 {
     PlayerInputActions _playerinputActions;
 
-
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private LookBehaviour _lookBehaviour;    
-
-
 
 
 

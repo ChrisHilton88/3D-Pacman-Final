@@ -1,13 +1,10 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 
 public class MinimapZoom : MonoBehaviour
 {
     private float _lerpDuration = 1f;
-    private float _currentFOV;
 
     PlayerInputActions _playerInputActions;
     Coroutine _lerpCoroutine;
@@ -28,8 +25,7 @@ public class MinimapZoom : MonoBehaviour
     void Start()
     {
         _cam = GetComponentInChildren<Camera>();
-        _cam.fieldOfView = 60;
-        _currentFOV = _cam.fieldOfView;
+        _cam.orthographicSize = 60;
         _currentFOVIndex = 0;
         _lerpCoroutine = null;
     }
@@ -73,7 +69,7 @@ public class MinimapZoom : MonoBehaviour
     {
         int previousFovIndex = _currentFOVIndex;        
         _currentFOVIndex = (_currentFOVIndex + 1) % _zoomLevel.Length;
-        _cam.fieldOfView = _zoomLevel[_currentFOVIndex];
+        _cam.orthographicSize = _zoomLevel[_currentFOVIndex];
         Debug.Log(_zoomLevel[_currentFOVIndex]);
         return (_zoomLevel[_currentFOVIndex], _zoomLevel[previousFovIndex]);        
     }
@@ -83,7 +79,7 @@ public class MinimapZoom : MonoBehaviour
     {
         int previousFovIndex = _currentFOVIndex;
         _currentFOVIndex = (_currentFOVIndex - 1 + _zoomLevel.Length) % _zoomLevel.Length;      
-        _cam.fieldOfView = _zoomLevel[_currentFOVIndex];
+        _cam.orthographicSize = _zoomLevel[_currentFOVIndex];
 
         return (_zoomLevel[_currentFOVIndex], _zoomLevel[previousFovIndex]);
     }
@@ -92,7 +88,7 @@ public class MinimapZoom : MonoBehaviour
     void ZoomDefaultHomePosition()
     {
         _currentFOVIndex = 0;
-        _cam.fieldOfView = _zoomLevel[_currentFOVIndex];
+        _cam.orthographicSize = _zoomLevel[_currentFOVIndex];
     }
 
     // Smooth out the transition between FOV's
@@ -104,7 +100,7 @@ public class MinimapZoom : MonoBehaviour
         {
             interpolationProgress += Time.deltaTime / _lerpDuration;
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, interpolationProgress);
-            _cam.fieldOfView = newFOV;
+            _cam.orthographicSize = newFOV;
             yield return null;      
         }
 
