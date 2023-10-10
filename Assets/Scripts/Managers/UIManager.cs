@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     [SerializeField] private Image[] _playerLifeIcons;
 
+    Coroutine _updateLivesRoutine;
 
 
     void OnEnable()
@@ -24,18 +26,19 @@ public class UIManager : MonoSingleton<UIManager>
 
     void Start()
     {
-        StartCoroutine(PlayerLivesDisplayRoutine());
-        StartCoroutine(PelletDisplayRoutine());   
+        _updateLivesRoutine = null;
+        if (_updateLivesRoutine == null)
+            _updateLivesRoutine = StartCoroutine(PlayerLivesDisplayRoutine());
+        else
+            return;
+
+        StartCoroutine(PelletDisplayRoutine());
+        Debug.Log("Test 1");
     }
 
     void UpdateLivesDisplay()
     {
-        for (int i = 0; i < _playerLifeIcons.Length; i++)
-        {
-            // Access the Image array and activate/deactivate images
-            _playerLifeIcons[i].gameObject.SetActive(i < _playerLives.CurrentPlayerLives);
-            Debug.Log(_playerLifeIcons[i].gameObject.activeInHierarchy);
-        }
+        StartCoroutine(PlayerLivesDisplayRoutine());
     }
 
     void UpdatePelletAndScoreDisplay(int value)
@@ -52,8 +55,15 @@ public class UIManager : MonoSingleton<UIManager>
 
     IEnumerator PlayerLivesDisplayRoutine()
     {
-        yield return new WaitForEndOfFrame();
-        UpdateLivesDisplay();
+        yield return null;
+
+        for (int i = 0; i < _playerLifeIcons.Length; i++)       // This will always run 4 times each call
+        {
+            _playerLifeIcons[i].gameObject.SetActive(i < _playerLives.CurrentPlayerLives);      // element 0 gameobject setactive(0 < 3)
+            Debug.Log(_playerLifeIcons[i].gameObject.activeInHierarchy);
+        }
+
+        _updateLivesRoutine = null;
     }
 
     // There is a delay in showing values so it needs to be updated at the end of each frame
