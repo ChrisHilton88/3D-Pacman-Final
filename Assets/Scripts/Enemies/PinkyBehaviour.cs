@@ -16,11 +16,9 @@ public class PinkyBehaviour : MonoBehaviour
 
     private const float _speedIncrement = 0.02f;
 
-    Vector3 newDestination;
-
     // Blinky starts directly above the exit
     // As soon as Blinky moves out of the doorway, Pinky can leave
-    // Pinky speed is the same as Blinky & Inky, which means that this AI can also subscrie to the pellet collecting event
+    // Pinky speed is the same as Blinky & Inky, which means that this AI can also subscribe to the pellet collecting event
 
     void OnEnable()
     {
@@ -37,18 +35,13 @@ public class PinkyBehaviour : MonoBehaviour
     {
         if(_canStart == true)
         {
-            newDestination = _forwardPos.position;
-            Debug.DrawLine(transform.position, newDestination, Color.red);
+            _agent.destination = _forwardPos.position;
+            Debug.DrawLine(transform.position, _forwardPos.position, Color.red);
         }
         else
         {
             return;
-            // Stay in the box
-            //newDestination = 
-            Debug.DrawLine(transform.position, newDestination, Color.red);
         }
-
-        _agent.destination = newDestination;       
     }
 
     // TODO - When Reset level takes place, reset enemy speed
