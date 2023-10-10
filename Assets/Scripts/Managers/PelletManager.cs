@@ -27,7 +27,7 @@ public class PelletManager : MonoSingleton<PelletManager>
 
     void OnEnable()
     {
-        ItemCollection.onItemCollected += PelletCollected;
+        ItemCollection.OnItemCollected += PelletCollected;
     }
 
     void Start()

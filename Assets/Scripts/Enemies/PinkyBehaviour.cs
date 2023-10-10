@@ -24,7 +24,7 @@ public class PinkyBehaviour : MonoBehaviour
 
     void OnEnable()
     {
-        ItemCollection.onItemCollected += PelletCollected;
+        ItemCollection.OnItemCollected += PelletCollected;
     }
 
     void Start()
@@ -77,6 +77,6 @@ public class PinkyBehaviour : MonoBehaviour
 
     void OnDisable()
     {
-        ItemCollection.onItemCollected -= PelletCollected;
+        ItemCollection.OnItemCollected -= PelletCollected;
     }
 }

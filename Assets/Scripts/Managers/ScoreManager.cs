@@ -21,7 +21,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
 
     void OnEnable()
     {
-        ItemCollection.onItemCollected += UpdateTotalScore;
+        ItemCollection.OnItemCollected += UpdateTotalScore;
     }
 
     void Start()
@@ -51,6 +51,6 @@ public class ScoreManager : MonoSingleton<ScoreManager>
 
     void OnDisable()
     {
-        ItemCollection.onItemCollected -= UpdateTotalScore;
+        ItemCollection.OnItemCollected -= UpdateTotalScore;
     }
 }

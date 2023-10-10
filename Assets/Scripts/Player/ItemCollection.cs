@@ -4,20 +4,27 @@ using UnityEngine;
 
 public class ItemCollection : MonoBehaviour
 {
-    public static Action<int> onItemCollected;
+    public static Action<int> OnItemCollected;
 
 
     // Method that will trigger all of the collectables
     void OnTriggerEnter(Collider other)
     {
         string tagToFind = other.tag;       // Cache the other.tag reference
-        (string key, int value) = GetKeyAndValueInDictionary(tagToFind);        // Cache the return Tuple
+        (string key, int value) = GetKeyAndValueInDictionary(tagToFind);        // Cache the Tuple
 
         if(other.tag != null)       // If other.tag string exists in the Dictionary
         {
-            onItemCollected?.Invoke(value);     // Pass value through the event to subscribers
-            Debug.Log("Key for tag: " + key);
-            Debug.Log("Value for tag: " + value);
+            if (other.CompareTag("Enemy"))      // EnemyCollision script will handle the collisions with the enemy, don't want to double dip
+            {
+                return;
+            }
+            else
+            {
+                OnItemCollected?.Invoke(value);     // Pass value through the event to subscribers
+                Debug.Log("Key for tag: " + key);
+                Debug.Log("Value for tag: " + value);
+            }
         }
         else
         {

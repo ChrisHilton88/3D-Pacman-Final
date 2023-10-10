@@ -14,7 +14,7 @@ public class BonusItemDisplay : MonoBehaviour
 
     void OnEnable()
     {
-        ItemCollection.onItemCollected += DisplayBonusItem; 
+        ItemCollection.OnItemCollected += DisplayBonusItem; 
     }
 
     void DisplayBonusItem(int value)
@@ -42,6 +42,6 @@ public class BonusItemDisplay : MonoBehaviour
 
     void OnDisable()
     {
-        ItemCollection.onItemCollected -= DisplayBonusItem; 
+        ItemCollection.OnItemCollected -= DisplayBonusItem; 
     }
 }

@@ -14,7 +14,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     void OnEnable()
     {
-        ItemCollection.onItemCollected += UpdateUIDisplay;
+        ItemCollection.OnItemCollected += UpdateUIDisplay;
     }
 
     void Start()
@@ -54,6 +54,6 @@ public class UIManager : MonoSingleton<UIManager>
 
     void OnDisable()
     {
-        ItemCollection.onItemCollected -= UpdateUIDisplay;
+        ItemCollection.OnItemCollected -= UpdateUIDisplay;
     }
 }

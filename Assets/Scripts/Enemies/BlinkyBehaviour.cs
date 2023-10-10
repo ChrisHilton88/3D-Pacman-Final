@@ -16,7 +16,7 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void OnEnable()
     {
-        ItemCollection.onItemCollected += PelletCollected;
+        ItemCollection.OnItemCollected += PelletCollected;
     }
 
     void Start()
@@ -56,6 +56,6 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void OnDisable()
     {
-        ItemCollection.onItemCollected -= PelletCollected; 
+        ItemCollection.OnItemCollected -= PelletCollected; 
     }
 }
