@@ -6,16 +6,18 @@ public class PinkyBehaviour : MonoBehaviour
 {
     private int _maxSpeed = 10;
 
-    private bool _canStart;
-    public bool CanStart { get { return _canStart; } private set { _canStart = value; } }   
+    private const float _speedIncrement = 0.02f;
 
-    NavMeshAgent _agent;
-    [SerializeField] private Transform _player;
-    [SerializeField] private Transform _homePos;
-    [SerializeField] private Transform _forwardPos;
+    private bool _canStart;
+    public bool CanStart { get { return _canStart; } private set { _canStart = value; } }
 
     private readonly Vector3 _startingPos = new Vector3(0.25f, 0, 0);
-    private const float _speedIncrement = 0.02f;
+
+    NavMeshAgent _agent;
+
+    [SerializeField] private Transform _player;
+    [SerializeField] private Transform _targetPos;
+
 
     // Blinky starts directly above the exit
     // As soon as Blinky moves out of the doorway, Pinky can leave
@@ -31,14 +33,15 @@ public class PinkyBehaviour : MonoBehaviour
     {
         _canStart = false;
         _agent = GetComponent<NavMeshAgent>();
+        _agent.transform.position = _startingPos;
     }
 
     void FixedUpdate()
     {
         if(_canStart == true)
         {
-            _agent.destination = _forwardPos.position;
-            Debug.DrawLine(transform.position, _forwardPos.position, Color.red);
+            _agent.destination = _targetPos.position;
+            Debug.DrawLine(transform.position, _targetPos.position, Color.red);
         }
         else
         {

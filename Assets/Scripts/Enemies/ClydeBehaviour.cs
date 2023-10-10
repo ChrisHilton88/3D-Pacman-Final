@@ -3,6 +3,8 @@ using UnityEngine.AI;
 
 public class ClydeBehaviour : MonoBehaviour
 {
+    
+
     NavMeshAgent _agent;
 
     private readonly Vector3 _startingPos = new Vector3(6f, 0, -0.25f);
@@ -16,6 +18,7 @@ public class ClydeBehaviour : MonoBehaviour
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _agent.transform.position = _startingPos;
 
     }
 

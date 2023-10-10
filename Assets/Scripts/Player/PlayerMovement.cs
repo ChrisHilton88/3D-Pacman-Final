@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         _cc = GetComponent<CharacterController>();  
+        transform.position = _startingPos;  
     }
 
     void Update()

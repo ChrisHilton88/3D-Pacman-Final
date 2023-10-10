@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 // Respsonsible for all things related to the Pellet GameObject
@@ -6,9 +5,8 @@ public class PelletManager : MonoSingleton<PelletManager>
 {
     private int _maxPellets = 240;
     private int _pelletIncrement = 1;
-    private static int _totalPellets;       // Global variable which holds reference to the total pool of pellets
-    private int _playerPellets;
-   
+    private int _totalPellets;       // Global variable which holds reference to the total pool of pellets
+    private int _pelletTally;
 
     #region Properties
     public int TotalPellets
@@ -16,14 +14,16 @@ public class PelletManager : MonoSingleton<PelletManager>
         get { return _totalPellets; }
         private set { _totalPellets = value; }
     }
-    public int PlayerPellets
+    public int PelletTally
     {
-        get { return _playerPellets; }
-        private set { _playerPellets = value; }
+        get { return _pelletTally; }
+        private set { _pelletTally = value; }
     }
     #endregion
 
     [SerializeField] private GameObject _pelletprefab;
+    [SerializeField] private InkyBehaviour _inkyBehaviour;
+
 
     void OnEnable()
     {
@@ -33,16 +33,34 @@ public class PelletManager : MonoSingleton<PelletManager>
     void Start()
     {
         TotalPellets = _maxPellets;
+        PelletTally = 0;
     }
 
     void PelletCollected(int value)
     {
+        PelletTally++;
+
         if (TotalPellets > 0)
         {
             TotalPellets -= _pelletIncrement;
-            PlayerPellets += _pelletIncrement;
         }
         else
             Debug.Log("No more pellets");
+
+        Debug.Log("Pellet Tally: " + PelletTally);
+
+        if (PelletTally >= _inkyBehaviour.StartRandomValue)
+        {
+            Debug.Log("Inky Start: " + _inkyBehaviour.StartRandomValue);
+            _inkyBehaviour.StartMovement();
+            Debug.Log("Starting");
+        }
+        else
+            return;
+    }
+
+    void OnDisable()
+    {
+        ItemCollection.OnItemCollected -= PelletCollected;  
     }
 }

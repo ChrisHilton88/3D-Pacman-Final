@@ -6,12 +6,13 @@ public class BlinkyBehaviour : MonoBehaviour
 {
     private int _maxSpeed = 10;
 
-    NavMeshAgent _agent;
-    [SerializeField] private Transform _player;
-    [SerializeField] private Transform _homePos;
+    private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
 
     private readonly Vector3 _startingPos = new Vector3(0.5f, 0, 8.5f);
-    private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
+
+    NavMeshAgent _agent;
+
+    [SerializeField] private Transform _player;
 
 
     void OnEnable()
@@ -22,7 +23,8 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();  
+        _agent = GetComponent<NavMeshAgent>();
+        _agent.transform.position = _startingPos;
     }
 
     void FixedUpdate()

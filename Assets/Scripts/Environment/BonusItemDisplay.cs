@@ -20,7 +20,7 @@ public class BonusItemDisplay : MonoBehaviour
     void DisplayBonusItem(int value)
     {
         // First, check if the pellet total is anything but 70 & 170 - If so, do nothing
-        if (PelletManager.Instance.PlayerPellets != _displayFirstBonusItem || PelletManager.Instance.PlayerPellets != _displaySecondBonusItem)
+        if (PelletManager.Instance.PelletTally != _displayFirstBonusItem || PelletManager.Instance.PelletTally != _displaySecondBonusItem)
         {
             return;
         }
