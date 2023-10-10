@@ -14,7 +14,7 @@ public class PinkyBehaviour : MonoBehaviour
     [SerializeField] private Transform _homePos;
     [SerializeField] private Transform _forwardPos;
 
-    private readonly Vector3 _startingPos = new Vector3(0.5f, 0, 0);
+    private readonly Vector3 _startingPos = new Vector3(0.25f, 0, 0);
     private const float _speedIncrement = 0.02f;
 
     // Blinky starts directly above the exit

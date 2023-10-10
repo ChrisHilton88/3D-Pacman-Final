@@ -4,10 +4,16 @@ public class PlayerMovement : MonoBehaviour
 {
     private float _speed = 10f;
 
-    Vector3 _moveDirection;
+    private Vector3 _moveDirection;
+    private readonly Vector3 _startingPos = new Vector3(0.25f, 1f, -32f);
 
     CharacterController _cc;
 
+
+    void OnEnable()
+    {
+        EnemyCollision.OnEnemyCollision += RestartPosition;
+    }
 
     void Start()
     {
@@ -32,5 +38,13 @@ public class PlayerMovement : MonoBehaviour
         _moveDirection.x = movement.x;
         _moveDirection.y = 0;
         _moveDirection.z = movement.y;
+    }
+
+    void RestartPosition()
+    {
+        Debug.Log("test");
+        _cc.enabled = false;
+        transform.position = _startingPos;
+        _cc.enabled = true;
     }
 }
