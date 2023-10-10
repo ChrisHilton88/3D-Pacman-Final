@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerLives : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class PlayerLives : MonoBehaviour
         get { return _currentPlayerLives; }
         private set { _currentPlayerLives = value; }
     }
+
+    
+
 
 
     void OnEnable()
