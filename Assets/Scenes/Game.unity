@@ -2809,6 +2809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pelletprefab: {fileID: 4510349038439087969, guid: 2fca374c0c2867142a750a4c7db286cf, type: 3}
   _inkyBehaviour: {fileID: 388938656648986474}
+  _clydeBehaviour: {fileID: 4871248537318511155}
 --- !u!1 &878178774
 GameObject:
   m_ObjectHideFlags: 0
@@ -5403,10 +5404,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7433025387611180415, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 8361306807952975499, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
       propertyPath: _playerLives
       value: 
@@ -6918,6 +6915,10 @@ PrefabInstance:
       propertyPath: _playerTargetPos
       value: 
       objectReference: {fileID: 541475785}
+    - target: {fileID: 5829594515556301993, guid: 407432f8304de044887245bd0724efca, type: 3}
+      propertyPath: m_Speed
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 407432f8304de044887245bd0724efca, type: 3}
 --- !u!4 &388938656648986473 stripped
@@ -7038,6 +7039,10 @@ PrefabInstance:
       propertyPath: _forwardPos
       value: 
       objectReference: {fileID: 406977849}
+    - target: {fileID: 4054185313398219589, guid: 199b1fb0cee885d4ab0cfea6ced51d36, type: 3}
+      propertyPath: m_Speed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6781991502653443603, guid: 199b1fb0cee885d4ab0cfea6ced51d36, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -7190,6 +7195,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Clyde
       objectReference: {fileID: 0}
+    - target: {fileID: 6570075215994551342, guid: 390f92d4e5a18104fa56fc07eb88e19f, type: 3}
+      propertyPath: m_Speed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8092939827313796430, guid: 390f92d4e5a18104fa56fc07eb88e19f, type: 3}
+      propertyPath: _playerTargetPos
+      value: 
+      objectReference: {fileID: 1693189006}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 390f92d4e5a18104fa56fc07eb88e19f, type: 3}
 --- !u!4 &4871248537318511154 stripped
@@ -7197,6 +7210,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4904595647207958515, guid: 390f92d4e5a18104fa56fc07eb88e19f, type: 3}
   m_PrefabInstance: {fileID: 4871248537318511153}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4871248537318511155 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8092939827313796430, guid: 390f92d4e5a18104fa56fc07eb88e19f, type: 3}
+  m_PrefabInstance: {fileID: 4871248537318511153}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cfa0bf7ddedc4148907b2078b7fbffa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5632541236152957558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8804,6 +8828,10 @@ PrefabInstance:
     - target: {fileID: 5516332709885480261, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7170905026173882132, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
+      propertyPath: m_Speed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8149949694477826176, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
       propertyPath: m_Name

@@ -43,7 +43,6 @@ public class PlayerMovement : MonoBehaviour
 
     void RestartPosition()
     {
-        Debug.Log("test");
         _cc.enabled = false;
         transform.position = _startingPos;
         _cc.enabled = true;

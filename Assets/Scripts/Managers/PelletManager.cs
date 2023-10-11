@@ -1,3 +1,4 @@
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 // Respsonsible for all things related to the Pellet GameObject
@@ -23,11 +24,14 @@ public class PelletManager : MonoSingleton<PelletManager>
 
     [SerializeField] private GameObject _pelletprefab;
     [SerializeField] private InkyBehaviour _inkyBehaviour;
+    [SerializeField] private ClydeBehaviour _clydeBehaviour;
 
 
     void OnEnable()
     {
         ItemCollection.OnItemCollected += PelletCollected;
+        ItemCollection.OnItemCollected += InkyStartMoving;
+        ItemCollection.OnItemCollected += ClydeStartMoving;
     }
 
     void Start()
@@ -40,27 +44,38 @@ public class PelletManager : MonoSingleton<PelletManager>
     {
         PelletTally++;
 
+        Debug.Log("Pellet Tally: " + PelletTally);
+
         if (TotalPellets > 0)
         {
             TotalPellets -= _pelletIncrement;
         }
         else
             Debug.Log("No more pellets");
+    }
 
-        Debug.Log("Pellet Tally: " + PelletTally);
-
+    // Inky can start moving
+    void InkyStartMoving(int value)
+    {
         if (PelletTally >= _inkyBehaviour.StartRandomValue)
-        {
-            Debug.Log("Inky Start: " + _inkyBehaviour.StartRandomValue);
             _inkyBehaviour.StartMovement();
-            Debug.Log("Starting");
-        }
+        else
+            return;
+    }
+
+    // Clyde can start moving
+    void ClydeStartMoving(int value)
+    {
+        if (PelletTally >= _clydeBehaviour.MovePelletCount)
+            _clydeBehaviour.StartMovement();
         else
             return;
     }
 
     void OnDisable()
     {
-        ItemCollection.OnItemCollected -= PelletCollected;  
+        ItemCollection.OnItemCollected -= PelletCollected;
+        ItemCollection.OnItemCollected -= InkyStartMoving;
+        ItemCollection.OnItemCollected -= ClydeStartMoving;
     }
 }
