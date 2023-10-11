@@ -16,6 +16,7 @@ TagManager:
   - Key
   - Ship
   - Power Pellet
+  - Decision
   layers:
   - Default
   - TransparentFX
