@@ -4,6 +4,14 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent), typeof(CapsuleCollider), typeof(Animator))]
 public class BlinkyBehaviour : MonoBehaviour
 {
+    private enum EnemyState
+    {
+        Scatter,
+        Chase,
+        Frightened
+    }
+    private EnemyState _currentState;
+
     private int _maxSpeed = 10;
 
     private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
@@ -25,11 +33,23 @@ public class BlinkyBehaviour : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _agent.transform.position = _startingPos;
+        _currentState = EnemyState.Scatter;
     }
 
     void FixedUpdate()
     {
-        _agent.destination = _player.position;
+        if(_currentState == EnemyState.Scatter)
+        {
+
+        }
+        else if(_currentState == EnemyState.Chase)
+        {
+            _agent.destination = _player.position;
+        }
+        else if(_currentState == EnemyState.Frightened)
+        {
+
+        }
     }
 
     // Increments agents speed everytime a pellet is collected

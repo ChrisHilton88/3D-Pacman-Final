@@ -3,6 +3,14 @@ using UnityEngine.AI;
 
 public class ClydeBehaviour : MonoBehaviour
 {
+    private enum EnemyState
+    {
+        Scatter,
+        Chase,
+        Frightened
+    }
+    private EnemyState _currentState;
+
     private int _maxDistance = 8;
     private int _movePelletCount;      
     private bool _canMove;
@@ -28,9 +36,10 @@ public class ClydeBehaviour : MonoBehaviour
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _agent.transform.position = _startingPos;
         MovePelletCount = 80;       // 1/3 of total pellet count
-        CanMove = false;    
+        CanMove = false;
+        _agent.transform.position = _startingPos;
+        _currentState = EnemyState.Scatter;
     }
 
     void Update()
