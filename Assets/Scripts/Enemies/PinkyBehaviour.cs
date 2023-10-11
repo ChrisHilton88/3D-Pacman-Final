@@ -4,12 +4,20 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent), typeof(CapsuleCollider), typeof(Animator))]
 public class PinkyBehaviour : MonoBehaviour
 {
+    private enum EnemyState
+    {
+        Scatter,
+        Chase,
+        Frightened
+    }
+    private EnemyState _currentState;
+
     private int _maxSpeed = 10;
 
     private const float _speedIncrement = 0.02f;
 
     private bool _canStart;
-    public bool CanStart { get { return _canStart; } private set { _canStart = value; } }
+    public bool CanMove { get { return _canStart; } private set { _canStart = value; } }
 
     private readonly Vector3 _startingPos = new Vector3(0.25f, 0, 0);
 
@@ -31,9 +39,10 @@ public class PinkyBehaviour : MonoBehaviour
 
     void Start()
     {
-        _canStart = false;
         _agent = GetComponent<NavMeshAgent>();
+        _canStart = false;
         _agent.transform.position = _startingPos;
+        _currentState = EnemyState.Scatter;
     }
 
     void FixedUpdate()
@@ -64,7 +73,7 @@ public class PinkyBehaviour : MonoBehaviour
     // Once Blinky has moved outside of his start box - Set destination for Pinky to start moving
     public void SetDestination()
     {
-        CanStart = true;
+        CanMove = true;
     }
 
     #region Events

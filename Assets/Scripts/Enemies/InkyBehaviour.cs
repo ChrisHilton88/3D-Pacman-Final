@@ -4,6 +4,14 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent), typeof(CapsuleCollider), typeof(Animator))]
 public class InkyBehaviour : MonoBehaviour
 {
+    private enum EnemyState
+    {
+        Scatter,
+        Chase,
+        Frightened
+    }
+    private EnemyState _currentState;
+
     private int _startRandomValue;       // Choose a starting value between 30 - 40% of total pellet count. This random value will be used to start moving Inky
     public int StartRandomValue {  get { return _startRandomValue; } private set { _startRandomValue = value; } }   
     private int _minStartValue = 30, _maxStartValue = 40;     // 30% & 40% of total pellet count (240)
@@ -31,12 +39,13 @@ public class InkyBehaviour : MonoBehaviour
 
     void Start()
     {
+        _agent = GetComponent<NavMeshAgent>();
         _minStartValue = (240 * _minStartValue) / 100;      
         _maxStartValue = (240 * _maxStartValue) / 100;
-        CanMove = false;
-        _agent = GetComponent<NavMeshAgent>();
-        _agent.transform.position = _startingPos;
         _startRandomValue = RandomNumber(_minStartValue, _maxStartValue);
+        CanMove = false;
+        _agent.transform.position = _startingPos;
+        _currentState = EnemyState.Scatter;
         Debug.Log("Start Random Value: " + _startRandomValue);
     }
 
