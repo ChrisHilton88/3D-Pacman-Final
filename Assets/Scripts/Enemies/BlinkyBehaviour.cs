@@ -21,6 +21,8 @@ public class BlinkyBehaviour : MonoBehaviour
     NavMeshAgent _agent;
 
     [SerializeField] private Transform _player;
+    [SerializeField] private Transform _scatterPos;
+
 
 
     void OnEnable()
@@ -38,12 +40,17 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log("Current State: " + _currentState);   
+
         if(_currentState == EnemyState.Scatter)
         {
-
+            _agent.destination = _scatterPos.position;
+            // Move directly to the top right scatter position
+            // Loop around waypoints in respective corner
         }
         else if(_currentState == EnemyState.Chase)
         {
+            // Chase the Player
             _agent.destination = _player.position;
         }
         else if(_currentState == EnemyState.Frightened)
