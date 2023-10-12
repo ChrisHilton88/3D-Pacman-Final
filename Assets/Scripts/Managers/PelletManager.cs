@@ -1,4 +1,3 @@
-using TMPro.EditorUtilities;
 using UnityEngine;
 
 // Respsonsible for all things related to the Pellet GameObject

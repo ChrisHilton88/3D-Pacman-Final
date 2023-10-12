@@ -16,22 +16,20 @@ public class PinkyBehaviour : MonoBehaviour
 
     private const float _speedIncrement = 0.02f;
 
-    private bool _canStart;
-    public bool CanMove { get { return _canStart; } private set { _canStart = value; } }
+    private bool _pinkyCanMove;
+    public bool PinkyCanMove { get { return _pinkyCanMove; } private set { _pinkyCanMove = value; } }
 
     private readonly Vector3 _startingPos = new Vector3(0.25f, 0, 0);
 
     NavMeshAgent _agent;
 
     [SerializeField] private int _currentPosition;       // Scatter mode waypoint incrementer
-    [SerializeField] private Transform _player;
-    [SerializeField] private Transform _targetPos;
+    [SerializeField] private Transform _playerTargetPos;
     [SerializeField] private Transform[] _scatterPositions = new Transform[4];
 
     #region Properties
     public int CurrentPosition { get { return _currentPosition; } private set { _currentPosition = value; } }
     #endregion
-
 
     // Blinky starts directly above the exit
     // As soon as Blinky moves out of the doorway, Pinky can leave
@@ -46,40 +44,46 @@ public class PinkyBehaviour : MonoBehaviour
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _canStart = false;
+        PinkyCanMove = false;
         _agent.Warp(_startingPos);
         CurrentPosition = 0;
-        _agent.destination = _scatterPositions[CurrentPosition].position;
     }
 
     void FixedUpdate()
     {
-        if (_canStart == true)
+        SwitchStates();
+    }
+
+    void SwitchStates()
+    {
+        Debug.Log("Pinky State: " + _currentState);
+
+        switch (_currentState)
         {
-            if (_currentState == EnemyState.Scatter && _agent.hasPath)
-            {
-                Debug.Log("Agent Position: " + _agent.transform.position);
-                Debug.Log("Agent Destination: " + _agent.destination);
-                Debug.Log("Agent Remaining Distance: " + _agent.remainingDistance);
-
-                if (_agent.remainingDistance < 1.5f)        // Agent should be moving to element 1
+            case EnemyState.Scatter:
+                Debug.Log("Pinky CanMove: " + PinkyCanMove);
+                if (PinkyCanMove && _agent.hasPath)
                 {
-                    CalculateNextDestination();     // If 2 >= 4, False - increase to 3
-                }
-            }
-            else if (_currentState == EnemyState.Chase)      // destination is player position
-            {
-                _agent.destination = _player.position;
-            }
-            else if (_currentState == EnemyState.Frightened)
-            {
+                    _agent.isStopped = false;
 
-            }
-            else
-                Debug.Log("Invalid State");
+                    if (_agent.remainingDistance < 1.5f)
+                    {
+                        CalculateNextDestination();
+                    }
+                }
+                break;
+
+            case EnemyState.Chase:
+                _agent.destination = _playerTargetPos.position;
+                break;
+
+            case EnemyState.Frightened:
+                break;
+
+            default:
+                _agent.isStopped = true;
+                break;
         }
-        else
-            return;
     }
 
     // TODO - When Reset level takes place, reset enemy speed
@@ -94,25 +98,22 @@ public class PinkyBehaviour : MonoBehaviour
         }
     }
 
+    // Scatter mode waypoint system
     void CalculateNextDestination()
     {
-        Debug.Log("test");
         if (CurrentPosition >= _scatterPositions.Length - 1)
-        {
             CurrentPosition = 0;
-        }
         else
-        {
             CurrentPosition++;
-        }
 
-        _agent.destination = _scatterPositions[_currentPosition].position;      // Element 2
+        _agent.destination = _scatterPositions[_currentPosition].position;      
     }
 
     // Once Blinky has moved outside of his start box - Set destination for Pinky to start moving
-    public void SetDestination()
+    public void StartMoving()
     {
-        CanMove = true;
+        _agent.destination = _scatterPositions[CurrentPosition].position;
+        PinkyCanMove = true;
     }
 
     #region Events

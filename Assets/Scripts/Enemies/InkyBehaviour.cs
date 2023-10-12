@@ -19,16 +19,21 @@ public class InkyBehaviour : MonoBehaviour
 
     private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
 
-    private bool _canMove;
-    public bool CanMove { get { return _canMove; }  private set { _canMove = value; } } 
+    private bool _inkyCanMove;
+    public bool InkyCanMove { get { return _inkyCanMove; }  private set { _inkyCanMove = value; } } 
 
     private readonly Vector3 _startingPos = new Vector3(-5f, 0, 0f);
 
     NavMeshAgent _agent;
 
+    [SerializeField] private int _inkyCurrentPosition;
     [SerializeField] private Transform _playerTargetPos;
     [SerializeField] private Transform _blinkyPos;
+    [SerializeField] private Transform[] _inkyScatterPositions = new Transform[4];
 
+    #region Properties
+    public int InkyCurrentPosition { get { return _inkyCurrentPosition; } private set { _inkyCurrentPosition = value; } }
+    #endregion
 
 
     void OnEnable()
@@ -43,29 +48,63 @@ public class InkyBehaviour : MonoBehaviour
         _minStartValue = (240 * _minStartValue) / 100;      
         _maxStartValue = (240 * _maxStartValue) / 100;
         _startRandomValue = RandomNumber(_minStartValue, _maxStartValue);
-        CanMove = false;
-        _agent.transform.position = _startingPos;
-        _currentState = EnemyState.Scatter;
-        Debug.Log("Start Random Value: " + _startRandomValue);
+        InkyCanMove = false;
+        _agent.Warp(_startingPos);
+        InkyCurrentPosition = 0;
     }
 
     void FixedUpdate()
     {
-        if (CanMove)
+        SwitchStates();
+    }
+
+    void SwitchStates()
+    {
+        switch (_currentState)
         {
-            Vector3 targetTile = (_blinkyPos.position - _playerTargetPos.position) * 2.0f;
-            _agent.destination = targetTile;
-            //Debug.Log(targetTile);
-            //Debug.DrawLine(transform.position, targetTile * 2.0f, Color.blue);
+            case EnemyState.Scatter:
+                if (InkyCanMove && _agent.hasPath)
+                {
+                    _agent.isStopped = false;
+
+                    if (_agent.remainingDistance < 1.5f)
+                    {
+                        CalculateNextDestination();
+                    }
+                }
+                break;
+
+            case EnemyState.Chase:
+                Vector3 targetTile = (_blinkyPos.position - _playerTargetPos.position) * 2.0f;
+                _agent.destination = targetTile;
+                //Debug.Log(targetTile);
+                //Debug.DrawLine(transform.position, targetTile * 2.0f, Color.blue);
+                break;
+
+            case EnemyState.Frightened:
+                break;
+
+            default:
+                _agent.isStopped = true;
+                break;
         }
+    }
+
+    void CalculateNextDestination()
+    {
+        if (InkyCurrentPosition >= _inkyScatterPositions.Length - 1)
+            InkyCurrentPosition = 0;
         else
-            return;
+            InkyCurrentPosition++;
+
+        _agent.destination = _inkyScatterPositions[InkyCurrentPosition].position;
     }
 
     // Called when the total pellets collected equals the random number
     public void StartMovement()
     {
-        CanMove = true;
+        _agent.destination = _inkyScatterPositions[InkyCurrentPosition].position;
+        InkyCanMove = true;
     }
 
     void IncrementAgentSpeed()
