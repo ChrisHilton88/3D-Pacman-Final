@@ -18,8 +18,13 @@ public class RoundManager : MonoSingleton<RoundManager>
         set { _levels = value; }
     }
 
-    public static Action StartRound;        // Event responsible for the start of a new round. Pellets re-activated, enemies/players start in positions etc, timers reset etc.
+    public static Action OnStartRound;        // Event responsible for the start of a new round. Pellets re-activated, enemies/players start in positions etc, timers reset etc.
 
+
+    void OnEnable()
+    {
+
+    }
 
     void Start()
     {

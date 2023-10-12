@@ -30,7 +30,6 @@ public class BonusItemDisplay : MonoBehaviour
             StartCoroutine(DisplayBonusItemRoutine(currentRound.time));
         }
     }
-
  
     // Needs - Timer only and maybe GameObject
     IEnumerator DisplayBonusItemRoutine(float timer)

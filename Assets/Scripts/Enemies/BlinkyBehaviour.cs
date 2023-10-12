@@ -49,17 +49,16 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
-        SwitchStates();
+        CheckState();
     }
 
-    void SwitchStates()
+    void CheckState()
     {
         switch (_currentState)
         {
             case EnemyState.Scatter:
-                if (_agent.hasPath)
+                if (_agent.hasPath)     // If agent is currently moving to it's destination
                 {
-                    _agent.isStopped = false;
                     Debug.DrawLine(transform.position, _blinkyScatterPositions[BlinkyCurrentPosition].position, Color.red);
 
                     if (_agent.remainingDistance < 1.5f)
@@ -70,8 +69,8 @@ public class BlinkyBehaviour : MonoBehaviour
                 break;
 
             case EnemyState.Chase:
-                _agent.destination = _playerTargetPos.position;
-                Debug.DrawLine(transform.position, _playerTargetPos.position, Color.red);
+                _agent.SetDestination(_playerTargetPos.position);
+                Debug.DrawLine(transform.position, _playerTargetPos.position, Color.red);       // The line is correct when changing states
                 break;
 
             case EnemyState.Frightened:
@@ -90,7 +89,12 @@ public class BlinkyBehaviour : MonoBehaviour
         {
             _currentState = EnemyState.Scatter;
             if (_animator != null)
+            {
+                _agent.destination = _blinkyScatterPositions[_blinkyCurrentPosition].position;          // We can have this here because the boxes are static
                 _animator.SetTrigger("ToScatter");
+                _agent.isStopped = false;
+                Debug.Log("Scatter Mode");
+            }
             else
                 Debug.Log("UH OH");
         }
@@ -98,7 +102,11 @@ public class BlinkyBehaviour : MonoBehaviour
         {
             _currentState = EnemyState.Chase;
             if (_animator != null)
+            {
                 _animator.SetTrigger("ToChase");
+                BlinkyCurrentPosition = 0;
+                Debug.Log("Chase Mode");
+            }
             else
                 Debug.Log("UH OH");
         }
