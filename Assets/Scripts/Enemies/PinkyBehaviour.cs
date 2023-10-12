@@ -56,12 +56,9 @@ public class PinkyBehaviour : MonoBehaviour
 
     void SwitchStates()
     {
-        Debug.Log("Pinky State: " + _currentState);
-
         switch (_currentState)
         {
             case EnemyState.Scatter:
-                Debug.Log("Pinky CanMove: " + PinkyCanMove);
                 if (PinkyCanMove && _agent.hasPath)
                 {
                     _agent.isStopped = false;

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class RoundManager : MonoSingleton<RoundManager>
@@ -16,6 +17,9 @@ public class RoundManager : MonoSingleton<RoundManager>
         get { return _levels; }
         set { _levels = value; }
     }
+
+    public static Action StartRound;        // Event responsible for the start of a new round. Pellets re-activated, enemies/players start in positions etc, timers reset etc.
+
 
     void Start()
     {

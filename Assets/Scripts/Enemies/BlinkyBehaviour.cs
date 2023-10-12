@@ -19,6 +19,7 @@ public class BlinkyBehaviour : MonoBehaviour
     private readonly Vector3 _blinkyStartingPos = new Vector3(0.5f, 0, 8.5f);
 
     NavMeshAgent _agent;
+    Animator _animator;
 
     [SerializeField] private int _blinkyCurrentPosition;       // Scatter mode waypoint incrementer
     [SerializeField] private Transform _playerTargetPos;
@@ -34,11 +35,13 @@ public class BlinkyBehaviour : MonoBehaviour
     {
         ItemCollection.OnItemCollected += PelletCollected;
         EnemyCollision.OnEnemyCollision += RestartPosition;
+        EnemyStateManager.OnNewState += SetNewState;
     }
 
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();   
         _agent.Warp(_blinkyStartingPos);
         BlinkyCurrentPosition = 0;
         _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;   
@@ -77,6 +80,27 @@ public class BlinkyBehaviour : MonoBehaviour
             default:
                 _agent.isStopped = true;
                 break;
+        }
+    }
+
+    // Cycle through these 2 states
+    void SetNewState()
+    {
+        if(_currentState == EnemyState.Chase)
+        {
+            _currentState = EnemyState.Scatter;
+            if (_animator != null)
+                _animator.SetTrigger("ToScatter");
+            else
+                Debug.Log("UH OH");
+        }
+        else if(_currentState == EnemyState.Scatter)
+        {
+            _currentState = EnemyState.Chase;
+            if (_animator != null)
+                _animator.SetTrigger("ToChase");
+            else
+                Debug.Log("UH OH");
         }
     }
 
@@ -122,6 +146,7 @@ public class BlinkyBehaviour : MonoBehaviour
     void OnDisable()
     {
         ItemCollection.OnItemCollected -= PelletCollected; 
-        EnemyCollision.OnEnemyCollision -= RestartPosition; 
+        EnemyCollision.OnEnemyCollision -= RestartPosition;
+        EnemyStateManager.OnNewState -= SetNewState;
     }
 }
