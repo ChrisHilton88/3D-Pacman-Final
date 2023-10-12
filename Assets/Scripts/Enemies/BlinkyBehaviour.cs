@@ -14,7 +14,6 @@ public class BlinkyBehaviour : MonoBehaviour
     private EnemyState _currentState;
 
     private int _maxSpeed = 10;
-    [SerializeField] private int _currentPosition;       // Scatter mode waypoint incrementer
 
     private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
 
@@ -22,6 +21,7 @@ public class BlinkyBehaviour : MonoBehaviour
 
     NavMeshAgent _agent;
 
+    [SerializeField] private int _currentPosition;       // Scatter mode waypoint incrementer
     [SerializeField] private Transform _player;
     [SerializeField] private Transform _scatterPos;
     [SerializeField] private Transform[] _scatterPositions = new Transform[4];
