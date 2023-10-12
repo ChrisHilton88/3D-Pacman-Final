@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,7 @@ public class BlinkyBehaviour : MonoBehaviour
     private EnemyState _currentState;
 
     private int _maxSpeed = 10;
+    [SerializeField] private int _currentPosition;       // Scatter mode waypoint incrementer
 
     private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
 
@@ -22,6 +24,11 @@ public class BlinkyBehaviour : MonoBehaviour
 
     [SerializeField] private Transform _player;
     [SerializeField] private Transform _scatterPos;
+    [SerializeField] private Transform[] _scatterPositions = new Transform[4];
+
+    #region Properties
+    public int CurrentPosition { get { return _currentPosition; } private set {  _currentPosition = value; } }
+    #endregion
 
 
 
@@ -34,29 +41,34 @@ public class BlinkyBehaviour : MonoBehaviour
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _agent.transform.position = _startingPos;
-        _currentState = EnemyState.Scatter;
+        _agent.Warp(_startingPos);
+        CurrentPosition = 0;
+        _agent.destination = _scatterPositions[CurrentPosition].position;   
     }
 
     void FixedUpdate()
     {
-        Debug.Log("Current State: " + _currentState);   
+        if (_currentState == EnemyState.Scatter && _agent.hasPath)
+        {
+            Debug.Log("Agent Position: " + _agent.transform.position);
+            Debug.Log("Agent Destination: " + _agent.destination);
+            Debug.Log("Agent Remaining Distance: " + _agent.remainingDistance);
 
-        if(_currentState == EnemyState.Scatter)
-        {
-            _agent.destination = _scatterPos.position;
-            // Move directly to the top right scatter position
-            // Loop around waypoints in respective corner
+            if (_agent.remainingDistance < 1.5f)        // Agent should be moving to element 1
+            {
+                CalculateNextDestination();     // If 2 >= 4, False - increase to 3
+            }
         }
-        else if(_currentState == EnemyState.Chase)
+        else if (_currentState == EnemyState.Chase)      // destination is player position
         {
-            // Chase the Player
             _agent.destination = _player.position;
         }
-        else if(_currentState == EnemyState.Frightened)
+        else if (_currentState == EnemyState.Frightened)
         {
 
         }
+        else
+            Debug.Log("Invalid State");
     }
 
     // Increments agents speed everytime a pellet is collected
@@ -69,6 +81,21 @@ public class BlinkyBehaviour : MonoBehaviour
             _agent.speed = _maxSpeed;
             return;
         }
+    }
+
+    void CalculateNextDestination()
+    {
+        Debug.Log("test");
+        if(CurrentPosition >= _scatterPositions.Length -1)
+        {
+            CurrentPosition = 0;
+        }
+        else
+        {
+            CurrentPosition++;
+        }
+
+        _agent.destination = _scatterPositions[_currentPosition].position;      // Element 2
     }
 
     #region Events
