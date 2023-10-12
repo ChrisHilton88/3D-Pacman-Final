@@ -13,7 +13,6 @@ public class InkyBehaviour : MonoBehaviour
     private EnemyState _currentState;
 
     private int _startRandomValue;       // Choose a starting value between 30 - 40% of total pellet count. This random value will be used to start moving Inky
-    public int StartRandomValue {  get { return _startRandomValue; } private set { _startRandomValue = value; } }   
     private int _minStartValue = 30, _maxStartValue = 40;     // 30% & 40% of total pellet count (240)
     private int _maxSpeed = 10;
 
@@ -32,6 +31,7 @@ public class InkyBehaviour : MonoBehaviour
     [SerializeField] private Transform[] _inkyScatterPositions = new Transform[4];
 
     #region Properties
+    public int StartRandomValue { get { return _startRandomValue; } private set { _startRandomValue = value; } }
     public int InkyCurrentPosition { get { return _inkyCurrentPosition; } private set { _inkyCurrentPosition = value; } }
     #endregion
 
@@ -47,7 +47,8 @@ public class InkyBehaviour : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _minStartValue = (240 * _minStartValue) / 100;      
         _maxStartValue = (240 * _maxStartValue) / 100;
-        _startRandomValue = RandomNumber(_minStartValue, _maxStartValue);
+        StartRandomValue = 0;
+        //_startRandomValue = RandomNumber(_minStartValue, _maxStartValue);
         InkyCanMove = false;
         _agent.Warp(_startingPos);
         InkyCurrentPosition = 0;
@@ -66,7 +67,8 @@ public class InkyBehaviour : MonoBehaviour
                 if (InkyCanMove && _agent.hasPath)
                 {
                     _agent.isStopped = false;
-
+                    Debug.DrawLine(transform.position, _inkyScatterPositions[InkyCurrentPosition].position, Color.cyan);
+                    
                     if (_agent.remainingDistance < 1.5f)
                     {
                         CalculateNextDestination();
@@ -78,7 +80,7 @@ public class InkyBehaviour : MonoBehaviour
                 Vector3 targetTile = (_blinkyPos.position - _playerTargetPos.position) * 2.0f;
                 _agent.destination = targetTile;
                 //Debug.Log(targetTile);
-                //Debug.DrawLine(transform.position, targetTile * 2.0f, Color.blue);
+                Debug.DrawLine(transform.position, targetTile, Color.cyan);
                 break;
 
             case EnemyState.Frightened:
@@ -93,9 +95,13 @@ public class InkyBehaviour : MonoBehaviour
     void CalculateNextDestination()
     {
         if (InkyCurrentPosition >= _inkyScatterPositions.Length - 1)
+        {
             InkyCurrentPosition = 0;
+        }
         else
+        {
             InkyCurrentPosition++;
+        }
 
         _agent.destination = _inkyScatterPositions[InkyCurrentPosition].position;
     }

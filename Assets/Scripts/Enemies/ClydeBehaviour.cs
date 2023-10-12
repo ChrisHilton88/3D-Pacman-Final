@@ -19,14 +19,14 @@ public class ClydeBehaviour : MonoBehaviour
 
     NavMeshAgent _agent;
 
-    [SerializeField] private int _currentPosition;       // Scatter mode waypoint incrementer
+    [SerializeField] private int _clydeCurrentPosition;       // Scatter mode waypoint incrementer
     [SerializeField] private Transform _playerTargetPos;
-    [SerializeField] private Transform[] _scatterPositions = new Transform[4];
+    [SerializeField] private Transform[] _clydeScatterPositions = new Transform[4];
 
     #region Properties
     public int MovePelletCount { get { return _movePelletCount; } private set { _movePelletCount = value; } }
     public bool ClydeCanMove { get { return _clydeCanMove; } private set { _clydeCanMove = value; } }
-    public int CurrentPosition { get { return _currentPosition; } private set { _currentPosition = value; } }
+    public int ClydeCurrentPosition { get { return _clydeCurrentPosition; } private set { _clydeCurrentPosition = value; } }
     #endregion
 
 
@@ -38,10 +38,10 @@ public class ClydeBehaviour : MonoBehaviour
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        MovePelletCount = 80;       // 1/3 of total pellet count
+        MovePelletCount = 0;       // 1/3 of total pellet count
         ClydeCanMove = false;
         _agent.Warp(_startingPos);
-        CurrentPosition = 0;
+        ClydeCurrentPosition = 0;
     }
 
     void FixedUpdate()
@@ -54,10 +54,10 @@ public class ClydeBehaviour : MonoBehaviour
         switch (_currentState)
         {
             case EnemyState.Scatter:
-                Debug.Log("Clyde CanMove: " + ClydeCanMove);
                 if (ClydeCanMove && _agent.hasPath)
                 {
                     _agent.isStopped = false;
+                    Debug.DrawLine(transform.position, _clydeScatterPositions[ClydeCurrentPosition].position, Color.magenta);
 
                     if (_agent.remainingDistance < 1.5f)
                     {
@@ -69,7 +69,6 @@ public class ClydeBehaviour : MonoBehaviour
             case EnemyState.Chase:
                 if (Vector2.Distance(_playerTargetPos.position, transform.position) > _maxDistance)
                 {
-                    Debug.Log("Distance: " + Vector2.Distance(_playerTargetPos.position, transform.position));
                     _agent.destination = _playerTargetPos.position;
                     Debug.DrawLine(transform.position, _playerTargetPos.position, Color.magenta);
                 }
@@ -92,17 +91,21 @@ public class ClydeBehaviour : MonoBehaviour
     // Scatter mode waypoint system
     void CalculateNextDestination()
     {
-        if (CurrentPosition >= _scatterPositions.Length - 1)
-            CurrentPosition = 0;
+        if (ClydeCurrentPosition >= _clydeScatterPositions.Length - 1)
+        {
+            ClydeCurrentPosition = 0;
+        }
         else
-            CurrentPosition++;
-            
-        _agent.destination = _scatterPositions[_currentPosition].position;  
+        {
+            ClydeCurrentPosition++;
+        }
+
+        _agent.destination = _clydeScatterPositions[ClydeCurrentPosition].position;  
     }
 
     public void StartMovement()
     {
-        _agent.destination = _scatterPositions[CurrentPosition].position;
+        _agent.destination = _clydeScatterPositions[ClydeCurrentPosition].position;
         ClydeCanMove = true;
     }
 

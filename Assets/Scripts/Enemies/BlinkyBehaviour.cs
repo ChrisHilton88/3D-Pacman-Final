@@ -57,6 +57,7 @@ public class BlinkyBehaviour : MonoBehaviour
                 if (_agent.hasPath)
                 {
                     _agent.isStopped = false;
+                    Debug.DrawLine(transform.position, _blinkyScatterPositions[BlinkyCurrentPosition].position, Color.red);
 
                     if (_agent.remainingDistance < 1.5f)
                     {
@@ -67,6 +68,7 @@ public class BlinkyBehaviour : MonoBehaviour
 
             case EnemyState.Chase:
                 _agent.destination = _playerTargetPos.position;
+                Debug.DrawLine(transform.position, _playerTargetPos.position, Color.red);
                 break;
 
             case EnemyState.Frightened:
@@ -102,10 +104,7 @@ public class BlinkyBehaviour : MonoBehaviour
             BlinkyCurrentPosition++;
         }
 
-        Debug.Log("Current Pos: " + BlinkyCurrentPosition);
         _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;
-        Debug.Log("Current Pos: " + BlinkyCurrentPosition);
-
     }
 
     #region Events

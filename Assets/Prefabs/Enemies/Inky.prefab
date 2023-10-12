@@ -114,7 +114,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 3.5
+  m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -136,7 +136,7 @@ Animator:
   m_GameObject: {fileID: 694856663718396286}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c9ee2d323fd91c54d89da12427bbc7d3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -159,6 +159,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3034cc053ba6f7542b48508ecf40d566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inkyCurrentPosition: 0
+  _playerTargetPos: {fileID: 0}
+  _blinkyPos: {fileID: 0}
+  _inkyScatterPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &4401923765751319445
 GameObject:
   m_ObjectHideFlags: 0

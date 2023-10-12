@@ -23,12 +23,12 @@ public class PinkyBehaviour : MonoBehaviour
 
     NavMeshAgent _agent;
 
-    [SerializeField] private int _currentPosition;       // Scatter mode waypoint incrementer
+    [SerializeField] private int _pinkyCurrentPosition;       // Scatter mode waypoint incrementer
     [SerializeField] private Transform _playerTargetPos;
-    [SerializeField] private Transform[] _scatterPositions = new Transform[4];
+    [SerializeField] private Transform[] _pinkyScatterPositions = new Transform[4];
 
     #region Properties
-    public int CurrentPosition { get { return _currentPosition; } private set { _currentPosition = value; } }
+    public int PinkyCurrentPosition { get { return _pinkyCurrentPosition; } private set { _pinkyCurrentPosition = value; } }
     #endregion
 
     // Blinky starts directly above the exit
@@ -46,7 +46,7 @@ public class PinkyBehaviour : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         PinkyCanMove = false;
         _agent.Warp(_startingPos);
-        CurrentPosition = 0;
+        PinkyCurrentPosition = 0;
     }
 
     void FixedUpdate()
@@ -65,6 +65,7 @@ public class PinkyBehaviour : MonoBehaviour
                 if (PinkyCanMove && _agent.hasPath)
                 {
                     _agent.isStopped = false;
+                    Debug.DrawLine(transform.position, _pinkyScatterPositions[PinkyCurrentPosition].position, Color.green);
 
                     if (_agent.remainingDistance < 1.5f)
                     {
@@ -75,6 +76,7 @@ public class PinkyBehaviour : MonoBehaviour
 
             case EnemyState.Chase:
                 _agent.destination = _playerTargetPos.position;
+                Debug.DrawLine(transform.position, _playerTargetPos.position, Color.green);  
                 break;
 
             case EnemyState.Frightened:
@@ -101,18 +103,22 @@ public class PinkyBehaviour : MonoBehaviour
     // Scatter mode waypoint system
     void CalculateNextDestination()
     {
-        if (CurrentPosition >= _scatterPositions.Length - 1)
-            CurrentPosition = 0;
+        if (PinkyCurrentPosition >= _pinkyScatterPositions.Length - 1)
+        {
+            PinkyCurrentPosition = 0;
+        }
         else
-            CurrentPosition++;
+        {
+            PinkyCurrentPosition++;
+        }
 
-        _agent.destination = _scatterPositions[_currentPosition].position;      
+        _agent.destination = _pinkyScatterPositions[PinkyCurrentPosition].position;      
     }
 
     // Once Blinky has moved outside of his start box - Set destination for Pinky to start moving
     public void StartMoving()
     {
-        _agent.destination = _scatterPositions[CurrentPosition].position;
+        _agent.destination = _pinkyScatterPositions[PinkyCurrentPosition].position;
         PinkyCanMove = true;
     }
 
