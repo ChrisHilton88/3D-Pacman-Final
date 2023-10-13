@@ -16,9 +16,9 @@ public class ItemCollection : MonoBehaviour
         Debug.Log(tagToFind);
         (string key, int value) = GetKeyAndValueInDictionary(tagToFind);        // Cache the Tuple
 
-        if (tagToFind != null)       
+        if (tagToFind != null)
         {
-            if (other.CompareTag("Enemy") || other.CompareTag("Untagged"))      // EnemyCollision script will handle the collisions with the enemy, don't want to double dip
+            if (other.CompareTag("Enemy") || other.CompareTag("Untagged") || other.CompareTag("Tunnel"))      // EnemyCollision script will handle the collisions with the enemy, don't want to double dip
             {
                 return;
             }
