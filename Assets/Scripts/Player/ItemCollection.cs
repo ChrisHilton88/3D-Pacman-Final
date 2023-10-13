@@ -14,9 +14,9 @@ public class ItemCollection : MonoBehaviour
         Debug.Log(tagToFind);
         (string key, int value) = GetKeyAndValueInDictionary(tagToFind);        // Cache the Tuple
 
-        if(other.tag != null)       // If other.tag string exists in the Dictionary
+        if (tagToFind != null)       
         {
-            if (other.CompareTag("Enemy"))      // EnemyCollision script will handle the collisions with the enemy, don't want to double dip
+            if (other.CompareTag("Enemy") || other.CompareTag("Untagged") || other.CompareTag("Decision"))      // EnemyCollision script will handle the collisions with the enemy, don't want to double dip
             {
                 return;
             }
@@ -25,14 +25,13 @@ public class ItemCollection : MonoBehaviour
                 OnItemCollected?.Invoke(value);     // Pass value through the event to subscribers
                 Debug.Log("Key for tag: " + key);
                 Debug.Log("Value for tag: " + value);
+                other.gameObject.SetActive(false);
             }
         }
         else
         {
             Debug.LogWarning("Tag not found: " + other.tag);
         }
-
-        other.gameObject.SetActive(false);  
     }
 
     (string key, int value) GetKeyAndValueInDictionary(string tagToFind)

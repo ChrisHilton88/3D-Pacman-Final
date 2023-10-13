@@ -128,6 +128,8 @@ public class PinkyBehaviour : MonoBehaviour
     void RestartPosition()
     {
         _agent.Warp(_startingPos);
+        PinkyCurrentPosition = 0;
+        _agent.destination = _pinkyScatterPositions[PinkyCurrentPosition].position;
     }
 
     #endregion

@@ -47,8 +47,7 @@ public class InkyBehaviour : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _minStartValue = (240 * _minStartValue) / 100;      
         _maxStartValue = (240 * _maxStartValue) / 100;
-        StartRandomValue = 0;
-        //_startRandomValue = RandomNumber(_minStartValue, _maxStartValue);
+        _startRandomValue = RandomNumber(_minStartValue, _maxStartValue);
         InkyCanMove = false;
         _agent.Warp(_startingPos);
         InkyCurrentPosition = 0;

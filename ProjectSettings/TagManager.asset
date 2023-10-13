@@ -17,6 +17,7 @@ TagManager:
   - Ship
   - Power Pellet
   - Decision
+  - Portal
   layers:
   - Default
   - TransparentFX

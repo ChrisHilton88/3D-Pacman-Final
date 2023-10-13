@@ -33,7 +33,7 @@ public class EnemyStateManager : MonoBehaviour
     void OnEnable()
     {
         OnNewState += CycleIncrement;
-        RoundManager.OnStartRound += NewRoundStart;
+        RoundManager.OnRoundStart += NewRoundStart;
     }
 
     void Start()
@@ -62,43 +62,41 @@ public class EnemyStateManager : MonoBehaviour
     }
 
     // Needs a parameter for a timer and we need to source this information from a stored table or something
-    // Let's cache 2 lots of WaitForSeconds
     IEnumerator CycleTimerRoutine()
     {
         while (CycleCount <= _maxCycles) 
         {
-            yield return _sevenSeconds;
-            Debug.Log("Realtime elapsed: " + realTimeElapsed);        // Should be = 7
-            CycleCount++;
-            OnNewState?.Invoke();
+            switch (CycleCount)
+            {
+                case 1:
+                    yield return _sevenSeconds;
+                    break;
+                case 2:
+                    yield return _twentySeconds;
+                    break;
+                case 3:
+                    yield return _sevenSeconds;
+                    break;
+                case 4:
+                    yield return _twentySeconds;
+                    break;
+                case 5:
+                    yield return _fiveSeconds;
+                    break;
+                case 6:
+                    yield return _twentySeconds;
+                    break;
+                case 7:
+                    yield return _fiveSeconds;
+                    break;
+                case 8: 
+                    yield return _twentySeconds;
+                    break;
+                default:
+                    Debug.Log("Incorrect Cycle Count in switch statement");
+                    break;
+            }
 
-            yield return _twentySeconds;
-            Debug.Log("Realtime elapsed: " + realTimeElapsed);        // Should be = 27
-            CycleCount++;
-            OnNewState?.Invoke();
-
-            yield return _sevenSeconds;
-            Debug.Log("Realtime elapsed: " + realTimeElapsed);        // Should be = 34
-            CycleCount++;
-            OnNewState?.Invoke();
-
-            yield return _twentySeconds;
-            Debug.Log("Realtime elapsed: " + realTimeElapsed);        // Should be = 54
-            CycleCount++;
-            OnNewState?.Invoke();
-
-            yield return _fiveSeconds;
-            Debug.Log("Realtime elapsed: " + realTimeElapsed);        // Should be = 59
-            CycleCount++;
-            OnNewState?.Invoke();
-
-            yield return _twentySeconds;
-            Debug.Log("Realtime elapsed: " + realTimeElapsed);        // Should be = 79
-            CycleCount++;
-            OnNewState?.Invoke();
-
-            yield return _fiveSeconds;
-            Debug.Log("Realtime elapsed: " + realTimeElapsed);        // Should be = 84
             CycleCount++;
             OnNewState?.Invoke();
         }
@@ -116,6 +114,6 @@ public class EnemyStateManager : MonoBehaviour
     void OnDisable()
     {
         OnNewState -= CycleIncrement;
-        RoundManager.OnStartRound -= NewRoundStart;
+        RoundManager.OnRoundStart -= NewRoundStart;
     }
 }

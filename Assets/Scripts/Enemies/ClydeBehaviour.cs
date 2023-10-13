@@ -38,7 +38,7 @@ public class ClydeBehaviour : MonoBehaviour
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        MovePelletCount = 0;       // 1/3 of total pellet count
+        MovePelletCount = 80;       // 1/3 of total pellet count
         ClydeCanMove = false;
         _agent.Warp(_startingPos);
         ClydeCurrentPosition = 0;

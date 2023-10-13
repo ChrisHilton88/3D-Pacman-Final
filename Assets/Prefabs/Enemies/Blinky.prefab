@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9210342216081392866}
   - component: {fileID: 5314364150686182062}
   - component: {fileID: 2499550493868595342}
+  - component: {fileID: 1056081980}
   m_Layer: 6
   m_Name: Quad
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1331028553005218059}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 7, y: 7, z: 7}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -98,6 +99,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1056081980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331028553005218059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 885aa1996b7ce3146940c6c2f5d8c347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8149949694477826176
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,8 +225,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 5
-  m_Acceleration: 100
+  m_Speed: 1
+  m_Acceleration: 50
   avoidancePriority: 50
   m_AngularSpeed: 100
   m_StoppingDistance: 0
@@ -257,10 +270,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609153cb48aa883449b8e7e5e8fd171c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentPosition: 0
-  _player: {fileID: 0}
-  _scatterPos: {fileID: 0}
-  _scatterPositions:
+  _blinkyCurrentPosition: 0
+  _triggerCube: {fileID: 0}
+  _playerTargetPos: {fileID: 0}
+  _blinkyScatterPositions:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

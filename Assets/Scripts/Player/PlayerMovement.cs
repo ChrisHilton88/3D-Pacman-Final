@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     void OnEnable()
     {
         EnemyCollision.OnEnemyCollision += RestartPosition;
+        RoundManager.OnRoundEnd += RestartPosition;
     }
 
     void Start()

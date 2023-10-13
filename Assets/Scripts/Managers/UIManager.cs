@@ -13,18 +13,24 @@ public class UIManager : MonoSingleton<UIManager>
 
     [SerializeField] private Image[] _playerLifeIcons;
 
+    Coroutine _updatePelletAndScoreRoutine;
     Coroutine _updateLivesRoutine;
+    Coroutine _updateNextLevel;
 
 
     void OnEnable()
     {
         ItemCollection.OnItemCollected += UpdatePelletAndScoreDisplay;
         EnemyCollision.OnEnemyCollision += UpdateLivesDisplay;
+        RoundManager.OnRoundEnd += UpdateNextLevel;
     }
 
     void Start()
     {
+        _updatePelletAndScoreRoutine = null;
         _updateLivesRoutine = null;
+        _updateNextLevel = null;    
+
         if (_updateLivesRoutine == null)
             _updateLivesRoutine = StartCoroutine(PlayerLivesDisplayRoutine());
         else
@@ -40,14 +46,20 @@ public class UIManager : MonoSingleton<UIManager>
 
     void UpdatePelletAndScoreDisplay(int value)
     {
-        if(value == ScoreManager.Instance.BonusItemsDictionary["Pellet"])
+        if(_updatePelletAndScoreRoutine == null && value == ScoreManager.Instance.BonusItemsDictionary["Pellet"])
         {
-            StartCoroutine(PelletDisplayRoutine());
+            _updatePelletAndScoreRoutine = StartCoroutine(PelletDisplayRoutine());
         }
         else
         {
-            StartCoroutine(BonusItemsDisplayRoutine()); 
+            _updatePelletAndScoreRoutine = StartCoroutine(BonusItemsDisplayRoutine()); 
         }
+    }
+
+    void UpdateNextLevel()
+    {
+        if(_updateNextLevel == null)
+            _updateNextLevel = StartCoroutine(NextLevelRoutine());
     }
 
     IEnumerator PlayerLivesDisplayRoutine()
@@ -69,6 +81,7 @@ public class UIManager : MonoSingleton<UIManager>
         yield return new WaitForEndOfFrame();
         _totalPellets.text = "Remaining Pellets: " + _pelletManager.TotalPellets.ToString();
         _totalScore.text = "Total Score: " + _scoreManager.TotalScore.ToString();
+        _updatePelletAndScoreRoutine = null;
     }
 
     // Handles only updating the Total Score with the Bonus Items
@@ -76,11 +89,21 @@ public class UIManager : MonoSingleton<UIManager>
     {
         yield return new WaitForEndOfFrame();
         _totalScore.text = "Total Score: " + _scoreManager.TotalScore.ToString();
+        _updatePelletAndScoreRoutine = null;
+    }
+
+    // Resets the values on the UI
+    IEnumerator NextLevelRoutine()
+    {
+        yield return new WaitForEndOfFrame();
+        _totalPellets.text = "Remaining Pellets: " + _pelletManager.TotalPellets.ToString();
+        _updateNextLevel = null;
     }
 
     void OnDisable()
     {
         ItemCollection.OnItemCollected -= UpdatePelletAndScoreDisplay;
         EnemyCollision.OnEnemyCollision -= UpdateLivesDisplay;
+        RoundManager.OnRoundEnd -= UpdateNextLevel;
     }
 }

@@ -12,6 +12,7 @@ public class BlinkyBehaviour : MonoBehaviour
     }
     private EnemyState _currentState;
 
+    private int _minSpeed = 5;
     private int _maxSpeed = 10;
 
     private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
@@ -22,6 +23,7 @@ public class BlinkyBehaviour : MonoBehaviour
     Animator _animator;
 
     [SerializeField] private int _blinkyCurrentPosition;       // Scatter mode waypoint incrementer
+    [SerializeField] private GameObject _triggerCube;          // Trigger cube for Pinky to start moving
     [SerializeField] private Transform _playerTargetPos;
     [SerializeField] private Transform[] _blinkyScatterPositions = new Transform[4];
 
@@ -36,6 +38,7 @@ public class BlinkyBehaviour : MonoBehaviour
         ItemCollection.OnItemCollected += PelletCollected;
         EnemyCollision.OnEnemyCollision += RestartPosition;
         EnemyStateManager.OnNewState += SetNewState;
+        RoundManager.OnRoundStart += RoundCompleted;
     }
 
     void Start()
@@ -145,6 +148,17 @@ public class BlinkyBehaviour : MonoBehaviour
         IncrementAgentSpeed();
     }
 
+    // Handles the successful completion of a round
+    void RoundCompleted()
+    {
+        _agent.Warp(_blinkyStartingPos);
+        BlinkyCurrentPosition = 0;
+        _agent.speed = _minSpeed;
+        _currentState = EnemyState.Scatter;
+        _triggerCube.SetActive(true);
+    }
+
+    // Handles only resetting the enemies position during a round when the player dies
     void RestartPosition()
     {
         _agent.Warp(_blinkyStartingPos);

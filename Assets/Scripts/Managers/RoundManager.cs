@@ -18,12 +18,18 @@ public class RoundManager : MonoSingleton<RoundManager>
         set { _levels = value; }
     }
 
-    public static Action OnStartRound;        // Event responsible for the start of a new round. Pellets re-activated, enemies/players start in positions etc, timers reset etc.
+    // Event for the NextLevel after player collects all 240 pellets - This
+    // Event for RestartLevel after the Player gets hit by an enemy - EnemyCollision
+    // Event for GameOver
+
+
+    public static Action OnRoundEnd;
+    public static Action OnRoundStart;
 
 
     void OnEnable()
     {
-
+        OnRoundEnd += IncrementRound;
     }
 
     void Start()
@@ -32,6 +38,7 @@ public class RoundManager : MonoSingleton<RoundManager>
         SetInitialLevelValues();
     }
 
+    // Only needs to be set once at the start of the game
     RoundData[] SetInitialLevelValues()
     {
         new RoundData(1, GetBonusItemValue("Cherry"), 6);
@@ -71,12 +78,25 @@ public class RoundManager : MonoSingleton<RoundManager>
         }
     }
 
+    // When player collects all pellets in a level - Go to the next level
+    public void NextLevel()
+    {
+        OnRoundEnd?.Invoke();
+    }
+
+    // Called when the player collects all pellets in a level
     public void IncrementRound()
     {
         if (CurrentRound >= _maxRounds)
+        {
             CurrentRound = 1;
+            Debug.Log("Current Round: " + CurrentRound);
+        }
         else
+        {
             CurrentRound++;
+            Debug.Log("Current Round: " + CurrentRound);
+        }
     }
 
     public RoundData CheckRound()
@@ -93,5 +113,10 @@ public class RoundManager : MonoSingleton<RoundManager>
         }
 
         return currentRoundData;    
+    }
+
+    void OnDisable()
+    {
+        OnRoundEnd -= IncrementRound;
     }
 }
