@@ -9,6 +9,8 @@ public class BonusItemDisplay : MonoBehaviour
 
     private Dictionary<string, int> _bonusItemDictionary = new Dictionary<string, int>();
 
+    Coroutine _tallyCountRoutine;
+
     [SerializeField] private GameObject _bonusItemDisplayPortal;
     [SerializeField] private GameObject[] _bonusItemPrefabArray;        // Assign all the Bonus Item Prefabs
     [SerializeField] private Transform _spawnPos;       // Set spawn position of all the items
@@ -27,6 +29,7 @@ public class BonusItemDisplay : MonoBehaviour
 
     void Start()
     {
+        _tallyCountRoutine = null;
         DisableAllPrefabs();
         GenerateDictionary();
     }
@@ -48,7 +51,8 @@ public class BonusItemDisplay : MonoBehaviour
         }
         else
         {
-            Debug.Log("Bonus Item Display Count: " + PelletManager.Instance.PelletTally);
+            if(_tallyCountRoutine == null)
+               _tallyCountRoutine = StartCoroutine(UpdateTallyCount());
         }
     }
 
@@ -88,6 +92,13 @@ public class BonusItemDisplay : MonoBehaviour
         {
             Debug.LogWarning("Dictionary value is out of range for _bonusItemArray.");
         }
+    }
+
+    IEnumerator UpdateTallyCount()
+    {
+        yield return new WaitForEndOfFrame();
+        Debug.Log("Bonus Item Display Count: " + PelletManager.Instance.PelletTally);
+        _tallyCountRoutine = null;
     }
 
     void OnDisable()
