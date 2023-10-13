@@ -34,17 +34,19 @@ public class ScoreManager : MonoSingleton<ScoreManager>
 
     void GenerateBonusItemsDictionary()
     {
-        _bonusItemsDictionary["Pellet"] = 10;
-        _bonusItemsDictionary["Power Pellet"] = 50;
-        _bonusItemsDictionary["Enemy"] = 200;       // Every consecutive enemy to the maximum of 4 is doubled - 200, 400, 800, 1600. Make sure to add in a calculation
-        _bonusItemsDictionary["Cherry"] = 100;
-        _bonusItemsDictionary["Strawberry"] = 300;
-        _bonusItemsDictionary["Orange"] = 500;
-        _bonusItemsDictionary["Apple"] = 700;
-        _bonusItemsDictionary["Melon"] = 1000;
-        _bonusItemsDictionary["Ship"] = 2000;
-        _bonusItemsDictionary["Bell"] = 3000;
-        _bonusItemsDictionary["Key"] = 5000;
+        BonusItemsDictionary["Pellet"] = 10;
+        BonusItemsDictionary["Power Pellet"] = 50;
+        BonusItemsDictionary["Enemy"] = 200;       // Every consecutive enemy to the maximum of 4 is doubled - 200, 400, 800, 1600. Make sure to add in a calculation
+        BonusItemsDictionary["Cherry"] = 100;
+        BonusItemsDictionary["Strawberry"] = 300;
+        BonusItemsDictionary["Orange"] = 500;
+        BonusItemsDictionary["Apple"] = 700;
+        BonusItemsDictionary["Melon"] = 1000;
+        BonusItemsDictionary["Ship"] = 2000;
+        BonusItemsDictionary["Bell"] = 3000;
+        BonusItemsDictionary["Key"] = 5000;
+
+        Debug.Log(BonusItemsDictionary.Count);
     }
 
     void UpdateTotalScore(int value)

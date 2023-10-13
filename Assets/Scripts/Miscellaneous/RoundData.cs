@@ -2,14 +2,14 @@
 public class RoundData
 {
     public int round;           // What number round it is
-    public string bonus;        // Tag name of the bonus
+    public string tag;          // Tag name of the bonus
     public int time;            // Timer of the bonus
 
 
-    public RoundData(int round, string bonus, int time)
+    public RoundData(int round, string tag, int time)
     {
         this.round = round;
-        this.bonus = bonus;
+        this.tag = tag;
         this.time = time;
     }
 }

@@ -16,7 +16,7 @@ public class ItemCollection : MonoBehaviour
 
         if (tagToFind != null)       
         {
-            if (other.CompareTag("Enemy") || other.CompareTag("Untagged") || other.CompareTag("Decision"))      // EnemyCollision script will handle the collisions with the enemy, don't want to double dip
+            if (other.CompareTag("Enemy") || other.CompareTag("Untagged"))      // EnemyCollision script will handle the collisions with the enemy, don't want to double dip
             {
                 return;
             }

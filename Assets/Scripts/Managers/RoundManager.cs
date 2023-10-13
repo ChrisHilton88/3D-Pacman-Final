@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using UnityEngine;
 
@@ -34,48 +35,36 @@ public class RoundManager : MonoSingleton<RoundManager>
 
     void Start()
     {
-        _currentRound = 1;  
+        CurrentRound = 2;  
         SetInitialLevelValues();
     }
 
     // Only needs to be set once at the start of the game
     RoundData[] SetInitialLevelValues()
     {
-        new RoundData(1, GetBonusItemValue("Cherry"), 6);
-        new RoundData(2, GetBonusItemValue("StrawBerry"), 5);
-        new RoundData(3, GetBonusItemValue("Orange"), 4);
-        new RoundData(4, GetBonusItemValue("Orange"), 3);
-        new RoundData(5, GetBonusItemValue("Apple"), 2);
-        new RoundData(6, GetBonusItemValue("Apple"), 5);
-        new RoundData(7, GetBonusItemValue("Melon"), 2);
-        new RoundData(8, GetBonusItemValue("Melon"), 2);
-        new RoundData(9, GetBonusItemValue("Ship"), 1);
-        new RoundData(10, GetBonusItemValue("Ship"), 5);
-        new RoundData(11, GetBonusItemValue("Bell"), 2);
-        new RoundData(12, GetBonusItemValue("Bell"), 1);
-        new RoundData(13, GetBonusItemValue("Key"), 1);
-        new RoundData(14, GetBonusItemValue("Key"), 3);
-        new RoundData(15, GetBonusItemValue("Key"), 1);
-        new RoundData(16, GetBonusItemValue("Key"), 1);
-        new RoundData(17, GetBonusItemValue("Key"), 0);
-        new RoundData(18, GetBonusItemValue("Key"), 1);
-        new RoundData(19, GetBonusItemValue("Key"), 0);
-        new RoundData(20, GetBonusItemValue("Key"), 0);
-        new RoundData(21, GetBonusItemValue("Key"), 0);
+        Levels[0] = new RoundData(1, "Cherry", 6);
+        Levels[1] = new RoundData(2, "Strawberry", 5);
+        Levels[2] = new RoundData(3, "Orange", 4);
+        Levels[3] = new RoundData(4, "Orange", 3);
+        Levels[4] = new RoundData(5, "Apple", 2);
+        Levels[5] = new RoundData(6, "Apple", 5);
+        Levels[6] = new RoundData(7, "Melon", 2);
+        Levels[7] = new RoundData(8, "Melon", 2);
+        Levels[8] = new RoundData(9, "Ship", 1);
+        Levels[9] = new RoundData(10, "Ship", 5);
+        Levels[10] = new RoundData(11, "Bell", 2);
+        Levels[11] = new RoundData(12, "Bell", 1);
+        Levels[12] = new RoundData(13, "Key", 1);
+        Levels[13] = new RoundData(14, "Key", 3);
+        Levels[14] = new RoundData(15, "Key", 1);
+        Levels[15] = new RoundData(16, "Key", 1);
+        Levels[16] = new RoundData(17, "Key", 0);
+        Levels[17] = new RoundData(18, "Key", 1);
+        Levels[18] = new RoundData(19, "Key", 0);
+        Levels[19] = new RoundData(20, "Key", 0);
+        Levels[20] = new RoundData(21, "Key", 0);
 
         return _levels;
-    }
-
-    string GetBonusItemValue(string itemName)
-    {
-        if (ScoreManager.Instance.BonusItemsDictionary.ContainsKey(itemName))
-        {
-            return ScoreManager.Instance.BonusItemsDictionary[itemName].ToString();
-        }
-        else
-        {
-            return "Item not found";
-        }
     }
 
     // When player collects all pellets in a level - Go to the next level
@@ -103,10 +92,13 @@ public class RoundManager : MonoSingleton<RoundManager>
     {
         RoundData currentRoundData = null;
 
-        foreach (var roundData in _levels)
+        foreach (RoundData roundData in Levels)
         {
+            Debug.Log("Testing 1");
             if (roundData.round == CurrentRound)
             {
+                Debug.Log("Testing 2");
+
                 currentRoundData = roundData;
                 break;      // Exits loop once matching round data is found 
             }
