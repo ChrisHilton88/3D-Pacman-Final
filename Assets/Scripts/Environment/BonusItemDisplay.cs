@@ -41,14 +41,10 @@ public class BonusItemDisplay : MonoBehaviour
 
     void DisplayBonusItem(int value)
     {
-        // First, check if the pellet total is anything but 70 & 170 - If so, do nothing
         if (PelletManager.Instance.PelletTally == _displayFirstBonusItem || PelletManager.Instance.PelletTally == _displaySecondBonusItem)
         {
             RoundData currentRound = RoundManager.Instance.CheckRound();
-            Debug.Log("Displaying Round: " + currentRound.round);
-            Debug.Log("Displaying tag: " + currentRound.tag);
-            Debug.Log("Displaying timer: " + currentRound.time);
-            StartCoroutine(DisplayBonusItemRoutine(currentRound));         // Getting associated time
+            StartCoroutine(DisplayBonusItemRoutine(currentRound));         
         }
         else
         {

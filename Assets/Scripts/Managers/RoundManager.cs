@@ -35,7 +35,7 @@ public class RoundManager : MonoSingleton<RoundManager>
 
     void Start()
     {
-        CurrentRound = 2;  
+        CurrentRound = 1;  
         SetInitialLevelValues();
     }
 
@@ -94,11 +94,8 @@ public class RoundManager : MonoSingleton<RoundManager>
 
         foreach (RoundData roundData in Levels)
         {
-            Debug.Log("Testing 1");
             if (roundData.round == CurrentRound)
             {
-                Debug.Log("Testing 2");
-
                 currentRoundData = roundData;
                 break;      // Exits loop once matching round data is found 
             }

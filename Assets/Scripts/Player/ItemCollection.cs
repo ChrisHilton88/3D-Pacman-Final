@@ -6,6 +6,8 @@ public class ItemCollection : MonoBehaviour
 {
     public static Action<int> OnItemCollected;
 
+    [SerializeField] private BonusItemDisplay _bonusItemDisplay;
+
 
     // Method that will trigger all of the collectables
     void OnTriggerEnter(Collider other)
@@ -23,8 +25,7 @@ public class ItemCollection : MonoBehaviour
             else
             {
                 OnItemCollected?.Invoke(value);     // Pass value through the event to subscribers
-                Debug.Log("Key for tag: " + key);
-                Debug.Log("Value for tag: " + value);
+                UIManager.Instance.AddCollectedBonusItem(key);
                 other.gameObject.SetActive(false);
             }
         }

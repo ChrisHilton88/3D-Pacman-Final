@@ -5,17 +5,24 @@ using UnityEngine.UI;
 
 public class UIManager : MonoSingleton<UIManager>   
 {
+    private int _currentBonusItemSlotIndex = 0;
+
+    Coroutine _updatePelletAndScoreRoutine;
+    Coroutine _updateLivesRoutine;
+    Coroutine _updateBonusItemRoutine;
+    Coroutine _updateNextLevel;
+
     [SerializeField] private TextMeshProUGUI _totalPellets;
     [SerializeField] private TextMeshProUGUI _totalScore;
     [SerializeField] private PelletManager _pelletManager;
     [SerializeField] private ScoreManager _scoreManager;
     [SerializeField] private PlayerLives _playerLives;
+    [SerializeField] private BonusItemDisplay _bonusItemDisplay;
 
     [SerializeField] private Image[] _playerLifeIcons;
-
-    Coroutine _updatePelletAndScoreRoutine;
-    Coroutine _updateLivesRoutine;
-    Coroutine _updateNextLevel;
+    [SerializeField] private Image[] _bonusItemIcons;
+    [SerializeField] private Sprite[] _bonusItemSprites;
+    
 
 
     void OnEnable()
@@ -29,14 +36,15 @@ public class UIManager : MonoSingleton<UIManager>
     {
         _updatePelletAndScoreRoutine = null;
         _updateLivesRoutine = null;
-        _updateNextLevel = null;    
+        _updateBonusItemRoutine = null; 
+        _updateNextLevel = null;
 
         if (_updateLivesRoutine == null)
             _updateLivesRoutine = StartCoroutine(PlayerLivesDisplayRoutine());
         else
-            return;
+            Debug.LogWarning("Coroutine not NULL for PlayerLivesDisplayRoutine");
 
-        StartCoroutine(PelletDisplayRoutine());
+        StartCoroutine(PelletScoreRoutine());
     }
 
     public void UpdateLivesDisplay()
@@ -48,11 +56,11 @@ public class UIManager : MonoSingleton<UIManager>
     {
         if(_updatePelletAndScoreRoutine == null && value == ScoreManager.Instance.BonusItemsDictionary["Pellet"])
         {
-            _updatePelletAndScoreRoutine = StartCoroutine(PelletDisplayRoutine());
+            _updatePelletAndScoreRoutine = StartCoroutine(PelletScoreRoutine());
         }
         else
         {
-            _updatePelletAndScoreRoutine = StartCoroutine(BonusItemsDisplayRoutine()); 
+            _updatePelletAndScoreRoutine = StartCoroutine(BonusItemsScoreRoutine()); 
         }
     }
 
@@ -74,9 +82,41 @@ public class UIManager : MonoSingleton<UIManager>
         _updateLivesRoutine = null;
     }
 
+    // 
+    public void AddCollectedBonusItem(string tagname)
+    {
+        if (_bonusItemDisplay.BonusItemDictionary.ContainsKey(tagname))     // Check if the Dictionary has the tag name
+        {
+            int slotIndex = _bonusItemDisplay.BonusItemDictionary[tagname];     // Pass in the matching value to the key
+            Debug.Log("Slot Index: " + slotIndex);
+
+            Debug.Log("CurrentBonusItemSlotIndex: " + _currentBonusItemSlotIndex);  
+            // 0 < 
+            if (_currentBonusItemSlotIndex < _bonusItemSprites.Length)      // Check that the currentIndex incrementor is less than the lenght of the array
+            {
+                // Element 0 = element 2
+                _bonusItemIcons[_currentBonusItemSlotIndex].sprite = _bonusItemSprites[slotIndex];        // Assign sprite from the array using the slotIndex value
+
+                _currentBonusItemSlotIndex++;       // Move to the next slot for the next collected BonusItem
+                Debug.Log("CurrentBonusItemSlotIndex: " + _currentBonusItemSlotIndex);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Tag name doesn't match in BonusItemDisplay Dictionary - UIManager");
+        }
+    }
+
+    IEnumerator BonusItemIconUpdate()
+    {
+        yield return null;  
+
+
+    }
+
     // There is a delay in showing values so it needs to be updated at the end of each frame
     // Handles updating Pellets
-    IEnumerator PelletDisplayRoutine()
+    IEnumerator PelletScoreRoutine()
     {
         yield return new WaitForEndOfFrame();
         _totalPellets.text = "Remaining Pellets: " + _pelletManager.TotalPellets.ToString();
@@ -85,7 +125,7 @@ public class UIManager : MonoSingleton<UIManager>
     }
 
     // Handles only updating the Total Score with the Bonus Items
-    IEnumerator BonusItemsDisplayRoutine()
+    IEnumerator BonusItemsScoreRoutine()
     {
         yield return new WaitForEndOfFrame();
         _totalScore.text = "Total Score: " + _scoreManager.TotalScore.ToString();
