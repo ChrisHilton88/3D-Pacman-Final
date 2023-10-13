@@ -70,7 +70,7 @@ public class EnemyStateManager : MonoBehaviour
             {
                 case 1:
                     Debug.Log(CycleCount);
-                    yield return _sevenSeconds;
+                    yield return _twentySeconds;
                     break;
                 case 2:
                     Debug.Log(CycleCount);
