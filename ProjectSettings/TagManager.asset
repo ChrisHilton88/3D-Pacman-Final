@@ -18,6 +18,7 @@ TagManager:
   - Power Pellet
   - Decision
   - Portal
+  - Orange
   layers:
   - Default
   - TransparentFX
