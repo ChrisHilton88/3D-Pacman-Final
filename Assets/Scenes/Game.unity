@@ -2070,6 +2070,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600022609374580, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &938153465 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 938153465, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+  m_PrefabInstance: {fileID: 9005141290807555693}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &945139502 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600022710718730, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
@@ -2631,6 +2636,11 @@ GameObject:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023368018852, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1354175622 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1354175622, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+  m_PrefabInstance: {fileID: 9005141290807555693}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1360605286 stripped
 GameObject:
@@ -10861,6 +10871,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2064333096}
     m_Modifications:
+    - target: {fileID: 827113860, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: targetPortal
+      value: 
+      objectReference: {fileID: 938153465}
+    - target: {fileID: 827113861, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 827113861, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 827113861, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 938153464, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_Name
+      value: Teleport Position Left
+      objectReference: {fileID: 0}
+    - target: {fileID: 938153464, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1354175621, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_Name
+      value: Teleport Position Right
+      objectReference: {fileID: 0}
+    - target: {fileID: 1354175621, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1702639100, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: targetPortal
+      value: 
+      objectReference: {fileID: 1354175622}
+    - target: {fileID: 1105680407773815848, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_Size.x
+      value: 2.816843
+      objectReference: {fileID: 0}
+    - target: {fileID: 1105680407773815848, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: m_Size.y
+      value: 2.41
+      objectReference: {fileID: 0}
     - target: {fileID: 9005141290024485456, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
       propertyPath: m_Name
       value: Portals

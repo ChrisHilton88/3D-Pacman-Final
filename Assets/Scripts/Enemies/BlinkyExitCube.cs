@@ -15,7 +15,6 @@ public class BlinkyExitCube : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Triggered");
             _pinkyBehaviour.StartMoving();
             gameObject.SetActive(false);  
         }

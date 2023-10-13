@@ -45,8 +45,6 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         BonusItemsDictionary["Ship"] = 2000;
         BonusItemsDictionary["Bell"] = 3000;
         BonusItemsDictionary["Key"] = 5000;
-
-        Debug.Log(BonusItemsDictionary.Count);
     }
 
     void UpdateTotalScore(int value)
