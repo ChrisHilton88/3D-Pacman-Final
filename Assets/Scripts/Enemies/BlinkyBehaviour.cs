@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,8 +13,9 @@ public class BlinkyBehaviour : MonoBehaviour
     }
     private EnemyState _currentState;
 
-    private int _minSpeed = 5;
-    private int _maxSpeed = 10;
+    private float _minSpeed = 5;
+    private float _minTunnelSpeed = 2.5f;
+    private float _maxSpeed = 10;
 
     private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
 
@@ -114,15 +116,15 @@ public class BlinkyBehaviour : MonoBehaviour
         }
     }
 
-    // Increments agents speed everytime a pellet is collected
-    void IncrementAgentSpeed()
+    public void DecrementSpeed()
     {
-        if (_agent.speed < _maxSpeed)
-            _agent.speed += _speedIncrement;
+        if (_agent.speed >= _minTunnelSpeed)
+        {
+            _agent.speed -= _speedIncrement;
+        }
         else
         {
-            _agent.speed = _maxSpeed;
-            return;
+            _agent.speed = _minTunnelSpeed;
         }
     }
 
@@ -142,6 +144,19 @@ public class BlinkyBehaviour : MonoBehaviour
     }
 
     #region Events
+
+    // Increments agents speed everytime a pellet is collected
+    void IncrementAgentSpeed()
+    {
+        if (_agent.speed < _maxSpeed)
+            _agent.speed += _speedIncrement;
+        else
+        {
+            _agent.speed = _maxSpeed;
+            return;
+        }
+    }
+
     void PelletCollected(int value)
     {
         IncrementAgentSpeed();

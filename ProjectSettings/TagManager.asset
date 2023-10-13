@@ -16,9 +16,9 @@ TagManager:
   - Key
   - Ship
   - Power Pellet
-  - Decision
   - Portal
   - Orange
+  - Tunnel
   layers:
   - Default
   - TransparentFX

@@ -69,27 +69,18 @@ public class EnemyStateManager : MonoBehaviour
             switch (CycleCount)
             {
                 case 1:
-                    Debug.Log(CycleCount);
                     yield return _twentySeconds;
                     break;
                 case 2:
-                    Debug.Log(CycleCount);
-
                     yield return _twentySeconds;
                     break;
                 case 3:
-                    Debug.Log(CycleCount);
-
                     yield return _sevenSeconds;
                     break;
                 case 4:
-                    Debug.Log(CycleCount);
-
                     yield return _twentySeconds;
                     break;
                 case 5:
-                    Debug.Log(CycleCount);
-
                     yield return _fiveSeconds;
                     break;
                 case 6:
