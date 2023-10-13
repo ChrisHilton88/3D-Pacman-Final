@@ -9,7 +9,6 @@ public class UIManager : MonoSingleton<UIManager>
 
     Coroutine _updatePelletAndScoreRoutine;
     Coroutine _updateLivesRoutine;
-    Coroutine _updateBonusItemRoutine;
     Coroutine _updateNextLevel;
 
     [SerializeField] private TextMeshProUGUI _totalPellets;
@@ -36,7 +35,6 @@ public class UIManager : MonoSingleton<UIManager>
     {
         _updatePelletAndScoreRoutine = null;
         _updateLivesRoutine = null;
-        _updateBonusItemRoutine = null; 
         _updateNextLevel = null;
 
         if (_updateLivesRoutine == null)
@@ -82,7 +80,6 @@ public class UIManager : MonoSingleton<UIManager>
         _updateLivesRoutine = null;
     }
 
-    // 
     public void AddCollectedBonusItem(string tagname)
     {
         if (_bonusItemDisplay.BonusItemDictionary.ContainsKey(tagname))     // Check if the Dictionary has the tag name
@@ -105,13 +102,6 @@ public class UIManager : MonoSingleton<UIManager>
         {
             Debug.LogWarning("Tag name doesn't match in BonusItemDisplay Dictionary - UIManager");
         }
-    }
-
-    IEnumerator BonusItemIconUpdate()
-    {
-        yield return null;  
-
-
     }
 
     // There is a delay in showing values so it needs to be updated at the end of each frame

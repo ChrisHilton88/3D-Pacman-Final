@@ -91,15 +91,15 @@ public class BlinkyBehaviour : MonoBehaviour
         if(_currentState == EnemyState.Chase)
         {
             _currentState = EnemyState.Scatter;
+
             if (_animator != null)
             {
                 _agent.destination = _blinkyScatterPositions[_blinkyCurrentPosition].position;          // We can have this here because the boxes are static
                 _animator.SetTrigger("ToScatter");
                 _agent.isStopped = false;
-                Debug.Log("Scatter Mode");
             }
             else
-                Debug.Log("UH OH");
+                Debug.Log("Animator is NULL in SetNewState() - BlinkyBehaviour");
         }
         else if(_currentState == EnemyState.Scatter)
         {
@@ -108,10 +108,9 @@ public class BlinkyBehaviour : MonoBehaviour
             {
                 _animator.SetTrigger("ToChase");
                 BlinkyCurrentPosition = 0;
-                Debug.Log("Chase Mode");
             }
             else
-                Debug.Log("UH OH");
+                Debug.Log("Animator is NULL in SetNewState() - BlinkyBehaviour");
         }
     }
 

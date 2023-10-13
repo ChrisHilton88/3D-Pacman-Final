@@ -47,7 +47,7 @@ public class BonusItemDisplay : MonoBehaviour
         if (PelletManager.Instance.PelletTally == _displayFirstBonusItem || PelletManager.Instance.PelletTally == _displaySecondBonusItem)
         {
             RoundData currentRound = RoundManager.Instance.CheckRound();
-            StartCoroutine(DisplayBonusItemRoutine(currentRound));         
+            StartCoroutine(DisplayBonusItemRoutine(currentRound));
         }
         else
         {
@@ -97,7 +97,6 @@ public class BonusItemDisplay : MonoBehaviour
     IEnumerator UpdateTallyCount()
     {
         yield return new WaitForEndOfFrame();
-        Debug.Log("Bonus Item Display Count: " + PelletManager.Instance.PelletTally);
         _tallyCountRoutine = null;
     }
 

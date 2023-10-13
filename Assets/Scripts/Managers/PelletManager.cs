@@ -47,10 +47,7 @@ public class PelletManager : MonoSingleton<PelletManager>
     #region Events
     void PelletCollected(int value)
     {
-        Debug.Log("Pellet Tally: " + PelletTally);  
         PelletTally++;      // Add 1 to the tally
-
-        Debug.Log("Pellet Tally: " + PelletTally);
 
         if (TotalPellets > 0)
         {
