@@ -50,7 +50,7 @@ public class ClydeBehaviour : MonoBehaviour
         EnemyCollision.OnEnemyCollision += RestartPosition;
         EnemyStateManager.OnNewState += SetNewState;
         ItemCollection.OnFrightened += FrightenedState;
-        RoundManager.OnRoundStart += RoundCompleted;
+        RoundManager.OnRoundEnd += RoundCompleted;
     }
 
     void OnDisable()
@@ -58,7 +58,7 @@ public class ClydeBehaviour : MonoBehaviour
         EnemyCollision.OnEnemyCollision -= RestartPosition;
         EnemyStateManager.OnNewState -= SetNewState;
         ItemCollection.OnFrightened -= FrightenedState;
-        RoundManager.OnRoundStart -= RoundCompleted;
+        RoundManager.OnRoundEnd -= RoundCompleted;
     }
 
     void Start()
@@ -251,7 +251,9 @@ public class ClydeBehaviour : MonoBehaviour
     // Event that handles the successful completion of a round
     void RoundCompleted()
     {
+        _agent.isStopped = true;
         _agent.Warp(_clydeStartingPos);
+        _agent.isStopped = false;
         ClydeCurrentScatterPosition = 0;
         _agent.speed = _minSpeed;
         _currentState = EnemyState.Scatter;
@@ -260,7 +262,9 @@ public class ClydeBehaviour : MonoBehaviour
     // Event that handles resetting the enemies position during a round when the player dies
     void RestartPosition()
     {
+        _agent.isStopped = true;
         _agent.Warp(_clydeStartingPos);
+        _agent.isStopped = false;
     }
     #endregion
 }

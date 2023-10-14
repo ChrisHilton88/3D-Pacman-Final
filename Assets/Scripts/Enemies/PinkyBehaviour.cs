@@ -50,7 +50,7 @@ public class PinkyBehaviour : MonoBehaviour
         EnemyStateManager.OnNewState += SetNewState;
         ItemCollection.OnItemCollected += PelletCollected;
         ItemCollection.OnFrightened += FrightenedState;
-        RoundManager.OnRoundStart += RoundCompleted;
+        RoundManager.OnRoundEnd += RoundCompleted;
     }
 
     void OnDisable()
@@ -59,7 +59,7 @@ public class PinkyBehaviour : MonoBehaviour
         EnemyStateManager.OnNewState -= SetNewState;
         ItemCollection.OnItemCollected -= PelletCollected;
         ItemCollection.OnFrightened += FrightenedState;
-        RoundManager.OnRoundStart -= RoundCompleted;
+        RoundManager.OnRoundEnd -= RoundCompleted;
     }
 
     void Start()
@@ -243,7 +243,9 @@ public class PinkyBehaviour : MonoBehaviour
     // Event that handles the successful completion of a round
     void RoundCompleted()
     {
+        _agent.isStopped = true;
         _agent.Warp(_pinkyStartingPos);
+        _agent.isStopped = false;
         PinkyCurrentPosition = 0;
         _agent.speed = _minSpeed;
         _currentState = EnemyState.Scatter;
@@ -252,7 +254,9 @@ public class PinkyBehaviour : MonoBehaviour
     // Event that handles resetting the enemies position during a round when the player dies
     void RestartPosition()
     {
+        _agent.isStopped = true;
         _agent.Warp(_pinkyStartingPos);
+        _agent.isStopped = false;
     }
     #endregion
 }

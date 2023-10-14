@@ -496,6 +496,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600022220829296, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &128982330 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 604631712785935188, guid: 2572232fe7b3d414ebcad42dc3997d02, type: 3}
+  m_PrefabInstance: {fileID: 5059923215927823667}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &153613478 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023447593684, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
@@ -877,6 +882,11 @@ GameObject:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600022468960941, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &366740603 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5059923216319960569, guid: 2572232fe7b3d414ebcad42dc3997d02, type: 3}
+  m_PrefabInstance: {fileID: 5059923215927823667}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &369583506 stripped
 GameObject:
@@ -1265,6 +1275,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 568923288}
   m_CullTransparentMesh: 1
+--- !u!1 &608069835 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2685461810208934682, guid: 2572232fe7b3d414ebcad42dc3997d02, type: 3}
+  m_PrefabInstance: {fileID: 5059923215927823667}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &615109943 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023580572205, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
@@ -2027,6 +2042,11 @@ MonoBehaviour:
   - {fileID: 1016862372}
   - {fileID: 888164002}
   - {fileID: 1740976141}
+  _powerPelletList:
+  - {fileID: 608069835}
+  - {fileID: 366740603}
+  - {fileID: 1090205072}
+  - {fileID: 128982330}
   _pelletprefab: {fileID: 4510349038439087969, guid: 2fca374c0c2867142a750a4c7db286cf, type: 3}
   _inkyBehaviour: {fileID: 388938656648986474}
   _clydeBehaviour: {fileID: 4871248537318511155}
@@ -2454,6 +2474,11 @@ GameObject:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023012522812, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1090205072 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5519371520858486831, guid: 2572232fe7b3d414ebcad42dc3997d02, type: 3}
+  m_PrefabInstance: {fileID: 5059923215927823667}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1097361139 stripped
 GameObject:
@@ -4524,6 +4549,14 @@ PrefabInstance:
       propertyPath: _pinkyScatterPositions.Array.data[3]
       value: 
       objectReference: {fileID: 774294062}
+    - target: {fileID: 841357010404908659, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 956331554144222936, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1581375202663964944, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -4571,6 +4604,14 @@ PrefabInstance:
     - target: {fileID: 1581375202663964945, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
       propertyPath: m_Name
       value: Enemies
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581375202663964945, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2542098802554877429, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
+      propertyPath: m_Speed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2749428911465490360, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
       propertyPath: _pacmanPos
@@ -4636,6 +4677,10 @@ PrefabInstance:
       propertyPath: _inkyScatterPositions.Array.data[3]
       value: 
       objectReference: {fileID: 417010896}
+    - target: {fileID: 4643497814549385990, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
+      propertyPath: m_Speed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7710838207788268824, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
       propertyPath: _triggerCube
       value: 

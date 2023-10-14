@@ -1,14 +1,16 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // Respsonsible for all things related to the Pellet GameObject
 public class PelletManager : MonoSingleton<PelletManager>
 {
-    private int _maxPellets = 240;
+    private int _maxPellets = 5;
     private int _totalPellets;       
     private int _pelletTally;
 
     [SerializeField] private List<GameObject> _pelletList = new List<GameObject>();     // SetActive (true) to all Pellet GameObjects at the start of a new level
+    [SerializeField] private List<GameObject> _powerPelletList = new List<GameObject>();
 
     [SerializeField] private GameObject _pelletprefab;
     [SerializeField] private InkyBehaviour _inkyBehaviour;
@@ -41,19 +43,19 @@ public class PelletManager : MonoSingleton<PelletManager>
     void Start()
     {
         TotalPellets = _maxPellets;
-        PelletTally = 1;
+        PelletTally = 0;
     }
 
     #region Events
     void PelletCollected(int value)
     {
-        PelletTally++;      // Add 1 to the tally
-
-        if (TotalPellets > 0)
+        if (TotalPellets > 0 && value == 10)
         {
             TotalPellets--;
+            PelletTally++;      // Add 1 to the tally
+            Debug.Log("Pellet Tally: " + PelletTally);
 
-            if(TotalPellets <= 0)
+            if (TotalPellets <= 0)
             {
                 RoundManager.Instance.NextLevel();
             }
@@ -83,20 +85,29 @@ public class PelletManager : MonoSingleton<PelletManager>
     {
         TotalPellets = 5;
         PelletTally = 0;
-        Debug.Log("Reset Counts");
     }
 
     // Activate all the pellets
     void ActivatePellets()
     {
+        StartCoroutine(DelayPelletActivationRoutine());
+    }
+    #endregion
+
+    IEnumerator DelayPelletActivationRoutine()
+    {
+        yield return null;
+
         for (int i = 0; i < _pelletList.Count; i++)
         {
             _pelletList[i].gameObject.SetActive(true);
         }
 
-        Debug.Log("Activated Pellets");
+        for (int i = 0; i < _powerPelletList.Count; i++)
+        {
+            _powerPelletList[i].gameObject.SetActive(true);
+        }
     }
-    #endregion
 
     void OnDisable()
     {

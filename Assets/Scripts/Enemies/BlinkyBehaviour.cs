@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Threading;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -47,7 +45,7 @@ public class BlinkyBehaviour : MonoBehaviour
         EnemyStateManager.OnNewState += SetNewState;
         ItemCollection.OnItemCollected += PelletCollected;
         ItemCollection.OnFrightened += FrightenedState;
-        RoundManager.OnRoundStart += RoundCompleted;
+        RoundManager.OnRoundEnd += RoundCompleted;
     }
 
     void OnDisable()
@@ -56,7 +54,7 @@ public class BlinkyBehaviour : MonoBehaviour
         EnemyStateManager.OnNewState -= SetNewState;
         ItemCollection.OnItemCollected -= PelletCollected;
         ItemCollection.OnFrightened -= FrightenedState;
-        RoundManager.OnRoundStart -= RoundCompleted;
+        RoundManager.OnRoundEnd -= RoundCompleted;
     }
 
     void Start()
@@ -79,11 +77,14 @@ public class BlinkyBehaviour : MonoBehaviour
         switch (_currentState)
         {
             case EnemyState.Scatter:
-                Debug.DrawLine(transform.position, _blinkyScatterPositions[BlinkyCurrentPosition].position, Color.red);
-
-                if (_agent.remainingDistance < 1.5f)
+                if (_agent.hasPath)
                 {
-                    CalculateNextDestination();
+                    Debug.DrawLine(transform.position, _blinkyScatterPositions[BlinkyCurrentPosition].position, Color.red);
+
+                    if (_agent.remainingDistance < 1.5f)
+                    {
+                        CalculateNextDestination();
+                    }
                 }
                 break;
 
@@ -141,10 +142,28 @@ public class BlinkyBehaviour : MonoBehaviour
         }
         else
         {
+            Debug.Log("test");
             BlinkyCurrentPosition++;
         }
 
         _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;
+    }
+
+    bool GenerateRandomFrightenedPosition()
+    {
+        _randomNumber = EnemyStateManager.Instance.RandomNumber();
+        Transform temp = EnemyStateManager.Instance.FrightenedPositions[_randomNumber];
+        float distance = Vector3.Distance(temp.position, _pacmanTargetPos.position);
+
+        if (distance > 20)
+        {
+            _agent.destination = temp.position;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state)
@@ -160,7 +179,9 @@ public class BlinkyBehaviour : MonoBehaviour
     // Event that handles resetting the enemies position during a round when the player dies
     void RestartPosition()
     {
+        _agent.isStopped = true;
         _agent.Warp(_blinkyStartingPos);
+        _agent.isStopped = false;
     }
 
     // Event that handles cycling through Chase & Scatter states
@@ -169,12 +190,11 @@ public class BlinkyBehaviour : MonoBehaviour
         if (_currentState == EnemyState.Chase)
         {
             _currentState = EnemyState.Scatter;
-            Debug.Log("Blinky Current State: " + _currentState);
+            _animator.SetTrigger("ToScatter");
 
             if (_animator != null)
             {
-                _agent.destination = _blinkyScatterPositions[_blinkyCurrentPosition].position;          // We can have this here because the boxes are static
-                _animator.SetTrigger("ToScatter");
+                _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;          // We can have this here because the boxes are static
                 _agent.isStopped = false;
             }
             else
@@ -183,7 +203,7 @@ public class BlinkyBehaviour : MonoBehaviour
         else if (_currentState == EnemyState.Scatter)
         {
             _currentState = EnemyState.Chase;
-            Debug.Log("Blinky Current State: " + _currentState);
+            Debug.Log("Test 2");
 
             if (_animator != null)
             {
@@ -214,33 +234,17 @@ public class BlinkyBehaviour : MonoBehaviour
             _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state));     // Start 6 second timer
     }
 
-    bool GenerateRandomFrightenedPosition()
-    {
-        _randomNumber = EnemyStateManager.Instance.RandomNumber();
-        Transform temp = EnemyStateManager.Instance.FrightenedPositions[_randomNumber];
-        float distance = Vector3.Distance(temp.position, _pacmanTargetPos.position);
-
-        if (distance > 20)
-        {
-            _agent.destination = temp.position;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     // Event that handles the successful completion of a round
     void RoundCompleted()
     {
+        _agent.isStopped = true;
         _agent.Warp(_blinkyStartingPos);
+        _agent.isStopped = false;
         BlinkyCurrentPosition = 0;
         _agent.speed = _minSpeed;
         _currentState = EnemyState.Scatter;
         _triggerCube.SetActive(true);
+        _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;
     }
-
-    
     #endregion
 }

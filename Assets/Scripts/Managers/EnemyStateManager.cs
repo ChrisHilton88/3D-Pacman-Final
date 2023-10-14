@@ -34,13 +34,13 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     {
         ItemCollection.OnFrightened += FrightenedState;
         OnNewState += CycleIncrement;
-        RoundManager.OnRoundStart += NewRoundStart;
+        RoundManager.OnRoundEnd += NewRoundStart;
     }
     void OnDisable()
     {
         ItemCollection.OnFrightened -= FrightenedState;
         OnNewState -= CycleIncrement;
-        RoundManager.OnRoundStart -= NewRoundStart;
+        RoundManager.OnRoundEnd -= NewRoundStart;
     }
 
     void Start()
@@ -129,6 +129,7 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     // Event that handles resetting the CycleCount back to 1 on New Round
     void NewRoundStart()
     {
+        StopCoroutine(_cycleCoroutine);
         CycleCount = 1;
         _cycleCoroutine = null;
         if (_cycleCoroutine == null)
