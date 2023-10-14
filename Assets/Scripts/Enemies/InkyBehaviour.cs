@@ -14,29 +14,30 @@ public class InkyBehaviour : MonoBehaviour
 
     private int _startRandomValue;       // Choose a starting value between 30 - 40% of total pellet count. This random value will be used to start moving Inky
     private int _minStartValue = 30, _maxStartValue = 40;     // 30% & 40% of total pellet count (240)
+    private int _inkyCurrentPosition;
+
     private float _minSpeed = 5;
     private float _minTunnelSpeed = 2.5f;
     private float _maxSpeed = 10;
-
-    private const float _speedIncrement = 0.02f;       // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
+    private const float _speedIncrement = 0.02f;       
 
     private bool _inkyCanMove;
-    public bool InkyCanMove { get { return _inkyCanMove; }  private set { _inkyCanMove = value; } } 
 
     private readonly Vector3 _inkyStartingPos = new Vector3(-5f, 0, 0f);
 
     NavMeshAgent _agent;
     Animator _animator; 
 
-    [SerializeField] private int _inkyCurrentPosition;
     [SerializeField] private Transform _playerTargetPos;
     [SerializeField] private Transform _blinkyPos;
     [SerializeField] private Transform[] _inkyScatterPositions = new Transform[4];
 
     #region Properties
+    public bool InkyCanMove { get { return _inkyCanMove; } private set { _inkyCanMove = value; } }
     public int StartRandomValue { get { return _startRandomValue; } private set { _startRandomValue = value; } }
     public int InkyCurrentPosition { get { return _inkyCurrentPosition; } private set { _inkyCurrentPosition = value; } }
     #endregion
+
 
 
     void OnEnable()
@@ -153,12 +154,12 @@ public class InkyBehaviour : MonoBehaviour
         InkyCanMove = true;
     }
 
-
     int RandomNumber(int min, int max)
     {
         int newValue = Random.Range(min, max + 1);   
         return newValue;
     }
+
 
     #region Events
     // Event that handles incrementing agent speed when a pellet is collected
@@ -192,7 +193,6 @@ public class InkyBehaviour : MonoBehaviour
             if (_animator != null)
             {
                 _animator.SetTrigger("ToChase");
-                InkyCurrentPosition = 0;
             }
             else
                 Debug.Log("Animator is NULL 2 in SetNewState() - InkyBehaviour");

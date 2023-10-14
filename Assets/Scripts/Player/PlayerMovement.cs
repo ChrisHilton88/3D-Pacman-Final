@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private float _speed = 10f;
+    private float _speed = 12f;
 
     private Vector3 _moveDirection;
     private readonly Vector3 _startingPos = new Vector3(0.25f, 1f, -32f);

@@ -12,31 +12,32 @@ public class PinkyBehaviour : MonoBehaviour
     }
     private EnemyState _currentState;
 
+    private int _pinkyCurrentPosition;       // Scatter mode waypoint incrementer
+
     private float _minSpeed = 5f;
     private float _minTunnelSpeed = 2.5f;
     private float _maxSpeed = 10f;
-
     private const float _speedIncrement = 0.02f;
 
     private bool _pinkyCanMove;
-    public bool PinkyCanMove { get { return _pinkyCanMove; } private set { _pinkyCanMove = value; } }
 
     private readonly Vector3 _pinkyStartingPos = new Vector3(0.25f, 0, 0);
 
     NavMeshAgent _agent;
     Animator _animator;
 
-    [SerializeField] private int _pinkyCurrentPosition;       // Scatter mode waypoint incrementer
     [SerializeField] private Transform _playerTargetPos;
     [SerializeField] private Transform[] _pinkyScatterPositions = new Transform[4];
 
     #region Properties
+    public bool PinkyCanMove { get { return _pinkyCanMove; } private set { _pinkyCanMove = value; } }
     public int PinkyCurrentPosition { get { return _pinkyCurrentPosition; } private set { _pinkyCurrentPosition = value; } }
     #endregion
 
     // Blinky starts directly above the exit
     // As soon as Blinky moves out of the doorway, Pinky can leave
     // Pinky speed is the same as Blinky & Inky, which means that this AI can also subscribe to the pellet collecting event
+
 
     void OnEnable()
     {
@@ -76,7 +77,7 @@ public class PinkyBehaviour : MonoBehaviour
                 if (PinkyCanMove && _agent.hasPath)
                 {
                     _agent.isStopped = false;
-                    Debug.DrawLine(transform.position, _pinkyScatterPositions[PinkyCurrentPosition].position, Color.green);
+                    Debug.DrawLine(transform.position, _pinkyScatterPositions[PinkyCurrentPosition].position, Color.magenta);
 
                     if (_agent.remainingDistance < 1.5f)
                     {
@@ -87,7 +88,7 @@ public class PinkyBehaviour : MonoBehaviour
 
             case EnemyState.Chase:
                 _agent.destination = _playerTargetPos.position;
-                Debug.DrawLine(transform.position, _playerTargetPos.position, Color.green);  
+                Debug.DrawLine(transform.position, _playerTargetPos.position, Color.magenta);  
                 break;
 
             case EnemyState.Frightened:
@@ -179,7 +180,6 @@ public class PinkyBehaviour : MonoBehaviour
             if (_animator != null)
             {
                 _animator.SetTrigger("ToChase");
-                PinkyCurrentPosition = 0;
             }
             else
                 Debug.Log("Animator is NULL 2 in SetNewState() - PinkyBehaviour");

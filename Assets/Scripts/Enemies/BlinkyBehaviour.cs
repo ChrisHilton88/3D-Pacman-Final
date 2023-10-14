@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +12,8 @@ public class BlinkyBehaviour : MonoBehaviour
     }
     private EnemyState _currentState;
 
+    private int _blinkyCurrentPosition;
+
     private float _minSpeed = 5;
     private float _minTunnelSpeed = 2.5f;
     private float _maxSpeed = 10;
@@ -24,8 +25,7 @@ public class BlinkyBehaviour : MonoBehaviour
     NavMeshAgent _agent;
     Animator _animator;
 
-    [SerializeField] private int _blinkyCurrentPosition;       // Scatter mode waypoint incrementer
-    [SerializeField] private GameObject _triggerCube;          // Trigger cube for Pinky to start moving
+    [SerializeField] private GameObject _triggerCube;          
     [SerializeField] private Transform _playerTargetPos;
     [SerializeField] private Transform[] _blinkyScatterPositions = new Transform[4];
 
@@ -168,7 +168,6 @@ public class BlinkyBehaviour : MonoBehaviour
             if (_animator != null)
             {
                 _animator.SetTrigger("ToChase");
-                BlinkyCurrentPosition = 0;
             }
             else
                 Debug.Log("Animator is NULL 2 in SetNewState() - BlinkyBehaviour");

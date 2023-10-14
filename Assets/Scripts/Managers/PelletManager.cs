@@ -41,7 +41,7 @@ public class PelletManager : MonoSingleton<PelletManager>
     void Start()
     {
         TotalPellets = _maxPellets;
-        PelletTally = 0;
+        PelletTally = 1;
     }
 
     #region Events
