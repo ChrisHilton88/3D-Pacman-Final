@@ -85,17 +85,12 @@ public class UIManager : MonoSingleton<UIManager>
         if (_bonusItemDisplay.BonusItemDictionary.ContainsKey(tagname))     // Check if the Dictionary has the tag name
         {
             int slotIndex = _bonusItemDisplay.BonusItemDictionary[tagname];     // Pass in the matching value to the key
-            Debug.Log("Slot Index: " + slotIndex);
 
-            Debug.Log("CurrentBonusItemSlotIndex: " + _currentBonusItemSlotIndex);  
-            // 0 < 
             if (_currentBonusItemSlotIndex < _bonusItemSprites.Length)      // Check that the currentIndex incrementor is less than the lenght of the array
             {
-                // Element 0 = element 2
                 _bonusItemIcons[_currentBonusItemSlotIndex].sprite = _bonusItemSprites[slotIndex];        // Assign sprite from the array using the slotIndex value
 
                 _currentBonusItemSlotIndex++;       // Move to the next slot for the next collected BonusItem
-                Debug.Log("CurrentBonusItemSlotIndex: " + _currentBonusItemSlotIndex);
             }
         }
         else

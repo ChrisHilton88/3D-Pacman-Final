@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,6 +12,7 @@ public class ClydeBehaviour : MonoBehaviour
     }
     private EnemyState _currentState;
 
+    private int _randomNumber;
     private int _movePelletCount;
     private int _clydeCurrentScatterPosition;       // Scatter mode waypoint incrementer
     private int _clydeCurrentChasePosition;
@@ -26,8 +28,11 @@ public class ClydeBehaviour : MonoBehaviour
 
     NavMeshAgent _agent;
     Animator _animator;
+    Coroutine _frightenedRoutine;
+    WaitForSeconds _frightenedTimer = new WaitForSeconds(6f);
 
     [SerializeField] private Transform _playerTargetPos;
+    [SerializeField] private Transform _pacmanPos;
     [SerializeField] private Transform[] _clydeScatterPositions = new Transform[4];
     [SerializeField] private Transform[] _clydeChasePositions = new Transform[4];
 
@@ -44,6 +49,7 @@ public class ClydeBehaviour : MonoBehaviour
     {
         EnemyCollision.OnEnemyCollision += RestartPosition;
         EnemyStateManager.OnNewState += SetNewState;
+        ItemCollection.OnFrightened += FrightenedState;
         RoundManager.OnRoundStart += RoundCompleted;
     }
 
@@ -51,6 +57,7 @@ public class ClydeBehaviour : MonoBehaviour
     {
         EnemyCollision.OnEnemyCollision -= RestartPosition;
         EnemyStateManager.OnNewState -= SetNewState;
+        ItemCollection.OnFrightened -= FrightenedState;
         RoundManager.OnRoundStart -= RoundCompleted;
     }
 
@@ -72,11 +79,11 @@ public class ClydeBehaviour : MonoBehaviour
 
     void CheckState()
     {
-        switch (_currentState)
+        if (ClydeCanMove & _agent.hasPath)
         {
-            case EnemyState.Scatter:
-                if (ClydeCanMove && _agent.hasPath)
-                {
+            switch (_currentState)
+            {
+                case EnemyState.Scatter:
                     _agent.isStopped = false;
                     Debug.DrawLine(transform.position, _clydeScatterPositions[ClydeCurrentScatterPosition].position, Color.yellow);
 
@@ -84,35 +91,43 @@ public class ClydeBehaviour : MonoBehaviour
                     {
                         CalculateNextScatterDestination();
                     }
-                }
-                break;
+                    break;
 
-            case EnemyState.Chase:
-                if (Vector2.Distance(transform.position, _playerTargetPos.position) > _maxDistance)     // If distance between Clyde and pacman is greater than 8 tiles
-                {
-                    _agent.destination = _playerTargetPos.position;     // Same target as Blinky - Pacmans current tile
-                    Debug.DrawLine(transform.position, _playerTargetPos.position, Color.yellow);        // Should be to Pacman
-                }
-                else
-                {
-                    _agent.destination = _clydeChasePositions[ClydeCurrentChasePosition].position;
-                    // Equal to the waypoint loop down the bottom of the map
-                    if (_agent.remainingDistance < 1.5f)
+                case EnemyState.Chase:
+                    if (Vector2.Distance(transform.position, _playerTargetPos.position) > _maxDistance)     // If distance between Clyde and pacman is greater than 8 tiles
                     {
-                        CalculateNextChaseDestination();
+                        _agent.destination = _playerTargetPos.position;     // Same target as Blinky - Pacmans current tile
+                        Debug.DrawLine(transform.position, _playerTargetPos.position, Color.yellow);        // Should be to Pacman
+                    }
+                    else
+                    {
+                        _agent.destination = _clydeChasePositions[ClydeCurrentChasePosition].position;
+
+                        if (_agent.remainingDistance < 1.5f)
+                        {
+                            CalculateNextChaseDestination();
+                        }
+
+                        Debug.DrawLine(transform.position, _clydeChasePositions[ClydeCurrentChasePosition].position, Color.yellow);
+                    }
+                    break;
+
+                case EnemyState.Frightened:
+                    if(_agent.remainingDistance < 1.5f)
+                    {
+                        GenerateRandomFrightenedPosition();
                     }
 
-                    Debug.DrawLine(transform.position, _clydeChasePositions[ClydeCurrentChasePosition].position, Color.yellow);
-                }
-                break;
+                    Debug.DrawLine(transform.position, _agent.destination, Color.yellow);
+                    break;
 
-            case EnemyState.Frightened:
-                break;
-
-            default:
-                _agent.isStopped = true;
-                break;
+                default:
+                    _agent.isStopped = true;
+                    break;
+            }
         }
+        else
+            return;
     }
 
     // Decrement agent speed whilst standing in OnTriggerStay in Tunnel
@@ -157,6 +172,31 @@ public class ClydeBehaviour : MonoBehaviour
         _agent.destination = _clydeChasePositions[ClydeCurrentChasePosition].position;
     }
 
+    bool GenerateRandomFrightenedPosition()
+    {
+        _randomNumber = EnemyStateManager.Instance.RandomNumber();
+        Transform temp = EnemyStateManager.Instance.FrightenedPositions[_randomNumber];
+        float distance = Vector3.Distance(temp.position, _pacmanPos.position);
+
+        if (distance > 20)
+        {
+            _agent.destination = temp.position;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state)
+    {
+        yield return _frightenedTimer;      // Wait for cached time (6 secs)
+        _currentState = previousState;      // Return to previous state
+        _animator.SetTrigger("To" + state);
+        _frightenedRoutine = null;
+    }
+
     // Called when the total pellets collected equals 80
     public void StartMovement()
     {
@@ -167,35 +207,45 @@ public class ClydeBehaviour : MonoBehaviour
 
 
     #region Events
+    void FrightenedState()
+    {
+        EnemyState tempState = _currentState;       // Store the current state so we can switch back to it once the timer has ended
+        string state = tempState.ToString();
+        _currentState = EnemyState.Frightened;      // Set new state to Frightened
+        _animator.SetTrigger("ToFrightened");
+
+        if (_frightenedRoutine == null)
+            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state));     // Start 6 second timer
+
+        if (ClydeCanMove)
+        {
+            while (!GenerateRandomFrightenedPosition()) ;
+        }
+        else
+            return;
+    }
+
+    
+
     // Handles cycling through Chase & Scatter states
     void SetNewState()
     {
-        if (_currentState == EnemyState.Chase)
-        {
-            _currentState = EnemyState.Scatter;
-            Debug.Log("Clyde Current State: " + _currentState);
-
-            if (_animator != null)
+            if (_currentState == EnemyState.Chase)
             {
-                _agent.destination = _clydeScatterPositions[ClydeCurrentScatterPosition].position;          // We can have this here because the boxes are static
+                _currentState = EnemyState.Scatter;
                 _animator.SetTrigger("ToScatter");
-                _agent.isStopped = false;
-            }
-            else
-                Debug.Log("Animator is NULL 1 in SetNewState() - ClydeBehaviour");
-        }
-        else if (_currentState == EnemyState.Scatter)
-        {
-            _currentState = EnemyState.Chase;
-            Debug.Log("Clyde Current State: " + _currentState);
 
-            if (_animator != null)
+                if (_animator != null && ClydeCanMove)
+                {
+                    _agent.destination = _clydeScatterPositions[ClydeCurrentScatterPosition].position;          // We can have this here because the boxes are static
+                    _agent.isStopped = false;
+                }
+            }
+            else if (_currentState == EnemyState.Scatter)
             {
+                _currentState = EnemyState.Chase;
                 _animator.SetTrigger("ToChase");
             }
-            else
-                Debug.Log("Animator is NULL 2 in SetNewState() - ClydeBehaviour");
-        }
     }
 
     // Event that handles the successful completion of a round

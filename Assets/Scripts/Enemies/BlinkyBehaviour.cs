@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Threading;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +16,7 @@ public class BlinkyBehaviour : MonoBehaviour
     private EnemyState _currentState;
 
     private int _blinkyCurrentPosition;
+    private int _randomNumber;
 
     private float _minSpeed = 5;
     private float _minTunnelSpeed = 2.5f;
@@ -24,9 +28,11 @@ public class BlinkyBehaviour : MonoBehaviour
 
     NavMeshAgent _agent;
     Animator _animator;
+    Coroutine _frightenedRoutine;
+    WaitForSeconds _frightenedTimer = new WaitForSeconds(6f);
 
     [SerializeField] private GameObject _triggerCube;          
-    [SerializeField] private Transform _playerTargetPos;
+    [SerializeField] private Transform _pacmanTargetPos;
     [SerializeField] private Transform[] _blinkyScatterPositions = new Transform[4];
 
     #region Properties
@@ -37,17 +43,19 @@ public class BlinkyBehaviour : MonoBehaviour
 
     void OnEnable()
     {
-        ItemCollection.OnItemCollected += PelletCollected;
         EnemyCollision.OnEnemyCollision += RestartPosition;
         EnemyStateManager.OnNewState += SetNewState;
+        ItemCollection.OnItemCollected += PelletCollected;
+        ItemCollection.OnFrightened += FrightenedState;
         RoundManager.OnRoundStart += RoundCompleted;
     }
 
     void OnDisable()
     {
-        ItemCollection.OnItemCollected -= PelletCollected;
         EnemyCollision.OnEnemyCollision -= RestartPosition;
         EnemyStateManager.OnNewState -= SetNewState;
+        ItemCollection.OnItemCollected -= PelletCollected;
+        ItemCollection.OnFrightened -= FrightenedState;
         RoundManager.OnRoundStart -= RoundCompleted;
     }
 
@@ -55,6 +63,7 @@ public class BlinkyBehaviour : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
+        _frightenedRoutine = null;
         _agent.Warp(_blinkyStartingPos);
         BlinkyCurrentPosition = 0;
         _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;   
@@ -70,23 +79,26 @@ public class BlinkyBehaviour : MonoBehaviour
         switch (_currentState)
         {
             case EnemyState.Scatter:
-                if (_agent.hasPath)     // If agent is currently moving to it's destination
-                {
-                    Debug.DrawLine(transform.position, _blinkyScatterPositions[BlinkyCurrentPosition].position, Color.red);
+                Debug.DrawLine(transform.position, _blinkyScatterPositions[BlinkyCurrentPosition].position, Color.red);
 
-                    if (_agent.remainingDistance < 1.5f)
-                    {
-                        CalculateNextDestination();
-                    }
+                if (_agent.remainingDistance < 1.5f)
+                {
+                    CalculateNextDestination();
                 }
                 break;
 
             case EnemyState.Chase:
-                _agent.SetDestination(_playerTargetPos.position);
-                Debug.DrawLine(transform.position, _playerTargetPos.position, Color.red);       // The line is correct when changing states
+                _agent.destination = _pacmanTargetPos.position;       // Needs to be continually updating for Player position
+                Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.red);       // The line is correct when changing states
                 break;
 
             case EnemyState.Frightened:
+                if (_agent.remainingDistance < 1.5f)
+                {
+                    GenerateRandomFrightenedPosition();
+                }
+
+                Debug.DrawLine(transform.position, _agent.destination, Color.red);  
                 break;
 
             default:
@@ -135,15 +147,23 @@ public class BlinkyBehaviour : MonoBehaviour
         _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;
     }
 
-
-    #region Events
-    // Event that handles incrementing agent speed when a pellet is collected
-    void PelletCollected(int value)
+    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state)
     {
-        IncrementAgentSpeed();
+        yield return _frightenedTimer;      // Wait for cached time (6 secs)
+        _currentState = previousState;      // Return to previous state
+        _animator.SetTrigger("To" + state);     // Set Animator to previous state
+        _frightenedRoutine = null;
     }
 
-    // Handles cycling through Chase & Scatter states
+
+    #region Events
+    // Event that handles resetting the enemies position during a round when the player dies
+    void RestartPosition()
+    {
+        _agent.Warp(_blinkyStartingPos);
+    }
+
+    // Event that handles cycling through Chase & Scatter states
     void SetNewState()
     {
         if (_currentState == EnemyState.Chase)
@@ -174,6 +194,43 @@ public class BlinkyBehaviour : MonoBehaviour
         }
     }
 
+    // Event that handles incrementing agent speed when a pellet is collected
+    void PelletCollected(int value)
+    {
+        IncrementAgentSpeed();
+    }
+    
+    // Event that handles setting the enemy's state to Frightened
+    void FrightenedState()
+    {
+        EnemyState tempState = _currentState;       // Store the current state so we can switch back to it once the timer has ended
+        string state = tempState.ToString();
+        _currentState = EnemyState.Frightened;      // Set new state to Frightened
+        _animator.SetTrigger("ToFrightened");
+
+        while (!GenerateRandomFrightenedPosition());
+
+        if (_frightenedRoutine == null)
+            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state));     // Start 6 second timer
+    }
+
+    bool GenerateRandomFrightenedPosition()
+    {
+        _randomNumber = EnemyStateManager.Instance.RandomNumber();
+        Transform temp = EnemyStateManager.Instance.FrightenedPositions[_randomNumber];
+        float distance = Vector3.Distance(temp.position, _pacmanTargetPos.position);
+
+        if (distance > 20)
+        {
+            _agent.destination = temp.position;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     // Event that handles the successful completion of a round
     void RoundCompleted()
     {
@@ -184,10 +241,6 @@ public class BlinkyBehaviour : MonoBehaviour
         _triggerCube.SetActive(true);
     }
 
-    // Event that handles resetting the enemies position during a round when the player dies
-    void RestartPosition()
-    {
-        _agent.Warp(_blinkyStartingPos);
-    }
+    
     #endregion
 }

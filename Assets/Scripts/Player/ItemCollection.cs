@@ -4,34 +4,58 @@ using UnityEngine;
 
 public class ItemCollection : MonoBehaviour
 {
-    public static Action<int> OnItemCollected;
+    public static Action<int> OnItemCollected;      // Event is triggered when the Player collects any Item
+    public static Action OnFrightened;              // Event is triggered when the Player collects a Power Pellet
 
     [SerializeField] private BonusItemDisplay _bonusItemDisplay;
 
 
-    // Method that will trigger all of the collectables
     void OnTriggerEnter(Collider other)
     {
         string tagToFind = other.tag;       // Cache the other.tag reference
-        Debug.Log(tagToFind);
         (string key, int value) = GetKeyAndValueInDictionary(tagToFind);        // Cache the Tuple
 
-        if (tagToFind != null)
+        if (tagToFind != null)      // A tag exists
         {
-            if (other.CompareTag("Enemy") || other.CompareTag("Untagged") || other.CompareTag("Tunnel"))      // EnemyCollision script will handle the collisions with the enemy, don't want to double dip
+            switch (tagToFind)
             {
-                return;
-            }
-            else
-            {
-                OnItemCollected?.Invoke(value);     // Pass value through the event to subscribers
-                UIManager.Instance.AddCollectedBonusItem(key);
-                other.gameObject.SetActive(false);
+                // TODO - Come back and add logic to Enemy - Depending on whether in frightened state or not
+                // Tags that we don't need to do anything with, just simply ignore
+                case "Enemy":
+                case "Untagged":
+                case "Portal":
+                case "Tunnel":
+                case "MainCamera":
+                case "Player":
+                case "StartBox":
+                    break;
+
+                // Seperate event for tag "Power Pellet" 
+                case "Power Pellet":
+                    OnFrightened?.Invoke();
+                    OnItemCollected?.Invoke(value);
+                    other.gameObject.SetActive(false);  
+                    break;
+
+                // Tags that we need to add to UIDisplay and add to Score
+                case "Pellet":
+                case "Cherry":
+                case "Strawberry":
+                case "Orange":
+                case "Apple":
+                case "Melon":
+                case "Ship":
+                case "Bell":
+                case "Key":
+                    OnItemCollected?.Invoke(value);
+                    UIManager.Instance.AddCollectedBonusItem(key);
+                    other.gameObject.SetActive(false);  
+                    break;
             }
         }
-        else
+        else       // Tag doesn't exist
         {
-            Debug.LogWarning("Tag not found: " + other.tag);
+            Debug.LogWarning("Tag not found in OnTriggerEnter switch statement - ItemCollection");
         }
     }
 

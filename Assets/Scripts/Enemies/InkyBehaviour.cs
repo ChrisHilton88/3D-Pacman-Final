@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,9 +13,10 @@ public class InkyBehaviour : MonoBehaviour
     }
     private EnemyState _currentState;
 
+    private int _inkyCurrentPosition;
+    private int _randomNumber;
     private int _startRandomValue;       // Choose a starting value between 30 - 40% of total pellet count. This random value will be used to start moving Inky
     private int _minStartValue = 30, _maxStartValue = 40;     // 30% & 40% of total pellet count (240)
-    private int _inkyCurrentPosition;
 
     private float _minSpeed = 5;
     private float _minTunnelSpeed = 2.5f;
@@ -26,9 +28,12 @@ public class InkyBehaviour : MonoBehaviour
     private readonly Vector3 _inkyStartingPos = new Vector3(-5f, 0, 0f);
 
     NavMeshAgent _agent;
-    Animator _animator; 
+    Animator _animator;
+    Coroutine _frightenedRoutine;
+    WaitForSeconds _frightenedTimer = new WaitForSeconds(6f);
 
-    [SerializeField] private Transform _playerTargetPos;
+    [SerializeField] private Transform _pacmanTargetPos;
+    [SerializeField] private Transform _pacmanPos;
     [SerializeField] private Transform _blinkyPos;
     [SerializeField] private Transform[] _inkyScatterPositions = new Transform[4];
 
@@ -42,16 +47,18 @@ public class InkyBehaviour : MonoBehaviour
 
     void OnEnable()
     {
-        ItemCollection.OnItemCollected += PelletCollected;
         EnemyCollision.OnEnemyCollision += RestartPosition;
         EnemyStateManager.OnNewState += SetNewState;
+        ItemCollection.OnFrightened += FrightenedState;
+        ItemCollection.OnItemCollected += PelletCollected;
         RoundManager.OnRoundStart += RoundCompleted;
     }
     void OnDisable()
     {
-        ItemCollection.OnItemCollected -= PelletCollected;
         EnemyCollision.OnEnemyCollision -= RestartPosition;
         EnemyStateManager.OnNewState -= SetNewState;
+        ItemCollection.OnFrightened -= FrightenedState;
+        ItemCollection.OnItemCollected -= PelletCollected;
         RoundManager.OnRoundStart -= RoundCompleted;
     }
 
@@ -74,36 +81,41 @@ public class InkyBehaviour : MonoBehaviour
 
     void CheckState()
     {
-        switch (_currentState)
+        if (InkyCanMove && _agent.hasPath)
         {
-            case EnemyState.Scatter:
-                if (InkyCanMove && _agent.hasPath)
-                {
+            switch (_currentState)
+            {
+                case EnemyState.Scatter:
                     _agent.isStopped = false;
                     Debug.DrawLine(transform.position, _inkyScatterPositions[InkyCurrentPosition].position, Color.cyan);
-                    
+
                     if (_agent.remainingDistance < 1.5f)
                     {
                         CalculateNextDestination();
                     }
-                }
-                break;
+                    break;
 
-            case EnemyState.Chase:
-                
-                Vector3 vectorToPlayer = _playerTargetPos.position - _blinkyPos.position;       // Calculate vector from Blinky to Players position
-                Vector3 doubledVector = vectorToPlayer * 2.0f;      // Double the length of the vector
-                Vector3 inkyTargetPosition = _blinkyPos.position + doubledVector;       // Inky's target = Adding doubled vector to Blinkys position
-                _agent.destination = inkyTargetPosition;        // Set destination = inkyTargetPosition
-                Debug.DrawLine(transform.position, inkyTargetPosition, Color.cyan);
-                break;
+                case EnemyState.Chase:
+                    Vector3 vectorToPlayer = _pacmanTargetPos.position - _blinkyPos.position;       // Calculate vector from Blinky to Players position
+                    Vector3 doubledVector = vectorToPlayer * 2.0f;      // Double the length of the vector
+                    Vector3 inkyTargetPosition = _blinkyPos.position + doubledVector;       // Inky's target = Adding doubled vector to Blinkys position
+                    _agent.destination = inkyTargetPosition;        // Set destination = inkyTargetPosition
+                    Debug.DrawLine(transform.position, inkyTargetPosition, Color.cyan);
+                    break;
 
-            case EnemyState.Frightened:
-                break;
+                case EnemyState.Frightened:
+                    if (_agent.remainingDistance < 1.5f)
+                    {
+                        GenerateRandomFrightenedPosition();
+                    }
 
-            default:
-                _agent.isStopped = true;
-                break;
+                    Debug.DrawLine(transform.position, _agent.destination, Color.cyan);
+                    break;
+
+                default:
+                    _agent.isStopped = true;
+                    break;
+            }
         }
     }
     
@@ -147,6 +159,34 @@ public class InkyBehaviour : MonoBehaviour
         _agent.destination = _inkyScatterPositions[InkyCurrentPosition].position;
     }
 
+    // Generates a random number and uses this to grab the corresponding element in the Transform array to set the agent's destination
+    bool GenerateRandomFrightenedPosition()
+    {
+        _randomNumber = EnemyStateManager.Instance.RandomNumber();
+
+        Transform temp = EnemyStateManager.Instance.FrightenedPositions[_randomNumber];
+        float distance = Vector3.Distance(temp.position, _pacmanPos.position);
+
+        if (distance > 20)
+        {
+            _agent.destination = temp.position;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // Frightened State timer
+    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state)
+    {
+        yield return _frightenedTimer;      // Wait for cached time (6 secs)
+        _currentState = previousState;      // Return to previous state
+        _animator.SetTrigger("To" + state);     // Set Animator to previous state
+        _frightenedRoutine = null;
+    }
+
     // Called when the total pellets collected equals the random number
     public void StartMovement()
     {
@@ -168,34 +208,43 @@ public class InkyBehaviour : MonoBehaviour
         IncrementAgentSpeed();
     }
 
+    // Event that handles changing to frightened state
+    void FrightenedState()
+    {
+        EnemyState tempState = _currentState;       // Store the current state so we can switch back to it once the timer has ended
+        string state = tempState.ToString();
+        _currentState = EnemyState.Frightened;      // Set new state to Frightened
+        _animator.SetTrigger("ToFrightened");
+
+        if (_frightenedRoutine == null)
+            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state));     // Start 6 second timer
+        
+        if (InkyCanMove)
+        {
+            while (!GenerateRandomFrightenedPosition());
+        }
+        else
+            return;
+    }
+
     // Handles cycling through Chase & Scatter states
     void SetNewState()
     {
         if (_currentState == EnemyState.Chase)
         {
             _currentState = EnemyState.Scatter;
-            Debug.Log("Inky Current State: " + _currentState);
+            _animator.SetTrigger("ToScatter");
 
-            if (_animator != null)
+            if (_animator != null && InkyCanMove)
             {
                 _agent.destination = _inkyScatterPositions[InkyCurrentPosition].position;          // We can have this here because the boxes are static
-                _animator.SetTrigger("ToScatter");
                 _agent.isStopped = false;
             }
-            else
-                Debug.Log("Animator is NULL 1 in SetNewState() - InkyBehaviour");
         }
         else if (_currentState == EnemyState.Scatter)
         {
             _currentState = EnemyState.Chase;
-            Debug.Log("Inky Current State: " + _currentState);
-
-            if (_animator != null)
-            {
-                _animator.SetTrigger("ToChase");
-            }
-            else
-                Debug.Log("Animator is NULL 2 in SetNewState() - InkyBehaviour");
+            _animator.SetTrigger("ToChase");
         }
     }
 

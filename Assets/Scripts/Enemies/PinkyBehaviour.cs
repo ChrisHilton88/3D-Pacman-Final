@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,7 @@ public class PinkyBehaviour : MonoBehaviour
     private EnemyState _currentState;
 
     private int _pinkyCurrentPosition;       // Scatter mode waypoint incrementer
+    private int _randomNumber;
 
     private float _minSpeed = 5f;
     private float _minTunnelSpeed = 2.5f;
@@ -25,8 +27,11 @@ public class PinkyBehaviour : MonoBehaviour
 
     NavMeshAgent _agent;
     Animator _animator;
+    Coroutine _frightenedRoutine;
+    WaitForSeconds _frightenedTimer = new WaitForSeconds(6f);
 
-    [SerializeField] private Transform _playerTargetPos;
+    [SerializeField] private Transform _pacmanTargetPos;
+    [SerializeField] private Transform _pacmanPos;
     [SerializeField] private Transform[] _pinkyScatterPositions = new Transform[4];
 
     #region Properties
@@ -41,17 +46,19 @@ public class PinkyBehaviour : MonoBehaviour
 
     void OnEnable()
     {
-        ItemCollection.OnItemCollected += PelletCollected;
         EnemyCollision.OnEnemyCollision += RestartPosition;
         EnemyStateManager.OnNewState += SetNewState;
+        ItemCollection.OnItemCollected += PelletCollected;
+        ItemCollection.OnFrightened += FrightenedState;
         RoundManager.OnRoundStart += RoundCompleted;
     }
 
     void OnDisable()
     {
-        ItemCollection.OnItemCollected -= PelletCollected;
         EnemyCollision.OnEnemyCollision -= RestartPosition;
         EnemyStateManager.OnNewState -= SetNewState;
+        ItemCollection.OnItemCollected -= PelletCollected;
+        ItemCollection.OnFrightened += FrightenedState;
         RoundManager.OnRoundStart -= RoundCompleted;
     }
 
@@ -87,11 +94,17 @@ public class PinkyBehaviour : MonoBehaviour
                 break;
 
             case EnemyState.Chase:
-                _agent.destination = _playerTargetPos.position;
-                Debug.DrawLine(transform.position, _playerTargetPos.position, Color.magenta);  
+                _agent.destination = _pacmanTargetPos.position;
+                Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.magenta);  
                 break;
 
             case EnemyState.Frightened:
+                if (_agent.remainingDistance < 1.5f)
+                {
+                    GenerateRandomFrightenedPosition();
+                }
+
+                Debug.DrawLine(transform.position, _agent.destination, Color.magenta);
                 break;
 
             default:
@@ -140,6 +153,31 @@ public class PinkyBehaviour : MonoBehaviour
         _agent.destination = _pinkyScatterPositions[PinkyCurrentPosition].position;      
     }
 
+    bool GenerateRandomFrightenedPosition()
+    {
+        _randomNumber = EnemyStateManager.Instance.RandomNumber();
+        Transform temp = EnemyStateManager.Instance.FrightenedPositions[_randomNumber];
+        float distance = Vector3.Distance(temp.position, _pacmanPos.position);
+
+        if (distance > 20)
+        {
+            _agent.destination = temp.position;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state)
+    {
+        yield return _frightenedTimer;      // Wait for cached time (6 secs)
+        _currentState = previousState;      // Return to previous state
+        _animator.SetTrigger("To" + state);     // Set Animator to previous state
+        _frightenedRoutine = null;
+    }
+
     // Once Blinky has moved outside of his start box - Set destination for Pinky to start moving
     public void StartMoving()
     {
@@ -155,13 +193,30 @@ public class PinkyBehaviour : MonoBehaviour
         IncrementAgentSpeed();
     }
 
+    void FrightenedState()
+    {
+        if (PinkyCanMove)
+        {
+            EnemyState tempState = _currentState;       // Store the current state so we can switch back to it once the timer has ended
+            string state = tempState.ToString();
+            _currentState = EnemyState.Frightened;      // Set new state to Frightened
+            _animator.SetTrigger("ToFrightened");
+
+            while (!GenerateRandomFrightenedPosition()) ;
+
+            if (_frightenedRoutine == null)
+                _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state));     // Start 6 second timer
+        }
+        else
+            return;
+    }
+
     // Handles cycling through Chase & Scatter states
     void SetNewState()
     {
         if (_currentState == EnemyState.Chase)
         {
             _currentState = EnemyState.Scatter;
-            Debug.Log("Pinky Current State: " + _currentState);
 
             if (_animator != null)
             {
@@ -175,7 +230,6 @@ public class PinkyBehaviour : MonoBehaviour
         else if (_currentState == EnemyState.Scatter)
         {
             _currentState = EnemyState.Chase;
-            Debug.Log("Pinky Current State: " + _currentState);
 
             if (_animator != null)
             {
