@@ -1265,23 +1265,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 568923288}
   m_CullTransparentMesh: 1
---- !u!1 &569153596 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1815871557557758439, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
-  m_PrefabInstance: {fileID: 1581375203533017287}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &569153604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 569153596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8ca315703c74d64e991444220dc4123, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &615109943 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023580572205, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
@@ -4562,10 +4545,6 @@ PrefabInstance:
     - target: {fileID: 1581375202663964945, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
       propertyPath: m_Name
       value: Enemies
-      objectReference: {fileID: 0}
-    - target: {fileID: 1654401408716800505, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2749428911465490360, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
       propertyPath: _playerTargetPos
@@ -10845,11 +10824,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7401159874784669185, guid: dac2802083d7c194d8d26d362918c958, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.183334
+      value: 9.6
       objectReference: {fileID: 0}
     - target: {fileID: 7401159874784669185, guid: dac2802083d7c194d8d26d362918c958, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.083333194
+      value: 10.416667
       objectReference: {fileID: 0}
     - target: {fileID: 7401159874817702814, guid: dac2802083d7c194d8d26d362918c958, type: 3}
       propertyPath: m_RootOrder

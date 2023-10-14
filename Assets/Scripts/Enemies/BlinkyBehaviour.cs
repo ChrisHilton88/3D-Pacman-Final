@@ -43,10 +43,18 @@ public class BlinkyBehaviour : MonoBehaviour
         RoundManager.OnRoundStart += RoundCompleted;
     }
 
+    void OnDisable()
+    {
+        ItemCollection.OnItemCollected -= PelletCollected;
+        EnemyCollision.OnEnemyCollision -= RestartPosition;
+        EnemyStateManager.OnNewState -= SetNewState;
+        RoundManager.OnRoundStart -= RoundCompleted;
+    }
+
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _animator = GetComponent<Animator>();   
+        _animator = GetComponent<Animator>();
         _agent.Warp(_blinkyStartingPos);
         BlinkyCurrentPosition = 0;
         _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;   
@@ -87,36 +95,20 @@ public class BlinkyBehaviour : MonoBehaviour
         }
     }
 
-    // Cycle through these 2 states
-    void SetNewState()
+    // Increments agents speed everytime a pellet is collected
+    void IncrementAgentSpeed()
     {
-        if(_currentState == EnemyState.Chase)
+        if (_agent.speed < _maxSpeed)
+            _agent.speed += _speedIncrement;
+        else
         {
-            _currentState = EnemyState.Scatter;
-
-            if (_animator != null)
-            {
-                _agent.destination = _blinkyScatterPositions[_blinkyCurrentPosition].position;          // We can have this here because the boxes are static
-                _animator.SetTrigger("ToScatter");
-                _agent.isStopped = false;
-            }
-            else
-                Debug.Log("Animator is NULL in SetNewState() - BlinkyBehaviour");
-        }
-        else if(_currentState == EnemyState.Scatter)
-        {
-            _currentState = EnemyState.Chase;
-            if (_animator != null)
-            {
-                _animator.SetTrigger("ToChase");
-                BlinkyCurrentPosition = 0;
-            }
-            else
-                Debug.Log("Animator is NULL in SetNewState() - BlinkyBehaviour");
+            _agent.speed = _maxSpeed;
+            return;
         }
     }
 
-    public void DecrementSpeed()
+    // Decrement agent speed whilst standing in OnTriggerStay in Tunnel
+    public void DecrementAgentSpeed()
     {
         if (_agent.speed >= _minTunnelSpeed)
         {
@@ -143,26 +135,47 @@ public class BlinkyBehaviour : MonoBehaviour
         _agent.destination = _blinkyScatterPositions[BlinkyCurrentPosition].position;
     }
 
+
     #region Events
-
-    // Increments agents speed everytime a pellet is collected
-    void IncrementAgentSpeed()
-    {
-        if (_agent.speed < _maxSpeed)
-            _agent.speed += _speedIncrement;
-        else
-        {
-            _agent.speed = _maxSpeed;
-            return;
-        }
-    }
-
+    // Event that handles incrementing agent speed when a pellet is collected
     void PelletCollected(int value)
     {
         IncrementAgentSpeed();
     }
 
-    // Handles the successful completion of a round
+    // Handles cycling through Chase & Scatter states
+    void SetNewState()
+    {
+        if (_currentState == EnemyState.Chase)
+        {
+            _currentState = EnemyState.Scatter;
+            Debug.Log("Blinky Current State: " + _currentState);
+
+            if (_animator != null)
+            {
+                _agent.destination = _blinkyScatterPositions[_blinkyCurrentPosition].position;          // We can have this here because the boxes are static
+                _animator.SetTrigger("ToScatter");
+                _agent.isStopped = false;
+            }
+            else
+                Debug.Log("Animator is NULL 1 in SetNewState() - BlinkyBehaviour");
+        }
+        else if (_currentState == EnemyState.Scatter)
+        {
+            _currentState = EnemyState.Chase;
+            Debug.Log("Blinky Current State: " + _currentState);
+
+            if (_animator != null)
+            {
+                _animator.SetTrigger("ToChase");
+                BlinkyCurrentPosition = 0;
+            }
+            else
+                Debug.Log("Animator is NULL 2 in SetNewState() - BlinkyBehaviour");
+        }
+    }
+
+    // Event that handles the successful completion of a round
     void RoundCompleted()
     {
         _agent.Warp(_blinkyStartingPos);
@@ -172,17 +185,10 @@ public class BlinkyBehaviour : MonoBehaviour
         _triggerCube.SetActive(true);
     }
 
-    // Handles only resetting the enemies position during a round when the player dies
+    // Event that handles resetting the enemies position during a round when the player dies
     void RestartPosition()
     {
         _agent.Warp(_blinkyStartingPos);
     }
     #endregion
-
-    void OnDisable()
-    {
-        ItemCollection.OnItemCollected -= PelletCollected; 
-        EnemyCollision.OnEnemyCollision -= RestartPosition;
-        EnemyStateManager.OnNewState -= SetNewState;
-    }
 }

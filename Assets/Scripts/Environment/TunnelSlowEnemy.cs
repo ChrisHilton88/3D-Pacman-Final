@@ -22,11 +22,9 @@ public class TunnelSlowEnemy : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        Debug.Log("Test");
-
         if (other.CompareTag("Tunnel"))
         {
-            _blinkybehaviour.DecrementSpeed();
+            _blinkybehaviour.DecrementAgentSpeed();
         }
     }
 
