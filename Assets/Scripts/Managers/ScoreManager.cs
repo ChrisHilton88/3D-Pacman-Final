@@ -29,6 +29,7 @@ public class ScoreManager : MonoSingleton<ScoreManager>
 
     void Start()
     {
+        TotalScore = 0; 
         GenerateBonusItemsDictionary();
     }
 

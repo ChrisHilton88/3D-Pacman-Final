@@ -77,8 +77,10 @@ public class UIManager : MonoSingleton<UIManager>
 
     void UpdateNextLevel()
     {
-        if(_updateNextLevelRoutine == null)
+        if (_updateNextLevelRoutine == null)
             _updateNextLevelRoutine = StartCoroutine(NextLevelRoutine());
+        else
+            Debug.Log("_updateNextLevel is NOT NULL - UIManager");
     }
 
     public void AddCollectedBonusItem(string tagname)
