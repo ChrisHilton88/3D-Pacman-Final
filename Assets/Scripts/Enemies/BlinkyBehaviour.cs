@@ -203,7 +203,6 @@ public class BlinkyBehaviour : MonoBehaviour
         else if (_currentState == EnemyState.Scatter)
         {
             _currentState = EnemyState.Chase;
-            Debug.Log("Test 2");
 
             if (_animator != null)
             {

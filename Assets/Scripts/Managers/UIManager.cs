@@ -9,8 +9,10 @@ public class UIManager : MonoSingleton<UIManager>
 
     Coroutine _updatePelletAndScoreRoutine;
     Coroutine _updateLivesRoutine;
-    Coroutine _updateNextLevel;
+    Coroutine _updateNextLevelRoutine;
+    Coroutine _gameOverFlickerRoutine;
 
+    [SerializeField] private TextMeshProUGUI _gameOver;
     [SerializeField] private TextMeshProUGUI _totalPellets;
     [SerializeField] private TextMeshProUGUI _totalScore;
     [SerializeField] private PelletManager _pelletManager;
@@ -21,21 +23,32 @@ public class UIManager : MonoSingleton<UIManager>
     [SerializeField] private Image[] _playerLifeIcons;
     [SerializeField] private Image[] _bonusItemIcons;
     [SerializeField] private Sprite[] _bonusItemSprites;
-    
+
 
 
     void OnEnable()
     {
         ItemCollection.OnItemCollected += UpdatePelletAndScoreDisplay;
         EnemyCollision.OnEnemyCollision += UpdateLivesDisplay;
+        EnemyCollision.OnEnemyCollision += GameOverFlicker;
         RoundManager.OnRoundEnd += UpdateNextLevel;
+    }
+
+    void OnDisable()
+    {
+        ItemCollection.OnItemCollected -= UpdatePelletAndScoreDisplay;
+        EnemyCollision.OnEnemyCollision -= UpdateLivesDisplay;
+        EnemyCollision.OnEnemyCollision -= GameOverFlicker;
+        RoundManager.OnRoundEnd -= UpdateNextLevel;
     }
 
     void Start()
     {
+        _gameOver.gameObject.SetActive(false);  
         _updatePelletAndScoreRoutine = null;
         _updateLivesRoutine = null;
-        _updateNextLevel = null;
+        _updateNextLevelRoutine = null;
+        _gameOverFlickerRoutine = null;
 
         if (_updateLivesRoutine == null)
             _updateLivesRoutine = StartCoroutine(PlayerLivesDisplayRoutine());
@@ -64,20 +77,8 @@ public class UIManager : MonoSingleton<UIManager>
 
     void UpdateNextLevel()
     {
-        if(_updateNextLevel == null)
-            _updateNextLevel = StartCoroutine(NextLevelRoutine());
-    }
-
-    IEnumerator PlayerLivesDisplayRoutine()
-    {
-        yield return null;
-
-        for (int i = 0; i < _playerLifeIcons.Length; i++)       // This will always run 4 times each call
-        {
-            _playerLifeIcons[i].gameObject.SetActive(i < _playerLives.CurrentPlayerLives);      // element 0 gameobject setactive(0 < 3)
-        }
-
-        _updateLivesRoutine = null;
+        if(_updateNextLevelRoutine == null)
+            _updateNextLevelRoutine = StartCoroutine(NextLevelRoutine());
     }
 
     public void AddCollectedBonusItem(string tagname)
@@ -97,6 +98,26 @@ public class UIManager : MonoSingleton<UIManager>
         {
             Debug.LogWarning("Tag name doesn't match in BonusItemDisplay Dictionary - UIManager");
         }
+    }
+
+    void GameOverFlicker()
+    {
+        if (_gameOverFlickerRoutine == null)
+            _gameOverFlickerRoutine = StartCoroutine(GameOverFlickerRoutine());
+        else
+            Debug.Log(_gameOverFlickerRoutine.ToString() + " is not equal to NULL - UIManager");
+    }
+
+    IEnumerator PlayerLivesDisplayRoutine()
+    {
+        yield return null;
+
+        for (int i = 0; i < _playerLifeIcons.Length; i++)       // This will always run 4 times each call
+        {
+            _playerLifeIcons[i].gameObject.SetActive(i < _playerLives.CurrentPlayerLives);      // element 0 gameobject setactive(0 < 3)
+        }
+
+        _updateLivesRoutine = null;
     }
 
     // There is a delay in showing values so it needs to be updated at the end of each frame
@@ -122,13 +143,24 @@ public class UIManager : MonoSingleton<UIManager>
     {
         yield return new WaitForEndOfFrame();
         _totalPellets.text = "Remaining Pellets: " + _pelletManager.TotalPellets.ToString();
-        _updateNextLevel = null;
+        _updateNextLevelRoutine = null;
     }
 
-    void OnDisable()
+    IEnumerator GameOverFlickerRoutine()
     {
-        ItemCollection.OnItemCollected -= UpdatePelletAndScoreDisplay;
-        EnemyCollision.OnEnemyCollision -= UpdateLivesDisplay;
-        RoundManager.OnRoundEnd -= UpdateNextLevel;
+        Debug.Log("Testing UIManager");
+        yield return null;  
+
+        while (GameManager.Instance.IsGameOver)
+        {
+            Debug.Log("Testing 2");
+            yield return new WaitForSecondsRealtime(0.5f);
+            _gameOver.gameObject.SetActive(true);
+            yield return new WaitForSecondsRealtime(0.5f);
+            _gameOver.gameObject.SetActive(false);
+        }
+
+        _gameOverFlickerRoutine = null;
+        Debug.Log("Exiting");
     }
 }

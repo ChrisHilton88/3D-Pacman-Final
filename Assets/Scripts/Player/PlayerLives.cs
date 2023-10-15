@@ -32,7 +32,7 @@ public class PlayerLives : MonoBehaviour
         {
             CurrentPlayerLives--;
         }
-        else if (CurrentPlayerLives == 0)
+        else if (CurrentPlayerLives <= 0)
         {
             Debug.Log("Death");
             // Game Over
