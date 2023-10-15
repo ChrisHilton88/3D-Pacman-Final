@@ -5,12 +5,14 @@ using UnityEngine;
 // Respsonsible for all things related to the Pellet GameObject
 public class PelletManager : MonoSingleton<PelletManager>
 {
-    private int _maxPellets = 5;
+    private int _maxPellets = 240;
     private int _totalPellets;       
     private int _pelletTally;
 
     Coroutine _activatePelletsRoutine;
-
+    AudioSource _audioSource;   
+    
+    [SerializeField] private AudioClip _audioClip;   
     [SerializeField] private List<GameObject> _pelletList = new List<GameObject>();     // SetActive (true) to all Pellet GameObjects at the start of a new level
     [SerializeField] private List<GameObject> _powerPelletList = new List<GameObject>();
 
@@ -52,9 +54,11 @@ public class PelletManager : MonoSingleton<PelletManager>
 
     void Start()
     {
+        _audioSource = GetComponent<AudioSource>(); 
         _activatePelletsRoutine = null;
         TotalPellets = _maxPellets;
         PelletTally = 0;
+        _audioSource.clip = _audioClip;
     }
 
     #region Events
@@ -62,6 +66,13 @@ public class PelletManager : MonoSingleton<PelletManager>
     {
         if (TotalPellets > 0 && value == 10)
         {
+            if (_audioSource != null)
+            {
+                _audioSource.Play();
+                Debug.Log("Playing");
+            }
+            else
+                Debug.Log("AudioSource is NULL - PelletManager");
             TotalPellets--;
             PelletTally++;      // Add 1 to the tally
             Debug.Log("Pellet Tally: " + PelletTally);
