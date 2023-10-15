@@ -9,6 +9,8 @@ public class PelletManager : MonoSingleton<PelletManager>
     private int _totalPellets;       
     private int _pelletTally;
 
+    Coroutine _activatePelletsRoutine;
+
     [SerializeField] private List<GameObject> _pelletList = new List<GameObject>();     // SetActive (true) to all Pellet GameObjects at the start of a new level
     [SerializeField] private List<GameObject> _powerPelletList = new List<GameObject>();
 
@@ -37,11 +39,20 @@ public class PelletManager : MonoSingleton<PelletManager>
         ItemCollection.OnItemCollected += ClydeStartMoving;
         RoundManager.OnRoundEnd += RoundEnd;
         RoundManager.OnRoundEnd += ActivatePellets;
-        //RoundManager.OnRoundStart += ActivatePellets;
+    }
+
+    void OnDisable()
+    {
+        ItemCollection.OnItemCollected -= PelletCollected;
+        ItemCollection.OnItemCollected -= InkyStartMoving;
+        ItemCollection.OnItemCollected -= ClydeStartMoving;
+        RoundManager.OnRoundEnd -= RoundEnd;
+        RoundManager.OnRoundEnd -= ActivatePellets;
     }
 
     void Start()
     {
+        _activatePelletsRoutine = null;
         TotalPellets = _maxPellets;
         PelletTally = 0;
     }
@@ -85,12 +96,16 @@ public class PelletManager : MonoSingleton<PelletManager>
     {
         TotalPellets = 5;
         PelletTally = 0;
+        _activatePelletsRoutine = null;
     }
 
     // Activate all the pellets
     void ActivatePellets()
     {
-        StartCoroutine(DelayPelletActivationRoutine());
+        if (_activatePelletsRoutine == null)
+            _activatePelletsRoutine = StartCoroutine(DelayPelletActivationRoutine());
+        else
+            Debug.Log("_activatePelletsRoutine is NOT NULL - PelletManager");
     }
     #endregion
 
@@ -107,14 +122,9 @@ public class PelletManager : MonoSingleton<PelletManager>
         {
             _powerPelletList[i].gameObject.SetActive(true);
         }
+
+        _activatePelletsRoutine = null;
     }
 
-    void OnDisable()
-    {
-        ItemCollection.OnItemCollected -= PelletCollected;
-        ItemCollection.OnItemCollected -= InkyStartMoving;
-        ItemCollection.OnItemCollected -= ClydeStartMoving;
-        RoundManager.OnRoundEnd -= RoundEnd;
-        RoundManager.OnRoundStart -= ActivatePellets;
-    }
+
 }

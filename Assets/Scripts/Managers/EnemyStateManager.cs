@@ -13,7 +13,8 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     private bool frightenedStateEventOccurred = false;
 
-    Coroutine _cycleCoroutine;
+    Coroutine _cycleRoutine;
+    Coroutine _newRoundStartRoutine;
     WaitForSeconds _fiveSeconds = new WaitForSeconds(5);        // Cache for optimisation
     WaitForSeconds _sevenSeconds = new WaitForSeconds(7);
     WaitForSeconds _twentySeconds = new WaitForSeconds(20);
@@ -24,7 +25,7 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     #region Properties
     public int CycleCount { get { return _cycleCount; } private set { _cycleCount = value; } }      
-    public float CycleTimer {  get { return _cycleTimer; } private set {  _cycleTimer = value; } }
+    public float startTime {  get { return _cycleTimer; } private set {  _cycleTimer = value; } }
     public Transform[] FrightenedPositions { get { return _frightenedPositions;} private set {  _frightenedPositions = value; } }       
     #endregion
 
@@ -46,11 +47,11 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     void Start()
     {
         CycleCount = 1;
-        CycleTimer = Time.time;
-        Debug.Log("Cycle Time: " + CycleTimer);
-        _cycleCoroutine = null;
-        if (_cycleCoroutine == null)
-            _cycleCoroutine = StartCoroutine(CycleTimerRoutine());
+        startTime = Time.time;
+        _cycleRoutine = null;
+        _newRoundStartRoutine = null;
+        if (_cycleRoutine == null)
+            _cycleRoutine = StartCoroutine(CycleTimerRoutine());
     }
 
     // Generates a random number to be used as an element reference in an array
@@ -61,57 +62,7 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     }
 
     // Needs a parameter for a timer and we need to source this information from a stored table or something
-    IEnumerator CycleTimerRoutine()
-    {
-        while (CycleCount <= _maxCycles && frightenedStateEventOccurred == false)        
-        {
-            switch (CycleCount)
-            {
-                case 1:
-                    yield return _sevenSeconds;     // ToChase
-                    Debug.Log("Change State 1");
-                    Debug.Log("Time: " + Time.time);
-                    break;
-                case 2:
-                    yield return _twentySeconds;    // ToScatter
-                    Debug.Log("Change State 2");
-                    Debug.Log("Time: " + Time.time);
-                    break;
-                case 3:
-                    yield return _sevenSeconds;     // ToChase
-                    Debug.Log("Change State 3");
-                    Debug.Log("Time: " + Time.time);
-                    break;
-                case 4:
-                    yield return _twentySeconds;    // ToScatter
-                    Debug.Log("Change State 4");
-                    Debug.Log("Time: " + Time.time);
-                    break;
-                case 5:
-                    yield return _fiveSeconds;      // ToChase
-                    Debug.Log("Change State 5");
-                    Debug.Log("Time: " + Time.time);
-                    break;
-                case 6:
-                    yield return _twentySeconds;    // ToScatter
-                    Debug.Log("Change State 6");
-                    Debug.Log("Time: " + Time.time);
-                    break;
-                case 7:
-                    yield return _fiveSeconds;      // ToChase
-                    Debug.Log("Change State 7");
-                    Debug.Log("Time: " + Time.time);
-                    break;
-                default:
-                    Debug.Log("Incorrect Cycle Count in CycleTimerRoutine() - EnemyStateManager");
-                    break;
-            }
-
-            OnNewState?.Invoke();       // Trigger event for all enemies
-        }
-
-        _cycleCoroutine = null;     // Set to null so we can run again
-    }
+    
 
     #region Events
     // Event that handles increasing the CycleCount
@@ -122,18 +73,88 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     void FrightenedState()
     {
-        Debug.Log("Frightened State occurred at: " + Time.time.ToString());
         frightenedStateEventOccurred = true;    
     }
 
     // Event that handles resetting the CycleCount back to 1 on New Round
     void NewRoundStart()
     {
-        StopCoroutine(_cycleCoroutine);
-        CycleCount = 1;
-        _cycleCoroutine = null;
-        if (_cycleCoroutine == null)
-            _cycleCoroutine = StartCoroutine(CycleTimerRoutine());
+        if (_newRoundStartRoutine == null)
+            _newRoundStartRoutine = StartCoroutine(NewRoundStartDelayRoutine());
+        else
+            Debug.Log("_newRoundStartRoutine is NOT NULL - EnemyStateManager");
     }
     #endregion
+
+    IEnumerator CycleTimerRoutine()
+    {
+        while (CycleCount <= _maxCycles && frightenedStateEventOccurred == false)
+        {
+            switch (CycleCount)
+            {
+                case 1:
+                    yield return _sevenSeconds;     // ToChase
+                    Debug.Log("Change State 1");
+                    break;
+                case 2:
+                    yield return _twentySeconds;    // ToScatter
+                    Debug.Log("Change State 2");
+                    break;
+                case 3:
+                    yield return _sevenSeconds;     // ToChase
+                    Debug.Log("Change State 3");
+                    break;
+                case 4:
+                    yield return _twentySeconds;    // ToScatter
+                    Debug.Log("Change State 4");
+                    break;
+                case 5:
+                    yield return _fiveSeconds;      // ToChase
+                    Debug.Log("Change State 5");
+                    break;
+                case 6:
+                    yield return _twentySeconds;    // ToScatter
+                    Debug.Log("Change State 6");
+                    break;
+                case 7:
+                    yield return _fiveSeconds;      // ToChase
+                    Debug.Log("Change State 7");
+                    break;
+                default:
+                    Debug.Log("Incorrect Cycle Count in CycleTimerRoutine() - EnemyStateManager");
+                    break;
+            }
+
+            OnNewState?.Invoke();       // Trigger event for all enemies
+        }
+
+        _cycleRoutine = null;     // Set to null so we can run again
+    }
+
+    IEnumerator NewRoundStartDelayRoutine()
+    {
+        yield return null;
+
+        Debug.Log("Cycle Count 1: " + CycleCount);
+        CycleCount = 1;
+        Debug.Log("Cycle Count 2: " + CycleCount);
+
+        if (_cycleRoutine != null)
+        {
+            StopCoroutine(_cycleRoutine);
+            _cycleRoutine = null;
+        }
+        else
+            Debug.Log("_cycleCoroutine is NULL - EnemyStateManager");
+
+        if (_cycleRoutine == null)
+        {
+            _cycleRoutine = StartCoroutine(CycleTimerRoutine());
+            Debug.Log("Starting new Coroutine");
+        }
+        else
+            Debug.Log("_cycleCoroutine is NOT NULL - EnemyStateManager");
+
+        _newRoundStartRoutine = null;
+    }
 }

@@ -42,6 +42,7 @@ public class PlayerLives : MonoBehaviour
     // Can only can 1 life after collecting 10000 total score
     public void GainLife()
     {
+        Debug.Log("Test");
         if (CurrentPlayerLives < _maxLives)
         {
             CurrentPlayerLives++;

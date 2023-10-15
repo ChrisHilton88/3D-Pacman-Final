@@ -18,7 +18,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        _cc = GetComponent<CharacterController>();  
+        if (_cc == null)
+            _cc = GetComponent<CharacterController>();
+        else
+            Debug.Log("CharacterController is NULL in PlayerMovement");
         transform.position = _startingPos;  
     }
 
@@ -44,8 +47,15 @@ public class PlayerMovement : MonoBehaviour
 
     void RestartPosition()
     {
-        _cc.enabled = false;
-        transform.position = _startingPos;
-        _cc.enabled = true;
+        if (_cc != null) // Check if _cc is valid
+        {
+            _cc.enabled = false;
+            transform.position = _startingPos;
+            _cc.enabled = true;
+        }
+        else
+        {
+            Debug.LogWarning("CharacterController is missing or destroyed.");
+        }
     }
 }

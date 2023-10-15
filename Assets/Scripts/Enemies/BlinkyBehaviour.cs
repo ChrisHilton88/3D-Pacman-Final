@@ -142,7 +142,6 @@ public class BlinkyBehaviour : MonoBehaviour
         }
         else
         {
-            Debug.Log("test");
             BlinkyCurrentPosition++;
         }
 

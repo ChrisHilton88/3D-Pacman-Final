@@ -16,13 +16,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    protected virtual void Initialize()
-    {
-        // Default implementation for initialization.
-        // Override this method in inheriting classes to add custom initialization logic.
-    }
-
-    protected MonoSingleton()
+    protected virtual void Awake()
     {
         if (_instance != null)
         {
@@ -32,8 +26,6 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
 
         _instance = this as T;
-
-        Initialize();
     }
 }
 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class InputManager : MonoSingleton<InputManager>
@@ -5,8 +6,7 @@ public class InputManager : MonoSingleton<InputManager>
     PlayerInputActions _playerinputActions;
 
     [SerializeField] private PlayerMovement _playerMovement;
-    [SerializeField] private LookBehaviour _lookBehaviour;    
-
+    [SerializeField] private LookBehaviour _lookBehaviour;
 
 
     void OnEnable()
@@ -17,10 +17,26 @@ public class InputManager : MonoSingleton<InputManager>
         _playerinputActions.Player.Move.canceled += MoveCanceled;
         _playerinputActions.Player.Look.performed += LookPerformed;
         _playerinputActions.Player.Look.canceled += Lookcanceled;
+
+        _playerinputActions.UI.Enable();
+        _playerinputActions.UI.Menu.started += MenuPerformed;
+    }
+
+    void OnDisable()
+    {
+        _playerinputActions.Player.Disable();
+        _playerinputActions.Player.Move.performed -= MovePerformed;
+        _playerinputActions.Player.Move.canceled -= MoveCanceled;
+        _playerinputActions.Player.Look.performed -= LookPerformed;
+        _playerinputActions.Player.Look.canceled -= Lookcanceled;
+
+        _playerinputActions.UI.Disable();
+        _playerinputActions.UI.Menu.started += MenuPerformed;
+
     }
 
 
-    #region Actions
+    #region Player Actions
     void MovePerformed(InputAction.CallbackContext context)
     {
         Vector2 move = context.ReadValue<Vector2>();
@@ -44,14 +60,18 @@ public class InputManager : MonoSingleton<InputManager>
         Vector2 look = context.ReadValue<Vector2>();
         _lookBehaviour.Look(look);
     }
-    #endregion 
 
 
-    void OnDisable()
+    #endregion
+
+    #region UI Actions
+    void MenuPerformed(InputAction.CallbackContext context)
     {
-        _playerinputActions.Player.Move.performed -= MovePerformed;
-        _playerinputActions.Player.Move.canceled -= MoveCanceled;
-        _playerinputActions.Player.Look.performed -= LookPerformed;
-        _playerinputActions.Player.Look.canceled -= Lookcanceled;
+        if(context.ReadValue<float>() == 1)
+        {
+            GameManager.Instance.OpenMenu();
+        }
     }
+    #endregion
+
 }
