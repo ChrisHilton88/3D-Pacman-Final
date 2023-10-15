@@ -2796,7 +2796,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1433076965}
-  - component: {fileID: 1433076966}
   m_Layer: 0
   m_Name: Minimap Camera
   m_TagString: Untagged
@@ -2820,18 +2819,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1433076966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1433076964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 572e8f182d490db48be182b63887c84a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1436349597 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023928692428, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
@@ -3134,6 +3121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1704647248}
   - component: {fileID: 1704647250}
+  - component: {fileID: 1704647251}
   m_Layer: 6
   m_Name: Minimap Cam
   m_TagString: Untagged
@@ -3148,7 +3136,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1704647247}
-  m_LocalRotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 96.5, z: -4.0000057}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3179,7 +3167,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 90
+  near clip plane: 10
   far clip plane: 100
   field of view: 60
   orthographic: 1
@@ -3199,6 +3187,19 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1704647251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704647247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 572e8f182d490db48be182b63887c84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPos: {fileID: 1693189006}
 --- !u!1001 &1706082080
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3206,14 +3207,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5889706252562693975, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5889706252562693975, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5889706253258460203, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
       propertyPath: m_Name
       value: Player
@@ -3260,10 +3253,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5889706253258460206, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5889706253418259864, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8361306807952975499, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
@@ -4090,22 +4079,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _frightenedPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1940641318}
+  - {fileID: 1063007401}
+  - {fileID: 702652875}
+  - {fileID: 1707337880}
+  - {fileID: 1198187786}
+  - {fileID: 800321937}
+  - {fileID: 228202570}
+  - {fileID: 774294062}
+  - {fileID: 1616059659}
+  - {fileID: 2043618514}
+  - {fileID: 2063285487}
+  - {fileID: 417010896}
+  - {fileID: 1826308336}
+  - {fileID: 1756226160}
+  - {fileID: 88673929}
+  - {fileID: 1006965971}
+  - {fileID: 2152769451592567828}
+  - {fileID: 2152769451592567827}
+  - {fileID: 2152769451592567826}
+  - {fileID: 2152769451592567825}
 --- !u!1 &2027817607 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600022284796061, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
