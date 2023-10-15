@@ -200,7 +200,6 @@ public class ClydeBehaviour : MonoBehaviour
     // Called when the total pellets collected equals 80
     public void StartMovement()
     {
-        Debug.Log("Clyde Pellet Count: " + PelletManager.Instance.PelletTally);
         _agent.destination = _clydeScatterPositions[ClydeCurrentScatterPosition].position;
         ClydeCanMove = true;
     }

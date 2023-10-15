@@ -150,12 +150,10 @@ public class UIManager : MonoSingleton<UIManager>
 
     IEnumerator GameOverFlickerRoutine()
     {
-        Debug.Log("Testing UIManager");
         yield return null;  
 
         while (GameManager.Instance.IsGameOver)
         {
-            Debug.Log("Testing 2");
             yield return new WaitForSecondsRealtime(0.5f);
             _gameOver.gameObject.SetActive(true);
             yield return new WaitForSecondsRealtime(0.5f);
@@ -163,6 +161,5 @@ public class UIManager : MonoSingleton<UIManager>
         }
 
         _gameOverFlickerRoutine = null;
-        Debug.Log("Exiting");
     }
 }

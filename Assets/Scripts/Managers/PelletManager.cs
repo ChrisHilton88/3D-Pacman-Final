@@ -69,7 +69,6 @@ public class PelletManager : MonoSingleton<PelletManager>
             _audioSource.Play();
             TotalPellets--;
             PelletTally++;      // Add 1 to the tally
-            Debug.Log("Pellet Tally: " + PelletTally);
 
             if (TotalPellets <= 0)
             {
@@ -99,7 +98,7 @@ public class PelletManager : MonoSingleton<PelletManager>
     // Reset the values
     void RoundEnd()
     {
-        TotalPellets = 5;
+        TotalPellets = 240;
         PelletTally = 0;
         _activatePelletsRoutine = null;
     }

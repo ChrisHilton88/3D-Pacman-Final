@@ -165,9 +165,11 @@ public class BlinkyBehaviour : MonoBehaviour
         }
     }
 
-    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state)
+    IEnumerator FrightenedRoutineTimer(Vector3 previousDestination, EnemyState previousState, string state)
     {
         yield return _frightenedTimer;      // Wait for cached time (6 secs)
+        EnemyStateManager.Instance.FrightenedStateOff();
+        _agent.destination = previousDestination;
         _currentState = previousState;      // Return to previous state
         _animator.SetTrigger("To" + state);     // Set Animator to previous state
         _frightenedRoutine = null;
@@ -210,6 +212,8 @@ public class BlinkyBehaviour : MonoBehaviour
             else
                 Debug.Log("Animator is NULL 2 in SetNewState() - BlinkyBehaviour");
         }
+        else
+            Debug.Log("Must be in Frightened State");
     }
 
     // Event that handles incrementing agent speed when a pellet is collected
@@ -221,6 +225,7 @@ public class BlinkyBehaviour : MonoBehaviour
     // Event that handles setting the enemy's state to Frightened
     void FrightenedState()
     {
+        Vector3 previousDestination = _agent.destination;   
         EnemyState tempState = _currentState;       // Store the current state so we can switch back to it once the timer has ended
         string state = tempState.ToString();
         _currentState = EnemyState.Frightened;      // Set new state to Frightened
@@ -229,7 +234,7 @@ public class BlinkyBehaviour : MonoBehaviour
         while (!GenerateRandomFrightenedPosition());
 
         if (_frightenedRoutine == null)
-            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state));     // Start 6 second timer
+            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(previousDestination, tempState, state));     // Start 6 second timer
     }
 
     // Event that handles the successful completion of a round

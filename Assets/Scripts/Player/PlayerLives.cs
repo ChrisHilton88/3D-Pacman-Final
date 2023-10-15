@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerLives : MonoBehaviour
 {
-    private int _maxLives = 4, _minLives = 0;
+    private int _maxLives = 4, _minLives = -1;
     private int _startingLives = 3;
     private int _currentPlayerLives;
 
@@ -31,18 +31,19 @@ public class PlayerLives : MonoBehaviour
         if (CurrentPlayerLives > _minLives)
         {
             CurrentPlayerLives--;
+            Debug.Log("Current Lives: " + CurrentPlayerLives);
         }
-        else if (CurrentPlayerLives <= 0)
+
+        if (CurrentPlayerLives < 0)
         {
             Debug.Log("Death");
-            // Game Over
+            Debug.Log("Exiting");
         }
     }
 
     // Can only can 1 life after collecting 10000 total score
     public void GainLife()
     {
-        Debug.Log("Test");
         if (CurrentPlayerLives < _maxLives)
         {
             CurrentPlayerLives++;

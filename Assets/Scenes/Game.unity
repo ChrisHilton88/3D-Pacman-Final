@@ -1187,6 +1187,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600022702227537, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &498495560 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 938153465, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+  m_PrefabInstance: {fileID: 9005141290807555693}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &521264408 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023324198589, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
@@ -2637,6 +2642,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023937862867, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &890023439 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1354175622, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+  m_PrefabInstance: {fileID: 9005141290807555693}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &892921082
 GameObject:
   m_ObjectHideFlags: 0
@@ -3992,6 +4002,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c2a1fc27247d174990b12c2252d1b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!143 &1693189013 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 5889706253258462161, guid: 163f9f6ea7575b84a95a0f17d3b6f20f, type: 3}
+  m_PrefabInstance: {fileID: 1706082080}
+  m_PrefabAsset: {fileID: 0}
 --- !u!82 &1693189014
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5777,11 +5792,7 @@ PrefabInstance:
       propertyPath: _blinkyScatterPositions.Array.data[3]
       value: 
       objectReference: {fileID: 1707337880}
-    m_RemovedComponents:
-    - {fileID: 569153604, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
-    - {fileID: 1345085333622362509, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
-    - {fileID: 4996696739783150086, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
-    - {fileID: 8097026738613830002, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bcff3c1100ea3d4585c7e156b0bd8a6, type: 3}
 --- !u!1001 &1769421614778705591
 PrefabInstance:
@@ -12281,6 +12292,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2064333096}
     m_Modifications:
+    - target: {fileID: 827113860, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: _cc
+      value: 
+      objectReference: {fileID: 1693189013}
+    - target: {fileID: 827113860, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: _targetPortal
+      value: 
+      objectReference: {fileID: 498495560}
+    - target: {fileID: 1702639100, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: _cc
+      value: 
+      objectReference: {fileID: 1693189013}
+    - target: {fileID: 1702639100, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
+      propertyPath: _targetPortal
+      value: 
+      objectReference: {fileID: 890023439}
     - target: {fileID: 9005141290024485456, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
       propertyPath: m_Name
       value: Portals

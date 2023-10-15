@@ -11,7 +11,7 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     private float _cycleTimer;
 
-    private bool frightenedStateEventOccurred = false;
+    private bool _frightenedState = false;
 
     Coroutine _cycleRoutine;
     Coroutine _newRoundStartRoutine;
@@ -26,6 +26,7 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     #region Properties
     public int CycleCount { get { return _cycleCount; } private set { _cycleCount = value; } }      
     public float startTime {  get { return _cycleTimer; } private set {  _cycleTimer = value; } }
+    public bool FrightenedState { get { return _frightenedState; } private set { _frightenedState = value; } }  
     public Transform[] FrightenedPositions { get { return _frightenedPositions;} private set {  _frightenedPositions = value; } }       
     #endregion
 
@@ -33,13 +34,13 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     void OnEnable()
     {
-        ItemCollection.OnFrightened += FrightenedState;
+        ItemCollection.OnFrightened += FrightenedStateOn;
         OnNewState += CycleIncrement;
         RoundManager.OnRoundEnd += NewRoundStart;
     }
     void OnDisable()
     {
-        ItemCollection.OnFrightened -= FrightenedState;
+        ItemCollection.OnFrightened -= FrightenedStateOn;
         OnNewState -= CycleIncrement;
         RoundManager.OnRoundEnd -= NewRoundStart;
     }
@@ -71,9 +72,14 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
         CycleCount++;
     }
 
-    void FrightenedState()
+    void FrightenedStateOn()
     {
-        frightenedStateEventOccurred = true;    
+        _frightenedState = true;    
+    }
+
+    public void FrightenedStateOff()
+    {
+        _frightenedState = false;
     }
 
     // Event that handles resetting the CycleCount back to 1 on New Round
@@ -88,7 +94,7 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     IEnumerator CycleTimerRoutine()
     {
-        while (CycleCount <= _maxCycles && frightenedStateEventOccurred == false)
+        while (CycleCount <= _maxCycles && _frightenedState == false)
         {
             switch (CycleCount)
             {
@@ -125,7 +131,8 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
                     break;
             }
 
-            OnNewState?.Invoke();       // Trigger event for all enemies
+            yield return new WaitUntil(() => !_frightenedState);
+            OnNewState?.Invoke(); 
         }
 
         _cycleRoutine = null;     // Set to null so we can run again
@@ -135,14 +142,13 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     {
         yield return null;
 
-        Debug.Log("Cycle Count 1: " + CycleCount);
         CycleCount = 1;
-        Debug.Log("Cycle Count 2: " + CycleCount);
 
         if (_cycleRoutine != null)
         {
             StopCoroutine(_cycleRoutine);
             _cycleRoutine = null;
+            Debug.Log("Starting new routine");
         }
         else
             Debug.Log("_cycleCoroutine is NULL - EnemyStateManager");

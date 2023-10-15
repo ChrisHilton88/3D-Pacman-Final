@@ -32,6 +32,7 @@ public class GameManager : MonoSingleton<GameManager>
     void Start()
     {
         isGameOver = false;
+        _menu.SetActive(false); 
         _currentScene = SceneManager.GetActiveScene().buildIndex;
         Time.timeScale = 1;
     }
@@ -70,9 +71,10 @@ public class GameManager : MonoSingleton<GameManager>
     {
         yield return new WaitForEndOfFrame();
 
-        if (_playerLives.CurrentPlayerLives == 0)
+        if (_playerLives.CurrentPlayerLives < 0)
         {
             IsGameOver = true;
+            _menu.SetActive(true);
             Time.timeScale = 0f;
         }
     }
