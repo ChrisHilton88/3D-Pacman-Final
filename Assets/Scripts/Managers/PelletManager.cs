@@ -66,13 +66,7 @@ public class PelletManager : MonoSingleton<PelletManager>
     {
         if (TotalPellets > 0 && value == 10)
         {
-            if (_audioSource != null)
-            {
-                _audioSource.Play();
-                Debug.Log("Playing");
-            }
-            else
-                Debug.Log("AudioSource is NULL - PelletManager");
+            _audioSource.Play();
             TotalPellets--;
             PelletTally++;      // Add 1 to the tally
             Debug.Log("Pellet Tally: " + PelletTally);
