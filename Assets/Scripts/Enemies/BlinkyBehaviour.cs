@@ -34,7 +34,7 @@ public class BlinkyBehaviour : MonoBehaviour
     [SerializeField] private Transform[] _blinkyScatterPositions = new Transform[4];
 
     #region Properties
-    public int BlinkyCurrentPosition { get { return _blinkyCurrentPosition; } private set {  _blinkyCurrentPosition = value; } }
+    public int BlinkyCurrentPosition { get; set;}
     #endregion
 
 
