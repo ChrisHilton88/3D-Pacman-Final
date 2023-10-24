@@ -3,7 +3,7 @@ using UnityEngine;
 // Responsible for telling Pinky that Blinky has left the cube and Pinky can start moving
 public class BlinkyExitCube : MonoBehaviour
 {
-    [SerializeField] private PinkyBehaviour _pinkyBehaviour;
+    [SerializeField] private TestPinky _testPinky;
 
 
     void OnEnable()
@@ -15,7 +15,8 @@ public class BlinkyExitCube : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            _pinkyBehaviour.StartMoving();
+            Debug.Log("StartMoving has been called");
+            _testPinky.StartMoving();
             gameObject.SetActive(false);  
         }
     }

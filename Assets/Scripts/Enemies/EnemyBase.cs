@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,16 +23,16 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected const float _speedIncrement = 0.02f;     // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
 
-    protected readonly Vector3 _startingPosition;     // Set own starting position
+    protected Vector3 _startingPosition;     // Set own starting position
 
     protected NavMeshAgent _agent;
     protected Animator _animator;
     protected Coroutine _frightenedRoutine;
     protected WaitForSeconds _frightenedTimer = new WaitForSeconds(6f);
+    protected Transform _pacmanTargetPos;
 
     protected Transform[] _scatterPositions;
 
-    [SerializeField] protected Transform _pacmanTargetPos;
 
     #region Properties
     public int CurrentPosition { get { return _currentPosition; } protected set { _currentPosition = value; } }   
@@ -45,7 +44,6 @@ public abstract class EnemyBase : MonoBehaviour
     {
         EnemyCollision.OnEnemyCollision += RestartPosition;
         EnemyStateManager.OnNewState += SetNewState;
-        ItemCollection.OnItemCollected += PelletCollected;
         ItemCollection.OnFrightened += FrightenedState;
         RoundManager.OnRoundEnd += RoundCompleted;
     }
@@ -54,13 +52,13 @@ public abstract class EnemyBase : MonoBehaviour
     {
         EnemyCollision.OnEnemyCollision -= RestartPosition;
         EnemyStateManager.OnNewState -= SetNewState;
-        ItemCollection.OnItemCollected -= PelletCollected;
         ItemCollection.OnFrightened -= FrightenedState;
         RoundManager.OnRoundEnd -= RoundCompleted;
     }
 
-
-    protected virtual void Start()
+    // The base class's Start method will be automatically called when the game starts for any object that has the derived class script attached.
+    // In other words, you don't need to re-implement this method in each derived class unless you have a specific need to do so.
+    protected virtual void Start()      
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
@@ -74,6 +72,8 @@ public abstract class EnemyBase : MonoBehaviour
     {
         CheckState();
     }
+
+    protected abstract void EnemyInitialisation();
 
     protected abstract void CheckState();           // Enemies implement their own State Behaviour
 
@@ -108,7 +108,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     #region Return Methods
     // Generates and returns a random frightened location
-    bool GenerateRandomFrightenedPosition()
+    protected virtual bool GenerateRandomFrightenedPosition()
     {
         _randomFrightenedLocation = EnemyStateManager.Instance.RandomNumber();
         Transform temp = EnemyStateManager.Instance.FrightenedPositions[_randomFrightenedLocation];
@@ -190,7 +190,7 @@ public abstract class EnemyBase : MonoBehaviour
     }
 
     // Event that handles incrementing agent speed when a pellet is collected
-    void PelletCollected(int value)
+    protected virtual void PelletCollected(int value)
     {
         IncrementAgentSpeed();
     }

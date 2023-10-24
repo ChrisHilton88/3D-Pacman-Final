@@ -1,25 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TestBlinky : EnemyBase
 {
     [SerializeField] private Transform[] _blinkyScatterPositions;
+    [SerializeField] private Transform _blinkyTargetPacmanPos;
 
 
-    void Awake()
+    protected override void OnEnable()
     {
-        _scatterPositions = _blinkyScatterPositions;
+        base.OnEnable();
+        ItemCollection.OnItemCollected += PelletCollected;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        ItemCollection.OnItemCollected -= PelletCollected;  
+    }
+
+    protected void Awake()
+    {
+        EnemyInitialisation();
     }
 
     protected override void Start()
     {
-        // This doesn't need to be here if Blinky doesn't have any additional initialisation that needs to be done. Can be removed at the end if this is the case.
         base.Start();
-
+        _agent.isStopped = false;
     }
 
-    protected override void CheckState()        
+    protected override void EnemyInitialisation()
+    {
+        _scatterPositions = _blinkyScatterPositions;
+        _pacmanTargetPos = _blinkyTargetPacmanPos;
+        _startingPosition = new Vector3(0.5f, 0, 8.5f);
+    }
+
+    protected sealed override void CheckState()        
     {
         switch (_currentState)
         {
@@ -31,15 +48,13 @@ public class TestBlinky : EnemyBase
                     if (_agent.remainingDistance < 1.5f)
                     {
                         CalculateNextDestination();
-                        // The base class method cannot be set to private otherwise we won't see this. 
-                        // At the same time, I don't want this class to be able to make any changes to the base method, affecting other classes that derive the base class.
                     }
                 }
                 break;
 
             case EnemyState.Chase:
-                _agent.destination = _pacmanTargetPos.position;       // Needs to be continually updating for Player position
-                Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.red);       // The line is correct when changing states
+                _agent.destination = _pacmanTargetPos.position;       
+                Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.red);       
                 break;
 
             case EnemyState.Frightened:

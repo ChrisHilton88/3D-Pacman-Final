@@ -17,8 +17,8 @@ public class PelletManager : MonoSingleton<PelletManager>
     [SerializeField] private List<GameObject> _powerPelletList = new List<GameObject>();
 
     [SerializeField] private GameObject _pelletprefab;
-    [SerializeField] private InkyBehaviour _inkyBehaviour;
-    [SerializeField] private ClydeBehaviour _clydeBehaviour;
+    [SerializeField] private TestInky _testInky;
+    [SerializeField] private TestClyde _testClyde;
 
     #region Properties
     public int TotalPellets
@@ -81,8 +81,8 @@ public class PelletManager : MonoSingleton<PelletManager>
     // Inky can start moving
     void InkyStartMoving(int value)
     {
-        if (PelletTally >= _inkyBehaviour.StartRandomValue)
-            _inkyBehaviour.StartMovement();
+        if (PelletTally >= _testInky.StartRandomValue)
+            _testInky.StartMovement();
         else
             return;
     }
@@ -90,8 +90,8 @@ public class PelletManager : MonoSingleton<PelletManager>
     // Clyde can start moving
     void ClydeStartMoving(int value)
     {
-        if (PelletTally >= _clydeBehaviour.MovePelletCount)
-            _clydeBehaviour.StartMovement();
+        if (PelletTally >= _testClyde.MovePelletCount)
+            _testClyde.StartMovement();
         else
             return;
     }
@@ -130,6 +130,4 @@ public class PelletManager : MonoSingleton<PelletManager>
 
         _activatePelletsRoutine = null;
     }
-
-
 }

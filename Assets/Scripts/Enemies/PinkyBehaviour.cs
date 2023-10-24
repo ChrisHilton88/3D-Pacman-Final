@@ -19,6 +19,7 @@ public class PinkyBehaviour : MonoBehaviour
     private float _minSpeed = 5f;
     private float _minTunnelSpeed = 2.5f;
     private float _maxSpeed = 10f;
+
     private const float _speedIncrement = 0.02f;
 
     private bool _pinkyCanMove;
