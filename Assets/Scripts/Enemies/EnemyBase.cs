@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -142,12 +143,14 @@ public abstract class EnemyBase : MonoBehaviour
     #endregion
 
     #region Coroutines
-    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state)
+    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state, Vector3 previousDestination, Action onComplete)
     {
         yield return _frightenedTimer;      // Wait for cached time (6 secs)
         _currentState = previousState;      // Return to previous state
+        _agent.destination = previousDestination;
         _animator.SetTrigger("To" + state);     // Set Animator to previous state
         _frightenedRoutine = null;
+        onComplete?.Invoke();   
     }
     #endregion
 
@@ -171,10 +174,9 @@ public abstract class EnemyBase : MonoBehaviour
             if (_animator != null)
             {
                 _agent.destination = _scatterPositions[CurrentPosition].position;          // We can have this here because the boxes are static
-                _agent.isStopped = false;
             }
             else
-                Debug.Log("Animator is NULL Chase -> Scatter in SetNewState() - BlinkyBehaviour");
+                Debug.Log("Animator is NULL Chase - EnemyBase");
         }
         else if (_currentState == EnemyState.Scatter)
         {
@@ -185,7 +187,7 @@ public abstract class EnemyBase : MonoBehaviour
                 _animator.SetTrigger("ToChase");
             }
             else
-                Debug.Log("Animator is NULL Scatter -> Chase in SetNewState() - BlinkyBehaviour");
+                Debug.Log("Animator is NULL Scatter - EnemyBase");
         }
     }
 
@@ -200,25 +202,27 @@ public abstract class EnemyBase : MonoBehaviour
     {
         EnemyState tempState = _currentState;       // Store the current state so we can switch back to it once the timer has ended
         string state = tempState.ToString();
+        Vector3 previousDestination = _agent.destination;
         _currentState = EnemyState.Frightened;      // Set new state to Frightened
         _animator.SetTrigger("ToFrightened");
 
-        while (!GenerateRandomFrightenedPosition()) ;
+        while (!GenerateRandomFrightenedPosition());
 
         if (_frightenedRoutine == null)
-            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state));     // Start 6 second timer
+            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state, previousDestination, () =>
+            {
+
+            }));     
     }
 
     // Event that handles the successful completion of a round
-    void RoundCompleted()
+    protected virtual void RoundCompleted()
     {
         _agent.isStopped = true;
         _agent.Warp(_startingPosition);
-        _agent.isStopped = false;
         CurrentPosition = 0;
         _agent.speed = _minSpeed;
         _currentState = EnemyState.Scatter;
-        _agent.destination = _scatterPositions[CurrentPosition].position;
     }
     #endregion
 }

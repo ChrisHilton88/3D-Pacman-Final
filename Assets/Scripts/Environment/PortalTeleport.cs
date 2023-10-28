@@ -10,7 +10,7 @@ public class PortalTeleport : MonoBehaviour
     {
         if (other.CompareTag("Player") && other.gameObject != _targetPortal.gameObject)
         {
-            TeleportPlayer(other.transform);       
+            TeleportPlayer(other.transform);
         }
         else if (other.CompareTag("Enemy") && other.gameObject != _targetPortal.gameObject)
         {

@@ -168,7 +168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5829594515556301993, guid: 407432f8304de044887245bd0724efca, type: 3}
       propertyPath: m_Speed
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4436275128398404246, guid: 407432f8304de044887245bd0724efca, type: 3}
@@ -200,7 +200,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _blinkyPos: {fileID: 0}
+  _blinkyPos: {fileID: 1330977667767825245}
   _inkyTargetPacmanPos: {fileID: 0}
 --- !u!1001 &1946686936526509744
 PrefabInstance:
@@ -299,7 +299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4054185313398219589, guid: 199b1fb0cee885d4ab0cfea6ced51d36, type: 3}
       propertyPath: m_Speed
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4508149637567062224, guid: 199b1fb0cee885d4ab0cfea6ced51d36, type: 3}
       propertyPath: m_CastShadows
@@ -481,7 +481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6570075215994551342, guid: 390f92d4e5a18104fa56fc07eb88e19f, type: 3}
       propertyPath: m_Speed
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8092939827313796430, guid: 390f92d4e5a18104fa56fc07eb88e19f, type: 3}
       propertyPath: _playerTargetPos
@@ -597,7 +597,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7170905026173882132, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
       propertyPath: m_Speed
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7170905026173882132, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
       propertyPath: m_Acceleration
