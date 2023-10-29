@@ -81,7 +81,9 @@ public class PelletManager : MonoSingleton<PelletManager>
     void InkyStartMoving(int value)
     {
         if (PelletTally >= _inkyBehaviour.StartRandomValue)
+        {
             _inkyBehaviour.StartMovement();
+        }
         else
             return;
     }
@@ -90,7 +92,9 @@ public class PelletManager : MonoSingleton<PelletManager>
     void ClydeStartMoving(int value)
     {
         if (PelletTally >= _clydeBehaviour.MovePelletCount)
+        {
             _clydeBehaviour.StartMovement();
+        }
         else
             return;
     }
@@ -129,6 +133,4 @@ public class PelletManager : MonoSingleton<PelletManager>
 
         _activatePelletsRoutine = null;
     }
-
-
 }
