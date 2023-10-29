@@ -11,7 +11,8 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     private float _cycleTimer;
 
-    private bool _frightenedState = false;
+    private bool _frightenedStateActive = false;
+
 
     Coroutine _cycleRoutine;
     Coroutine _newRoundStartRoutine;
@@ -26,7 +27,7 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     #region Properties
     public int CycleCount { get { return _cycleCount; } private set { _cycleCount = value; } }      
     public float startTime {  get { return _cycleTimer; } private set {  _cycleTimer = value; } }
-    public bool FrightenedState { get { return _frightenedState; } private set { _frightenedState = value; } }  
+    public bool FrightenedStateActive { get { return _frightenedStateActive; } private set { _frightenedStateActive= value; } } 
     public Transform[] FrightenedPositions { get { return _frightenedPositions;} private set {  _frightenedPositions = value; } }       
     #endregion
 
@@ -62,8 +63,6 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
         return _randomNumber;
     }
 
-    // Needs a parameter for a timer and we need to source this information from a stored table or something
-    
 
     #region Events
     // Event that handles increasing the CycleCount
@@ -74,12 +73,14 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     void FrightenedStateOn()
     {
-        _frightenedState = true;    
+        _frightenedStateActive = true;    
     }
 
     public void FrightenedStateOff()
     {
-        _frightenedState = false;
+        _frightenedStateActive = true;  
+        // Need to find a way to be told that the coroutine has finished so that we can set the state back to false.
+        // At the same time we need to pause the other coroutine and have it resume when this timer finishes.
     }
 
     // Event that handles resetting the CycleCount back to 1 on New Round
@@ -92,47 +93,50 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     }
     #endregion
 
+    // Chase & Scatter States
     IEnumerator CycleTimerRoutine()
     {
-        while (CycleCount <= _maxCycles && _frightenedState == false)
+        while (CycleCount <= _maxCycles && _frightenedStateActive == false)
         {
             switch (CycleCount)
             {
                 case 1:
                     yield return _sevenSeconds;     // ToChase
-                    Debug.Log("Change State 1");
+                    Debug.Log("Change State 1 (ToChase): " + Time.time);
+                    Debug.Log("Frightened State: " + _frightenedStateActive);
                     break;
                 case 2:
-                    yield return _twentySeconds;    // ToScatter
-                    Debug.Log("Change State 2");
+                    yield return _twentySeconds;    // ToScatter            // Stuck in here after collecting Power Pellet in Chase state
+                    Debug.Log("Change State 2 (ToScatter): " + Time.time);
+                    Debug.Log("Frightened State: " + _frightenedStateActive);
                     break;
                 case 3:
                     yield return _sevenSeconds;     // ToChase
-                    Debug.Log("Change State 3");
+                    Debug.Log("Change State 3 (ToChase): " + Time.time);
                     break;
                 case 4:
                     yield return _twentySeconds;    // ToScatter
-                    Debug.Log("Change State 4");
+                    Debug.Log("Change State 4 (ToScatter): " + Time.time);
                     break;
                 case 5:
                     yield return _fiveSeconds;      // ToChase
-                    Debug.Log("Change State 5");
+                    Debug.Log("Change State 5 (ToChase): " + Time.time);
                     break;
                 case 6:
                     yield return _twentySeconds;    // ToScatter
-                    Debug.Log("Change State 6");
+                    Debug.Log("Change State 6 (ToScatter): " + Time.time);
                     break;
                 case 7:
                     yield return _fiveSeconds;      // ToChase
-                    Debug.Log("Change State 7");
+                    Debug.Log("Change State 7 (ToChase): " + Time.time);
                     break;
                 default:
                     Debug.Log("Incorrect Cycle Count in CycleTimerRoutine() - EnemyStateManager");
                     break;
             }
 
-            yield return new WaitUntil(() => !_frightenedState);
-            OnNewState?.Invoke(); 
+            yield return new WaitUntil(() => !_frightenedStateActive);
+            OnNewState?.Invoke();       // Trigger event for all enemies
         }
 
         _cycleRoutine = null;     // Set to null so we can run again
