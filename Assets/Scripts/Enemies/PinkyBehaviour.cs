@@ -48,41 +48,37 @@ public class PinkyBehaviour : EnemyBase
 
     protected sealed override void CheckState()
     {
-        Debug.Log("transform pos: " + transform.position);
-        Debug.Log("Agent isStopped: " + _agent.isStopped);
-        Debug.Log("State: " + _currentState);
-
-        switch (_currentState)
+        if(PinkyCanMove)
         {
-            case EnemyState.Scatter:
-                if (PinkyCanMove && _agent.hasPath)
-                {
+            switch (_currentState)
+            {
+                case EnemyState.Scatter:
                     Debug.DrawLine(transform.position, _scatterPositions[CurrentPosition].position, Color.magenta);
 
                     if (_agent.remainingDistance < 1.5f)
                     {
                         CalculateNextDestination();
                     }
-                }
-                break;
+                    break;
 
-            case EnemyState.Chase:
-                _agent.destination = _pacmanTargetPos.position;
-                Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.magenta);
-                break;
+                case EnemyState.Chase:
+                    _agent.SetDestination(_pinkyTargetPacmanPos.position);
+                    Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.magenta);
+                    break;
 
-            case EnemyState.Frightened:
-                if (_agent.remainingDistance < 1.5f)
-                {
-                    GenerateRandomFrightenedPosition();
-                }
+                case EnemyState.Frightened:
+                    if (_agent.remainingDistance < 1.5f)
+                    {
+                        GenerateRandomFrightenedPosition();
+                    }
 
-                Debug.DrawLine(transform.position, _agent.destination, Color.magenta);
-                break;
+                    Debug.DrawLine(transform.position, _agent.destination, Color.magenta);
+                    break;
 
-            default:
-                _agent.isStopped = true;
-                break;
+                default:
+                    _agent.isStopped = true;
+                    break;
+            }
         }
     }
 

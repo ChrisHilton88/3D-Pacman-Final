@@ -71,12 +71,8 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     void Update()
     {
-        Debug.Log("Time: " + Time.time);
-        Debug.Log("Cycle Timer: " + CycleTimer);
-
         if(Time.time >= CycleTimer && HasChangedState == false)     
         {
-            Debug.Log("Test");
             HasChangedState = true;
             CycleTimer += EnemyStateTimer(); 
         }    
@@ -105,15 +101,10 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
         }
     }
 
-    // Should only be called once - When Time.time has reached the timer
     float EnemyStateTimer()
     {
         float newTime = 0;
 
-        Debug.Log("Count for how many times this method is called");
-        Debug.Log("Cycle Count: " + CycleCount);
-
-        // Cycle count is increasing each frame
         if (_currentSO != null && CycleCount >= 0 && CycleCount < _currentSO.stateTimers.Length)
         {
             newTime = _currentSO.stateTimers[CycleCount];
@@ -152,8 +143,6 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     public void FrightenedStateOff()
     {
         _frightenedStateActive = true;  
-        // Need to find a way to be told that the coroutine has finished so that we can set the state back to false.
-        // At the same time we need to pause the other coroutine and have it resume when this timer finishes.
     }
 
     // Event that handles resetting the CycleCount back to 1 on New Round
@@ -215,7 +204,6 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     //    _cycleRoutine = null;     // Set to null so we can run again
     //}
-
 
     IEnumerator NewRoundStartDelayRoutine()
     {

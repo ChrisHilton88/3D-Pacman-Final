@@ -43,20 +43,18 @@ public class BlinkyBehaviour : EnemyBase
         switch (_currentState)
         {
             case EnemyState.Scatter:
-                if (_agent.hasPath)
-                {
-                    Debug.DrawLine(transform.position, _scatterPositions[CurrentPosition].position, Color.red);
 
-                    if (_agent.remainingDistance < 1.5f)
-                    {
-                        CalculateNextDestination();
-                    }
+                Debug.DrawLine(transform.position, _scatterPositions[CurrentPosition].position, Color.red);
+
+                if (_agent.remainingDistance < 1.5f)
+                {
+                    CalculateNextDestination();
                 }
                 break;
 
             case EnemyState.Chase:
-                _agent.destination = _pacmanTargetPos.position;       
-                Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.red);       
+                _agent.SetDestination(_blinkyTargetPacmanPos.position);
+                Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.red);
                 break;
 
             case EnemyState.Frightened:
@@ -69,6 +67,7 @@ public class BlinkyBehaviour : EnemyBase
                 break;
 
             default:
+                Debug.Log("test");
                 _agent.isStopped = true;
                 break;
         }

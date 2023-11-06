@@ -3,7 +3,7 @@ using UnityEngine;
 public class InkyBehaviour : EnemyBase
 {
     private int _startRandomValue;       // Choose a starting value between 30 - 40% of total pellet count. This random value will be used to start moving Inky
-    private int _minStartValue = 0, _maxStartValue = 1;     // 30% & 40% of total pellet count (240)
+    private int _minStartValue = 30, _maxStartValue = 40;     // 30% & 40% of total pellet count (240)
 
     private bool _inkyCanMove;
 
