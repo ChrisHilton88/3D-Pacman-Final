@@ -2326,6 +2326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5bd3dda2e87593449801a62963f56b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _blinkyStartCube: {fileID: 1728684083}
 --- !u!1 &661643294 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1769421613868071489, guid: c9b533602b8354a469855f3233c46239, type: 3}
@@ -5459,6 +5460,11 @@ GameObject:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600023525741332, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1728684083 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1417923143117002501, guid: 12cd68cb53af3304d9afbb001a2cfc66, type: 3}
+  m_PrefabInstance: {fileID: 1417923144354199288}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1735244318
 GameObject:

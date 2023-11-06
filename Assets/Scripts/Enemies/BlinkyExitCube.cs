@@ -6,10 +6,11 @@ public class BlinkyExitCube : MonoBehaviour
     [SerializeField] private PinkyBehaviour _pinkyBehaviour;
 
 
-    void OnEnable()
+    private void OnEnable()
     {
         gameObject.SetActive(true);
     }
+
 
     void OnTriggerExit(Collider other)
     {

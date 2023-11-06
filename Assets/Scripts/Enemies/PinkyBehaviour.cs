@@ -84,8 +84,17 @@ public class PinkyBehaviour : EnemyBase
 
     public void StartMoving()
     {
+        Debug.Log("Starting to move");
         _agent.destination = _pinkyScatterPositions[CurrentPosition].position;
         PinkyCanMove = true;
         _agent.isStopped = false;
+        Debug.Log("Pink can move: " + PinkyCanMove);
+        Debug.Log(_agent.isStopped);
+    }
+
+    protected override void RoundCompleted()
+    {
+        base.RoundCompleted();
+        PinkyCanMove = false;
     }
 }
