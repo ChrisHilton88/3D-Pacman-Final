@@ -6513,6 +6513,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 159bce71404e9764190eb3b2b343753e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyStateRoundTimer:
+  - {fileID: 11400000, guid: 466e5f1abc6b0f44da5bea47e92d3b1b, type: 2}
+  - {fileID: 11400000, guid: cdeaabd3b574c11448732e195f148a56, type: 2}
+  - {fileID: 11400000, guid: 3b014c0500446df4cb569af49ca4ee46, type: 2}
   _frightenedPositions:
   - {fileID: 1940641318}
   - {fileID: 1063007401}

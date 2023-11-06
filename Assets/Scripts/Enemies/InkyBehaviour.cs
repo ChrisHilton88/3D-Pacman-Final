@@ -51,7 +51,6 @@ public class InkyBehaviour : EnemyBase
         _minStartValue = (240 * _minStartValue) / 100;
         _maxStartValue = (240 * _maxStartValue) / 100;
         StartRandomValue = RandomNumber(_minStartValue, _maxStartValue);
-        Debug.Log("Inky Start Pellet Count: " + StartRandomValue);
     }
 
     protected sealed override void CheckState()

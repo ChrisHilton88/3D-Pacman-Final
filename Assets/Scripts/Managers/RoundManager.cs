@@ -4,32 +4,26 @@ using UnityEngine;
 public class RoundManager : MonoSingleton<RoundManager>
 {
     private int _currentRound;
-    public int CurrentRound
-    {
-        get { return _currentRound; }
-        private set { _currentRound = value; }
-    }
     private int _maxRounds = 22;
 
     private RoundData[] _levels = new RoundData[21];
-    public RoundData[] Levels
-    {
-        get { return _levels; }
-        set { _levels = value; }
-    }
 
-    // Event for the NextLevel after player collects all 240 pellets - This
-    // Event for RestartLevel after the Player gets hit by an enemy - EnemyCollision
-    // Event for GameOver
-
+    #region
+    public int CurrentRound { get { return _currentRound; } private set { _currentRound = value; } }
+    public RoundData[] Levels { get { return _levels; } private set { _levels = value; } }
+    #endregion
 
     public static Action OnRoundEnd;
     public static Action OnRoundStart;
 
-
     void OnEnable()
     {
         OnRoundEnd += IncrementRound;
+    }
+
+    void OnDisable()
+    {
+        OnRoundEnd -= IncrementRound;
     }
 
     void Start()
@@ -38,8 +32,8 @@ public class RoundManager : MonoSingleton<RoundManager>
         SetInitialLevelValues();
     }
 
-    // Only needs to be set once at the start of the game
-    RoundData[] SetInitialLevelValues()
+
+    RoundData[] SetInitialLevelValues()     
     {
         Levels[0] = new RoundData(1, "Cherry", 6);
         Levels[1] = new RoundData(2, "Strawberry", 5);
@@ -101,10 +95,5 @@ public class RoundManager : MonoSingleton<RoundManager>
         }
 
         return currentRoundData;    
-    }
-
-    void OnDisable()
-    {
-        OnRoundEnd -= IncrementRound;
     }
 }

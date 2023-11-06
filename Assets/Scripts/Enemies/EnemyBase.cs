@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -63,6 +62,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
+        _currentState = EnemyState.Chase;
         _frightenedRoutine = null;
         _agent.Warp(_startingPosition);
         CurrentPosition = 0;
@@ -143,14 +143,13 @@ public abstract class EnemyBase : MonoBehaviour
     #endregion
 
     #region Coroutines
-    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state, Vector3 previousDestination, Action onComplete)
+    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state, Vector3 previousDestination)
     {
         yield return _frightenedTimer;      // Wait for cached time (6 secs)
         _currentState = previousState;      // Return to previous state
         _agent.destination = previousDestination;
         _animator.SetTrigger("To" + state);     // Set Animator to previous state
         _frightenedRoutine = null;
-        onComplete?.Invoke();   
     }
     #endregion
 
@@ -168,6 +167,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         if (_currentState == EnemyState.Chase)
         {
+            Debug.Log("Test - Chase to Scatter");
             _currentState = EnemyState.Scatter;
             _animator.SetTrigger("ToScatter");
 
@@ -180,6 +180,8 @@ public abstract class EnemyBase : MonoBehaviour
         }
         else if (_currentState == EnemyState.Scatter)
         {
+            Debug.Log("Test - Scatter to Chase");
+
             _currentState = EnemyState.Chase;
 
             if (_animator != null)
@@ -209,10 +211,7 @@ public abstract class EnemyBase : MonoBehaviour
         while (!GenerateRandomFrightenedPosition());
 
         if (_frightenedRoutine == null)
-            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state, previousDestination, () =>
-            {
-
-            }));     
+            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state, previousDestination));
     }
 
     // Event that handles the successful completion of a round
