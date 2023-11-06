@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f48a025c875dded41998769d5d961719, type: 3}
   m_Name: Round 1
   m_EditorClassIdentifier: 
-  _stateTimers:
+  stateTimers:
   - 7
   - 20
   - 7

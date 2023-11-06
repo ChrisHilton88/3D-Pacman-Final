@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BlinkyBehaviour : EnemyBase
 {
+    private Vector3 _blinkyStartingPosition = new Vector3(0.5f, 0, 8.5f);
+
     [SerializeField] private Transform[] _blinkyScatterPositions;
     [SerializeField] private Transform _blinkyTargetPacmanPos;      // Pacmans position
 
@@ -31,9 +33,9 @@ public class BlinkyBehaviour : EnemyBase
 
     protected override void EnemyInitialisation()
     {
+        _startingPosition = _blinkyStartingPosition;
         _scatterPositions = _blinkyScatterPositions;
         _pacmanTargetPos = _blinkyTargetPacmanPos;
-        _startingPosition = new Vector3(0.5f, 0, 8.5f);
     }
 
     protected sealed override void CheckState()        

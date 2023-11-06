@@ -167,7 +167,6 @@ public abstract class EnemyBase : MonoBehaviour
     {
         if (_currentState == EnemyState.Chase)
         {
-            Debug.Log("Test - Chase to Scatter");
             _currentState = EnemyState.Scatter;
             _animator.SetTrigger("ToScatter");
 
@@ -180,8 +179,6 @@ public abstract class EnemyBase : MonoBehaviour
         }
         else if (_currentState == EnemyState.Scatter)
         {
-            Debug.Log("Test - Scatter to Chase");
-
             _currentState = EnemyState.Chase;
 
             if (_animator != null)
@@ -221,7 +218,7 @@ public abstract class EnemyBase : MonoBehaviour
         _agent.Warp(_startingPosition);
         CurrentPosition = 0;
         _agent.speed = _minSpeed;
-        _currentState = EnemyState.Scatter;
+        _currentState = EnemyState.Chase;
     }
     #endregion
 }

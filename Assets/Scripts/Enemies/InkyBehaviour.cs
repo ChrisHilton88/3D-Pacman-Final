@@ -3,11 +3,11 @@ using UnityEngine;
 public class InkyBehaviour : EnemyBase
 {
     private int _startRandomValue;       // Choose a starting value between 30 - 40% of total pellet count. This random value will be used to start moving Inky
-    private int _minStartValue = 30, _maxStartValue = 40;     // 30% & 40% of total pellet count (240)
+    private int _minStartValue = 0, _maxStartValue = 1;     // 30% & 40% of total pellet count (240)
 
     private bool _inkyCanMove;
 
-    private Vector3 _pinkyStartingPosition = new Vector3(-5f, 0, 0f);
+    private Vector3 _inkyStartingPosition = new Vector3(-5f, 0f, 0f);
 
     [SerializeField] private Transform[] _inkyScatterPositions;
     [SerializeField] private Transform _blinkyPos;
@@ -45,7 +45,7 @@ public class InkyBehaviour : EnemyBase
     protected override void EnemyInitialisation()
     {
         _scatterPositions = _inkyScatterPositions;
-        _startingPosition = _pinkyStartingPosition;
+        _startingPosition = _inkyStartingPosition;
         _pacmanTargetPos = _inkyTargetPacmanPos;
         InkyCanMove = false;
         _minStartValue = (240 * _minStartValue) / 100;

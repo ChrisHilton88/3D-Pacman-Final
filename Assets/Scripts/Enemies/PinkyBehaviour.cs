@@ -4,7 +4,7 @@ public class PinkyBehaviour : EnemyBase
 {
     private bool _pinkyCanMove;
 
-    private Vector3 _pinkyStartingPosition = new Vector3(0.25f, 0, 0);
+    private Vector3 _pinkyStartingPosition = new Vector3(0.5f, 0, 0);
 
     [SerializeField] private Transform[] _pinkyScatterPositions;
     [SerializeField] private Transform _pinkyTargetPacmanPos;       // 4 tiles ahead of Pacman
@@ -48,6 +48,10 @@ public class PinkyBehaviour : EnemyBase
 
     protected sealed override void CheckState()
     {
+        Debug.Log("transform pos: " + transform.position);
+        Debug.Log("Agent isStopped: " + _agent.isStopped);
+        Debug.Log("State: " + _currentState);
+
         switch (_currentState)
         {
             case EnemyState.Scatter:
