@@ -32,12 +32,6 @@ public class PinkyBehaviour : EnemyBase
         EnemyInitialisation();
     }
 
-    protected override void Start()
-    {
-        base.Start();
-        _agent.isStopped = true;
-    }
-
     protected override void EnemyInitialisation()
     {
         _scatterPositions = _pinkyScatterPositions;
@@ -76,7 +70,8 @@ public class PinkyBehaviour : EnemyBase
                     break;
 
                 default:
-                    _agent.isStopped = true;
+                    _agent.speed = _stopSpeed;
+                    Debug.Log(gameObject.name + " isStopped - Default case - CheckState()");
                     break;
             }
         }
@@ -84,12 +79,9 @@ public class PinkyBehaviour : EnemyBase
 
     public void StartMoving()
     {
-        Debug.Log("Starting to move");
         _agent.destination = _pinkyScatterPositions[CurrentPosition].position;
         PinkyCanMove = true;
-        _agent.isStopped = false;
-        Debug.Log("Pink can move: " + PinkyCanMove);
-        Debug.Log(_agent.isStopped);
+        _agent.speed = _minSpeed;
     }
 
     protected override void RoundCompleted()

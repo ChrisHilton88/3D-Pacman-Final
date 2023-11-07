@@ -6494,7 +6494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cycleCount: 0
-  _cycleTimer: 0
+  _enemyCycleTimer: 0
   _enemyStateRoundTimer:
   - {fileID: 11400000, guid: 466e5f1abc6b0f44da5bea47e92d3b1b, type: 2}
   - {fileID: 11400000, guid: cdeaabd3b574c11448732e195f148a56, type: 2}
@@ -7356,6 +7356,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1841029149889401381, guid: bfc309ba02b4dd149acd236472d064c8, type: 3}
+      propertyPath: m_AutoBraking
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1841029149889401382, guid: bfc309ba02b4dd149acd236472d064c8, type: 3}
       propertyPath: m_Height
       value: 3
@@ -7380,6 +7384,10 @@ PrefabInstance:
       propertyPath: _pinkyScatterPositions.Array.data[3]
       value: 
       objectReference: {fileID: 774294062}
+    - target: {fileID: 2083319329534884832, guid: bfc309ba02b4dd149acd236472d064c8, type: 3}
+      propertyPath: m_AutoBraking
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2083319329534884833, guid: bfc309ba02b4dd149acd236472d064c8, type: 3}
       propertyPath: m_Height
       value: 3
@@ -7414,6 +7422,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6491517741275125417, guid: bfc309ba02b4dd149acd236472d064c8, type: 3}
       propertyPath: m_BaseOffset
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491517741275125417, guid: bfc309ba02b4dd149acd236472d064c8, type: 3}
+      propertyPath: m_AutoBraking
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6491517741275125422, guid: bfc309ba02b4dd149acd236472d064c8, type: 3}

@@ -7,7 +7,7 @@ public class ClydeBehaviour : EnemyBase
 
     private float _maxDistance = 8;
 
-    private bool _clydeCanMove;
+    [SerializeField] private bool _clydeCanMove;
 
     private Vector3 _clydeStartingPosition = new Vector3(6f, 0, -0.25f);
 
@@ -45,7 +45,7 @@ public class ClydeBehaviour : EnemyBase
 
     protected override void CheckState()
     {
-        if (ClydeCanMove & _agent.hasPath)
+        if (ClydeCanMove)
         {
             switch (_currentState)
             {

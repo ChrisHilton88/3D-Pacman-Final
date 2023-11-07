@@ -28,7 +28,7 @@ public class BlinkyBehaviour : EnemyBase
     protected override void Start()
     {
         base.Start();
-        _agent.isStopped = false;
+        _agent.speed = _minSpeed;
     }
 
     protected override void EnemyInitialisation()
@@ -67,9 +67,15 @@ public class BlinkyBehaviour : EnemyBase
                 break;
 
             default:
-                Debug.Log("test");
-                _agent.isStopped = true;
+                _agent.speed = _stopSpeed;
+                Debug.Log(gameObject.name + " isStopped - Default case - CheckState()");
                 break;
         }
+    }
+
+    protected override void RoundCompleted()
+    {
+        base.RoundCompleted();
+        _agent.speed = _minSpeed;
     }
 }

@@ -5,7 +5,7 @@ public class InkyBehaviour : EnemyBase
     private int _startRandomValue;       // Choose a starting value between 30 - 40% of total pellet count. This random value will be used to start moving Inky
     private int _minStartValue = 30, _maxStartValue = 40;     // 30% & 40% of total pellet count (240)
 
-    private bool _inkyCanMove;
+    [SerializeField] private bool _inkyCanMove;
 
     private Vector3 _inkyStartingPosition = new Vector3(-5f, 0f, 0f);
 
@@ -55,7 +55,7 @@ public class InkyBehaviour : EnemyBase
 
     protected sealed override void CheckState()
     {
-        if (InkyCanMove && _agent.hasPath)
+        if (InkyCanMove)
         {
             switch (_currentState)
             {

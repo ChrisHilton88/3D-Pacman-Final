@@ -17,6 +17,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected int _currentPosition;
     protected int _randomFrightenedLocation;
 
+    protected float _stopSpeed = 0f;
     protected float _minSpeed = 5f;
     protected float _minTunnelSpeed = 2.5f;
     protected float _maxSpeed = 10f;
@@ -64,7 +65,7 @@ public abstract class EnemyBase : MonoBehaviour
         _animator = GetComponent<Animator>();
         _currentState = EnemyState.Chase;
         _frightenedRoutine = null;
-        _agent.Warp(_startingPosition);
+        _agent.speed = _stopSpeed;
         CurrentPosition = 0;
         _agent.destination = _scatterPositions[CurrentPosition].position;
     }
@@ -157,9 +158,10 @@ public abstract class EnemyBase : MonoBehaviour
     // Event that handles resetting the enemies position during a round when the player dies
     void RestartPosition()
     {
-        _agent.isStopped = true;
+        float tempSpeed = _agent.speed;
+        _agent.speed = _stopSpeed;
         _agent.Warp(_startingPosition);
-        _agent.isStopped = false;
+        _agent.speed = tempSpeed;
     }
 
     // Event that handles cycling through Chase & Scatter states
@@ -214,11 +216,12 @@ public abstract class EnemyBase : MonoBehaviour
     // Event that handles the successful completion of a round
     protected virtual void RoundCompleted()
     {
-        _agent.isStopped = true;
+        _agent.speed = _stopSpeed;
         _agent.Warp(_startingPosition);
+        _frightenedRoutine = null;
         CurrentPosition = 0;
-        _agent.speed = _minSpeed;
         _currentState = EnemyState.Chase;
+        _agent.destination = _scatterPositions[CurrentPosition].position;
     }
     #endregion
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 // Respsonsible for all things related to the Pellet GameObject
 public class PelletManager : MonoSingleton<PelletManager>
 {
-    private int _maxPellets = 50;
+    private int _maxPellets = 10;
     private int _totalPellets;       
     private int _pelletTally;
 
