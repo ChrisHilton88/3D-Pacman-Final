@@ -28,12 +28,6 @@ public class ClydeBehaviour : EnemyBase
         EnemyInitialisation();
     }
 
-    protected override void Start()
-    {
-        base.Start();   
-        _agent.isStopped = true;
-    }
-
     protected override void EnemyInitialisation()
     {
         _scatterPositions = _clydeScatterPositions;
@@ -87,7 +81,8 @@ public class ClydeBehaviour : EnemyBase
                     break;
 
                 default:
-                    _agent.isStopped = true;
+                    _agent.speed = _stopSpeed;
+                    Debug.Log(gameObject.name + " isStopped - Default case - CheckState()");
                     break;
             }
         }
@@ -99,7 +94,7 @@ public class ClydeBehaviour : EnemyBase
     {
         _agent.destination = _clydeScatterPositions[CurrentPosition].position;
         ClydeCanMove = true;
-        _agent.isStopped = false;
+        _agent.speed = _minSpeed;
     }
 
     protected override void RoundCompleted()

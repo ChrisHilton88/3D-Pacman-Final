@@ -14,7 +14,6 @@ public class PinkyBehaviour : EnemyBase
     #endregion
 
 
-
     protected override void OnEnable()
     {
         base.OnEnable();

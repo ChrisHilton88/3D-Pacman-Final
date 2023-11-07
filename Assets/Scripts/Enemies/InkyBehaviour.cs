@@ -36,12 +36,6 @@ public class InkyBehaviour : EnemyBase
         EnemyInitialisation();  
     }
 
-    protected override void Start()
-    {
-        base.Start();
-        _agent.isStopped = true;
-    }
-
     protected override void EnemyInitialisation()
     {
         _scatterPositions = _inkyScatterPositions;
@@ -86,7 +80,8 @@ public class InkyBehaviour : EnemyBase
                     break;
 
                 default:
-                    _agent.isStopped = true;
+                    _agent.speed = _stopSpeed;
+                    Debug.Log(gameObject.name + " isStopped - Default case - CheckState()");
                     break;
             }
         }
@@ -96,7 +91,6 @@ public class InkyBehaviour : EnemyBase
     {
         _agent.destination = _inkyScatterPositions[CurrentPosition].position;
         InkyCanMove = true;
-        _agent.isStopped = false;
     }
 
     private int RandomNumber(int min, int max)
@@ -110,6 +104,5 @@ public class InkyBehaviour : EnemyBase
         base.RoundCompleted();
         InkyCanMove = false;
         StartRandomValue = RandomNumber(_minStartValue, _maxStartValue);
-        Debug.Log("Inky Start Random Value 2: " + StartRandomValue);
     }
 }

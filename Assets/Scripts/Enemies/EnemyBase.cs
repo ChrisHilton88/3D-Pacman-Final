@@ -19,7 +19,6 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected float _stopSpeed = 0f;
     protected float _minSpeed = 5f;
-    protected float _minTunnelSpeed = 2.5f;
     protected float _maxSpeed = 10f;
 
     protected const float _speedIncrement = 0.02f;     // (10% - 5% / 240) = 5/240. Or, (maximum allowed speed - starting speed / total pellets)
@@ -33,7 +32,6 @@ public abstract class EnemyBase : MonoBehaviour
     protected Transform _pacmanTargetPos;
 
     protected Transform[] _scatterPositions;
-
 
     #region Properties
     public int CurrentPosition { get { return _currentPosition; } protected set { _currentPosition = value; } }   
@@ -79,7 +77,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected abstract void CheckState();           // Enemies implement their own State Behaviour
 
-    #region Void Methods
+    #region Methods
     // Scatter mode waypoint system
     protected virtual void CalculateNextDestination()       // Only derived classes can inherit this method and unless they use the Override keyword, it cannot be changed
     {
@@ -106,9 +104,7 @@ public abstract class EnemyBase : MonoBehaviour
             return;
         }
     }
-    #endregion
 
-    #region Return Methods
     // Generates and returns a random frightened location
     protected virtual bool GenerateRandomFrightenedPosition()
     {
@@ -126,21 +122,9 @@ public abstract class EnemyBase : MonoBehaviour
             return false;
         }
     }
-    #endregion
 
-    #region Public Methods
     // Decrement agent speed whilst standing in OnTriggerStay in Tunnel
-    public void DecrementAgentSpeed()
-    {
-        if (_agent.speed >= _minTunnelSpeed)
-        {
-            _agent.speed -= _speedIncrement;
-        }
-        else
-        {
-            _agent.speed = _minTunnelSpeed;
-        }
-    }
+    
     #endregion
 
     #region Coroutines

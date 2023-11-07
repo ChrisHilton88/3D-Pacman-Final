@@ -1,35 +1,51 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TunnelSlowEnemy : MonoBehaviour
+// Responsible for slowing the enemy AI in the tunnel
+public class TunnelSlowEnemy : MonoBehaviour 
 {
+    private float _minTunnelSpeed = 2.5f;
     private float _originalSpeed;
 
-    BlinkyBehaviour _blinkybehaviour;
-    NavMeshAgent _agent;    
-    
+    private NavMeshAgent _agent;    
 
-    void Start()
+
+    private void Start()
     {
-        _blinkybehaviour = GetComponent<BlinkyBehaviour>(); 
-        _agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponent<NavMeshAgent>();  
     }
 
+
+    // Store agents current speed
     void OnTriggerEnter(Collider other)
     {
-        _originalSpeed = _agent.speed;
+        if (other.CompareTag("Tunnel"))
+        {
+            _originalSpeed = _agent.speed;  
+        }
+        else
+            return;
     }
 
+    // Decrement agents speed
     void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Tunnel"))
         {
-            _blinkybehaviour.DecrementAgentSpeed();
+            _agent.speed = _minTunnelSpeed;
         }
+        else
+            return;
     }
 
+    // Restore agents previous speed
     void OnTriggerExit(Collider other)
     {
-        _agent.speed = _originalSpeed;  
+        if (other.CompareTag("Tunnel"))
+        {
+            _agent.speed = _originalSpeed;      
+        }
+        else
+            return;
     }
 }
