@@ -4,6 +4,9 @@ public class BlinkyBehaviour : EnemyBase
 {
     private Vector3 _blinkyStartingPosition = new Vector3(0.5f, 0, 8.5f);
 
+    BlinkyExitCube _blinkyExitCube;
+
+    [SerializeField] private GameObject _exitCube;
     [SerializeField] private Transform[] _blinkyScatterPositions;
     [SerializeField] private Transform _blinkyTargetPacmanPos;      // Pacmans position
 
@@ -28,6 +31,7 @@ public class BlinkyBehaviour : EnemyBase
     protected override void Start()
     {
         base.Start();
+        _blinkyExitCube = GetComponent<BlinkyExitCube>();   
         _agent.speed = _minSpeed;
     }
 
@@ -76,6 +80,8 @@ public class BlinkyBehaviour : EnemyBase
     protected override void RoundCompleted()
     {
         base.RoundCompleted();
+        _exitCube.SetActive(true);
+        _blinkyExitCube.enabled = true;
         _agent.speed = _minSpeed;
     }
 }

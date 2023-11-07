@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 8108497451843928120}
   - component: {fileID: 8108497451843928118}
   - component: {fileID: 1689701629}
+  - component: {fileID: 4147044263426730852}
   m_Layer: 0
   m_Name: Blinky
   m_TagString: Enemy
@@ -249,6 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293a71f212306e6459055c90e16f7b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _exitCube: {fileID: 0}
   _blinkyScatterPositions:
   - {fileID: 0}
   - {fileID: 0}
@@ -267,3 +269,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ca315703c74d64e991444220dc4123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4147044263426730852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108497451843928116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 332b482aa61672e4c851ff47d8269fc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pinkyBehaviour: {fileID: 0}

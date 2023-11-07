@@ -6,18 +6,22 @@ public class BlinkyExitCube : MonoBehaviour
     [SerializeField] private PinkyBehaviour _pinkyBehaviour;
 
 
-    private void OnEnable()
-    {
-        gameObject.SetActive(true);
-    }
-
-
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Exit Box"))
         {
             _pinkyBehaviour.StartMoving();
-            gameObject.SetActive(false);  
+            other.gameObject.SetActive(false);          // Disable the exit box
+
+            if (enabled)
+            {
+                enabled = false;
+                Debug.Log("Enabled: " + enabled);
+            }
+            else
+                Debug.Log("Enabled is True");
         }
+        else
+            return;
     }
 }

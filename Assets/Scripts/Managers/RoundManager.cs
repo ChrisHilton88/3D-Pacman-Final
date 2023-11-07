@@ -73,15 +73,11 @@ public class RoundManager : MonoSingleton<RoundManager>
         if (CurrentRound >= _maxRounds)
         {
             CurrentRound = 1;
-            Debug.Log("Current Round: " + CurrentRound);
         }
         else
         {
             CurrentRound++;
-            Debug.Log("Current Round: " + CurrentRound);
         }
-
-        _blinkyStartCube.SetActive(true);
     }
 
     public RoundData CheckRound()

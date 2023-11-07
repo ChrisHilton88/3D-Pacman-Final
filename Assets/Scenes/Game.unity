@@ -7144,17 +7144,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1417923143117001978, guid: 12cd68cb53af3304d9afbb001a2cfc66, type: 3}
-      propertyPath: _testPinky
-      value: 
-      objectReference: {fileID: 1578587823}
-    - target: {fileID: 1417923143117001978, guid: 12cd68cb53af3304d9afbb001a2cfc66, type: 3}
-      propertyPath: _pinkyBehaviour
-      value: 
-      objectReference: {fileID: 1578587823}
     - target: {fileID: 1417923143117002501, guid: 12cd68cb53af3304d9afbb001a2cfc66, type: 3}
       propertyPath: m_Name
-      value: Blinky Start Cube
+      value: Blinky Exit Cube
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12cd68cb53af3304d9afbb001a2cfc66, type: 3}
@@ -16868,10 +16860,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1743278773}
     m_Modifications:
+    - target: {fileID: 4147044263426730852, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
+      propertyPath: _pinkyBehaviour
+      value: 
+      objectReference: {fileID: 1578587823}
     - target: {fileID: 8108497451843928116, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
       propertyPath: m_Name
       value: Blinky
       objectReference: {fileID: 0}
+    - target: {fileID: 8108497451843928118, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
+      propertyPath: _exitCube
+      value: 
+      objectReference: {fileID: 1728684083}
     - target: {fileID: 8108497451843928118, guid: 2f27b26fb690e7c4cb84cb96de7e6300, type: 3}
       propertyPath: _blinkyTargetPacmanPos
       value: 
