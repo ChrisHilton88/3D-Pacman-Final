@@ -1,21 +1,15 @@
 using System;
 using UnityEngine;
 
-// Responsible for holding a reference to a collision event
+// Responsible for holding a reference to a collision event with the Enemy
 public class EnemyCollision : MonoBehaviour
 {
-    private string _stateName = "Frightened";
-
     public static Action OnEnemyCollision;
-
     
     AudioSource _audioSource;
-    Animator _animator;
 
     [SerializeField] private AudioClip _deathClip;
     [SerializeField] private AudioClip _eatClip;
-    [SerializeField] private AudioClip _audioClip;
-    [SerializeField] private PlayerLives _playerLives;
 
 
     void Start()
@@ -27,11 +21,7 @@ public class EnemyCollision : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            _animator = other.gameObject.GetComponent<Animator>();  
-
-            bool isStatePlaying = IsAnimatorStatePlaying(_animator, _stateName, 0);
-
-            if(isStatePlaying)
+            if(EnemyStateManager.Instance.FrightenedStateActive)        // Check if Frightened state is active
             {
                 _audioSource.clip = _eatClip;       
             }
@@ -43,11 +33,5 @@ public class EnemyCollision : MonoBehaviour
             _audioSource.Play();
             OnEnemyCollision?.Invoke();
         }
-    }
-
-    bool IsAnimatorStatePlaying(Animator animator, string stateName, int layerIndex)
-    {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
-        return stateInfo.IsName(stateName);
     }
 }

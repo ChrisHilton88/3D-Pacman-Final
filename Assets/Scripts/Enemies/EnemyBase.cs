@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent), typeof(CapsuleCollider), typeof(Animator))] 
+[RequireComponent(typeof(NavMeshAgent), typeof(CapsuleCollider))] 
 public abstract class EnemyBase : MonoBehaviour
 {
     protected enum EnemyState
@@ -26,7 +26,6 @@ public abstract class EnemyBase : MonoBehaviour
     protected Vector3 _startingPosition;     // Set own starting position
 
     protected NavMeshAgent _agent;
-    protected Animator _animator;
     protected Coroutine _frightenedRoutine;
     protected WaitForSeconds _frightenedTimer = new WaitForSeconds(6f);
     protected Transform _pacmanTargetPos;
@@ -60,7 +59,6 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void Start()      
     {
         _agent = GetComponent<NavMeshAgent>();
-        _animator = GetComponent<Animator>();
         _currentState = EnemyState.Chase;
         _frightenedRoutine = null;
         _agent.speed = _stopSpeed;
@@ -122,18 +120,14 @@ public abstract class EnemyBase : MonoBehaviour
             return false;
         }
     }
-
-    // Decrement agent speed whilst standing in OnTriggerStay in Tunnel
-    
     #endregion
 
     #region Coroutines
-    IEnumerator FrightenedRoutineTimer(EnemyState previousState, string state, Vector3 previousDestination)
+    IEnumerator FrightenedRoutineTimer(EnemyState previousState, Vector3 previousDestination)
     {
         yield return _frightenedTimer;      // Wait for cached time (6 secs)
         _currentState = previousState;      // Return to previous state
         _agent.destination = previousDestination;
-        _animator.SetTrigger("To" + state);     // Set Animator to previous state
         _frightenedRoutine = null;
     }
     #endregion
@@ -154,25 +148,11 @@ public abstract class EnemyBase : MonoBehaviour
         if (_currentState == EnemyState.Chase)
         {
             _currentState = EnemyState.Scatter;
-            _animator.SetTrigger("ToScatter");
-
-            if (_animator != null)
-            {
-                _agent.destination = _scatterPositions[CurrentPosition].position;          // We can have this here because the boxes are static
-            }
-            else
-                Debug.Log("Animator is NULL Chase - EnemyBase");
+            _agent.destination = _scatterPositions[CurrentPosition].position;          // We can have this here because the boxes are static
         }
         else if (_currentState == EnemyState.Scatter)
         {
             _currentState = EnemyState.Chase;
-
-            if (_animator != null)
-            {
-                _animator.SetTrigger("ToChase");
-            }
-            else
-                Debug.Log("Animator is NULL Scatter - EnemyBase");
         }
     }
 
@@ -189,12 +169,11 @@ public abstract class EnemyBase : MonoBehaviour
         string state = tempState.ToString();
         Vector3 previousDestination = _agent.destination;
         _currentState = EnemyState.Frightened;      // Set new state to Frightened
-        _animator.SetTrigger("ToFrightened");
 
         while (!GenerateRandomFrightenedPosition());
 
         if (_frightenedRoutine == null)
-            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, state, previousDestination));
+            _frightenedRoutine = StartCoroutine(FrightenedRoutineTimer(tempState, previousDestination));
     }
 
     // Event that handles the successful completion of a round
