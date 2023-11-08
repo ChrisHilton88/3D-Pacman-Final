@@ -7,15 +7,15 @@ public class RoundManager : MonoSingleton<RoundManager>
     private int _maxRounds = 22;
 
     private RoundData[] _levels = new RoundData[21];
+
     [SerializeField] private GameObject _blinkyStartCube;       // Reactive starting cube at the start of a new round
 
-    #region
+    #region Properties
     public int CurrentRound { get { return _currentRound; } private set { _currentRound = value; } }
     public RoundData[] Levels { get { return _levels; } private set { _levels = value; } }
     #endregion
 
     public static Action OnRoundEnd;
-    public static Action OnRoundStart;
 
     void OnEnable()
     {
@@ -32,7 +32,6 @@ public class RoundManager : MonoSingleton<RoundManager>
         CurrentRound = 1;  
         SetInitialLevelValues();
     }
-
 
     RoundData[] SetInitialLevelValues()     
     {

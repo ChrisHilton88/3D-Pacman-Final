@@ -7,7 +7,7 @@ public class InkyBehaviour : EnemyBase
 
     [SerializeField] private bool _inkyCanMove;
 
-    private Vector3 _inkyStartingPosition = new Vector3(-5f, 0f, 0f);
+    private readonly Vector3 _inkyStartingPosition = new Vector3(-5f, 0f, 0f);
 
     [SerializeField] private Transform[] _inkyScatterPositions;
     [SerializeField] private Transform _blinkyPos;
@@ -15,8 +15,8 @@ public class InkyBehaviour : EnemyBase
 
 
     #region Properties
-    public bool InkyCanMove { get { return _inkyCanMove; } private set { _inkyCanMove = value; } }
     public int StartRandomValue { get { return _startRandomValue; } private set { _startRandomValue = value; } }
+    public bool InkyCanMove { get { return _inkyCanMove; } private set { _inkyCanMove = value; } }
     #endregion
 
     protected override void OnEnable()
@@ -66,7 +66,7 @@ public class InkyBehaviour : EnemyBase
                     Vector3 vectorToPlayer = _pacmanTargetPos.position - _blinkyPos.position;       // Calculate vector from Blinky to Players position
                     Vector3 doubledVector = vectorToPlayer * 2.0f;      // Double the length of the vector
                     Vector3 inkyTargetPosition = _blinkyPos.position + doubledVector;       // Inky's target = Adding doubled vector to Blinkys position
-                    _agent.destination = inkyTargetPosition;        // Set destination = inkyTargetPosition
+                    _agent.SetDestination(inkyTargetPosition);       // Set destination = inkyTargetPosition
                     Debug.DrawLine(transform.position, inkyTargetPosition, Color.cyan);
                     break;
 
@@ -89,7 +89,7 @@ public class InkyBehaviour : EnemyBase
 
     public void StartMovement()
     {
-        _agent.destination = _inkyScatterPositions[CurrentPosition].position;
+        _agent.SetDestination(_inkyScatterPositions[CurrentPosition].position);
         InkyCanMove = true;
     }
 

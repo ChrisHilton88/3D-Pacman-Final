@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BlinkyBehaviour : EnemyBase
 {
-    private Vector3 _blinkyStartingPosition = new Vector3(0.5f, 0, 8.5f);
+    private readonly Vector3 _blinkyStartingPosition = new Vector3(0.5f, 0, 8.5f);
 
-    BlinkyExitCube _blinkyExitCube;
+    private BlinkyExitCube _blinkyExitCube;
 
     [SerializeField] private GameObject _exitCube;
     [SerializeField] private Transform[] _blinkyScatterPositions;

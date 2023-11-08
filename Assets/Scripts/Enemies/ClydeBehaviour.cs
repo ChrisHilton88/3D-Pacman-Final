@@ -9,7 +9,7 @@ public class ClydeBehaviour : EnemyBase
 
     [SerializeField] private bool _clydeCanMove;
 
-    private Vector3 _clydeStartingPosition = new Vector3(6f, 0, -0.25f);
+    private readonly Vector3 _clydeStartingPosition = new Vector3(6f, 0, -0.25f);
 
     [SerializeField] private Transform _pacmanPos;
     [SerializeField] private Transform _clydeTargetPacmanPos;       // If > 8 tiles, target becomes Blinky's target tile (Pacman). If < 8 tiles, set to Scatter mode tiles
@@ -55,12 +55,12 @@ public class ClydeBehaviour : EnemyBase
                 case EnemyState.Chase:
                     if (Vector2.Distance(transform.position, _pacmanPos.position) > _maxDistance)     // If distance between Clyde and pacman is greater than 8 tiles
                     {
-                        _agent.destination = _pacmanPos.position;     // Same target as Blinky - Pacmans current tile
+                        _agent.SetDestination(_pacmanPos.position);     // Same target as Blinky - Pacmans current tile
                         Debug.DrawLine(transform.position, _pacmanPos.position, Color.yellow);        // Should be to Pacman
                     }
                     else
                     {
-                        _agent.destination = _clydeChasePositions[ClydeCurrentChasePosition].position;
+                        _agent.SetDestination(_clydeChasePositions[ClydeCurrentChasePosition].position);
 
                         if (_agent.remainingDistance < 1.5f)
                         {

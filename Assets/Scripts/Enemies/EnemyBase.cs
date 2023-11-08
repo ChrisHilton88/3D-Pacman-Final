@@ -184,7 +184,7 @@ public abstract class EnemyBase : MonoBehaviour
         _frightenedRoutine = null;
         CurrentPosition = 0;
         _currentState = EnemyState.Chase;
-        _agent.destination = _scatterPositions[CurrentPosition].position;
+        _agent.SetDestination(_scatterPositions[CurrentPosition].position);
     }
     #endregion
 }

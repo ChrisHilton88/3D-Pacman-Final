@@ -4,7 +4,7 @@ public class PinkyBehaviour : EnemyBase
 {
     private bool _pinkyCanMove;
 
-    private Vector3 _pinkyStartingPosition = new Vector3(0.5f, 0, 0);
+    private readonly Vector3 _pinkyStartingPosition = new Vector3(0.5f, 0, 0);
 
     [SerializeField] private Transform[] _pinkyScatterPositions;
     [SerializeField] private Transform _pinkyTargetPacmanPos;       // 4 tiles ahead of Pacman
@@ -78,7 +78,7 @@ public class PinkyBehaviour : EnemyBase
 
     public void StartMoving()
     {
-        _agent.destination = _pinkyScatterPositions[CurrentPosition].position;
+        _agent.SetDestination(_pinkyScatterPositions[CurrentPosition].position);
         PinkyCanMove = true;
         _agent.speed = _minSpeed;
     }
