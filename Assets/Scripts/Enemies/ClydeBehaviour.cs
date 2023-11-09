@@ -11,7 +11,6 @@ public class ClydeBehaviour : EnemyBase
 
     private readonly Vector3 _clydeStartingPosition = new Vector3(6f, 0, -0.25f);
 
-    [SerializeField] private Transform _pacmanPos;
     [SerializeField] private Transform _clydeTargetPacmanPos;       // If > 8 tiles, target becomes Blinky's target tile (Pacman). If < 8 tiles, set to Scatter mode tiles
     [SerializeField] private Transform[] _clydeScatterPositions;
     [SerializeField] private Transform[] _clydeChasePositions;
@@ -32,7 +31,6 @@ public class ClydeBehaviour : EnemyBase
     {
         _scatterPositions = _clydeScatterPositions;
         _startingPosition = _clydeStartingPosition;
-        _pacmanTargetPos = _clydeTargetPacmanPos;
         ClydeCanMove = false;
         MovePelletCount = 80;       // 1/3 of total pellet count
     }
@@ -53,21 +51,20 @@ public class ClydeBehaviour : EnemyBase
                     break;
 
                 case EnemyState.Chase:
-                    if (Vector2.Distance(transform.position, _pacmanPos.position) > _maxDistance)     // If distance between Clyde and pacman is greater than 8 tiles
+                    if (Vector2.Distance(transform.position, _pacmanTargetPos.position) > _maxDistance)     // If distance between Clyde and pacman is greater than 8 tiles
                     {
-                        _agent.SetDestination(_pacmanPos.position);     // Same target as Blinky - Pacmans current tile
-                        Debug.DrawLine(transform.position, _pacmanPos.position, Color.yellow);        // Should be to Pacman
+                        _agent.SetDestination(_pacmanTargetPos.position);     // Same target as Blinky - Pacmans current tile
+                        Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.yellow);        // Should be to Pacman
                     }
                     else
                     {
                         _agent.SetDestination(_clydeChasePositions[ClydeCurrentChasePosition].position);
+                        Debug.DrawLine(transform.position, _clydeChasePositions[ClydeCurrentChasePosition].position, Color.yellow);
 
                         if (_agent.remainingDistance < 1.5f)
                         {
                             CalculateNextDestination();
                         }
-
-                        Debug.DrawLine(transform.position, _clydeChasePositions[ClydeCurrentChasePosition].position, Color.yellow);
                     }
                     break;
 
@@ -82,7 +79,6 @@ public class ClydeBehaviour : EnemyBase
 
                 default:
                     _agent.speed = _stopSpeed;
-                    Debug.Log(gameObject.name + " isStopped - Default case - CheckState()");
                     break;
             }
         }

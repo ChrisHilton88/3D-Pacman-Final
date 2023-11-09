@@ -5,7 +5,7 @@ using UnityEngine;
 // Respsonsible for all things related to the Pellet GameObject
 public class PelletManager : MonoSingleton<PelletManager>
 {
-    private int _maxPellets = 20;
+    private int _maxPellets = 10;
     private int _totalPellets;       
     private int _pelletTally;
 
@@ -81,7 +81,6 @@ public class PelletManager : MonoSingleton<PelletManager>
     {
         if (PelletTally >= _inkyBehaviour.StartRandomValue && InkySpawned == false)
         {
-            Debug.Log("Test 2");
             _inkyBehaviour.StartMovement();
             InkySpawned = true; 
         }
@@ -94,7 +93,6 @@ public class PelletManager : MonoSingleton<PelletManager>
     {
         if (PelletTally >= _clydeBehaviour.MovePelletCount && ClydeSpawned == false)
         {
-            Debug.Log("Test 3");
             _clydeBehaviour.StartMovement();
             ClydeSpawned = true;    
         }
@@ -105,7 +103,7 @@ public class PelletManager : MonoSingleton<PelletManager>
     // Reset the values
     void RoundEnd()
     {
-        TotalPellets = 20;
+        TotalPellets = 10;
         PelletTally = 0;
         _activatePelletsRoutine = null;
         InkySpawned = false;
@@ -117,8 +115,6 @@ public class PelletManager : MonoSingleton<PelletManager>
     {
         if (_activatePelletsRoutine == null)
             _activatePelletsRoutine = StartCoroutine(DelayPelletActivationRoutine());
-        else
-            Debug.Log("_activatePelletsRoutine is NOT NULL - PelletManager");
     }
     #endregion
 

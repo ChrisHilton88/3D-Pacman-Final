@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PinkyBehaviour : EnemyBase
 {
     private bool _pinkyCanMove;
 
     private readonly Vector3 _pinkyStartingPosition = new Vector3(0.5f, 0, 0);
+
+    NavMeshPath _navMeshPath;
 
     [SerializeField] private Transform[] _pinkyScatterPositions;
     [SerializeField] private Transform _pinkyTargetPacmanPos;       // 4 tiles ahead of Pacman
@@ -33,9 +36,9 @@ public class PinkyBehaviour : EnemyBase
 
     protected override void EnemyInitialisation()
     {
+        _navMeshPath = new NavMeshPath();
         _scatterPositions = _pinkyScatterPositions;
         _startingPosition = _pinkyStartingPosition;
-        _pacmanTargetPos = _pinkyTargetPacmanPos;
         PinkyCanMove = false;
     }
 
@@ -55,10 +58,17 @@ public class PinkyBehaviour : EnemyBase
                     break;
 
                 case EnemyState.Chase:
-                    _agent.SetDestination(_pinkyTargetPacmanPos.position);
-                    Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.magenta);
+                    if (IsPositionReachable(_pinkyTargetPacmanPos.position))        // If position is reachable, set as Pinky's original game design destination
+                    {
+                        _agent.SetDestination(_pinkyTargetPacmanPos.position);
+                        Debug.DrawLine(transform.position, _pinkyTargetPacmanPos.position, Color.magenta);
+                    }
+                    else                                                            // Else, set the position as Pacman's position (as this is always in bounds, on a complete path)
+                    {
+                        _agent.SetDestination(_pacmanTargetPos.position);
+                        Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.magenta);
+                    }
                     break;
-
                 case EnemyState.Frightened:
                     if (_agent.remainingDistance < 1.5f)
                     {
@@ -70,10 +80,19 @@ public class PinkyBehaviour : EnemyBase
 
                 default:
                     _agent.speed = _stopSpeed;
-                    Debug.Log(gameObject.name + " isStopped - Default case - CheckState()");
                     break;
             }
         }
+    }
+
+    bool IsPositionReachable(Vector3 position)
+    {
+        _agent.CalculatePath(position, _navMeshPath);
+
+        if (_navMeshPath.status == NavMeshPathStatus.PathComplete)
+            return true;
+        else
+            return false;
     }
 
     public void StartMoving()

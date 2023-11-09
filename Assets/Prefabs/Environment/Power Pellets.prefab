@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &9219893479809460052
 Transform:
@@ -48,7 +48,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3614348398605738498, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 3614348398605738500, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_CastShadows
@@ -128,7 +128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6730469514864041466, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 7240089554529226322, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_CastShadows
@@ -170,7 +170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3614348398605738498, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 3614348398605738500, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_CastShadows
@@ -250,7 +250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6730469514864041466, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 7240089554529226322, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_CastShadows
@@ -292,7 +292,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3614348398605738498, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 3614348398605738500, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_CastShadows
@@ -372,7 +372,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6730469514864041466, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 7240089554529226322, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_CastShadows
@@ -414,7 +414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3614348398605738498, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 3614348398605738500, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_CastShadows
@@ -494,7 +494,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6730469514864041466, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 7240089554529226322, guid: b36b1c0c01df78a489be6ea8714cb127, type: 3}
       propertyPath: m_CastShadows

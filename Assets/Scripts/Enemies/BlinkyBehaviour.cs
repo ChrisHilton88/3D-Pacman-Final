@@ -10,7 +10,6 @@ public class BlinkyBehaviour : EnemyBase
 
     [SerializeField] private GameObject _exitCube;
     [SerializeField] private Transform[] _blinkyScatterPositions;
-    [SerializeField] private Transform _blinkyTargetPacmanPos;      // Pacmans position
 
 
     protected override void OnEnable()
@@ -41,7 +40,6 @@ public class BlinkyBehaviour : EnemyBase
     {
         _startingPosition = _blinkyStartingPosition;
         _scatterPositions = _blinkyScatterPositions;
-        _pacmanTargetPos = _blinkyTargetPacmanPos;
         _newRoundRoutine = null;
     }
 
@@ -60,7 +58,7 @@ public class BlinkyBehaviour : EnemyBase
                 break;
 
             case EnemyState.Chase:
-                _agent.SetDestination(_blinkyTargetPacmanPos.position);
+                _agent.SetDestination(_pacmanTargetPos.position);
                 Debug.DrawLine(transform.position, _pacmanTargetPos.position, Color.red);
                 break;
 
@@ -75,7 +73,6 @@ public class BlinkyBehaviour : EnemyBase
 
             default:
                 _agent.speed = _stopSpeed;
-                Debug.Log(gameObject.name + " isStopped - Default case - CheckState()");
                 break;
         }
     }
@@ -85,7 +82,7 @@ public class BlinkyBehaviour : EnemyBase
         base.RoundCompleted();
         _exitCube.SetActive(true);
         _blinkyExitCube.enabled = true;
-        if(_newRoundRoutine != null)
+        if(_newRoundRoutine == null)
             StartCoroutine(NewRoundRoutine());
     }
 
@@ -93,5 +90,6 @@ public class BlinkyBehaviour : EnemyBase
     {
         yield return null;
         _agent.speed = _minSpeed;
+        _newRoundRoutine = null;
     }
 }

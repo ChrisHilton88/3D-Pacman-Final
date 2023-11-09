@@ -12,7 +12,7 @@ public abstract class EnemyBase : MonoBehaviour
         Frightened
     }
 
-    protected EnemyState _currentState;
+    [SerializeField] protected EnemyState _currentState;
 
     protected int _currentPosition;
     protected int _randomFrightenedLocation;
@@ -29,7 +29,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected Coroutine _frightenedRoutine;
     protected Coroutine _roundCompletedRoutine;
     protected WaitForSeconds _frightenedTimer = new WaitForSeconds(6f);
-    protected Transform _pacmanTargetPos;
+    [SerializeField] protected Transform _pacmanTargetPos;
 
     protected Transform[] _scatterPositions;
 

@@ -14,12 +14,7 @@ public class BlinkyExitCube : MonoBehaviour
             other.gameObject.SetActive(false);          // Disable the exit box
 
             if (enabled)
-            {
                 enabled = false;
-                Debug.Log("Enabled: " + enabled);
-            }
-            else
-                Debug.Log("Enabled is True");
         }
         else
             return;
