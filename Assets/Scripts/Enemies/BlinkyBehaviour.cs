@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BlinkyBehaviour : EnemyBase
@@ -5,6 +6,7 @@ public class BlinkyBehaviour : EnemyBase
     private readonly Vector3 _blinkyStartingPosition = new Vector3(0.5f, 0, 8.5f);
 
     private BlinkyExitCube _blinkyExitCube;
+    private Coroutine _newRoundRoutine;
 
     [SerializeField] private GameObject _exitCube;
     [SerializeField] private Transform[] _blinkyScatterPositions;
@@ -40,6 +42,7 @@ public class BlinkyBehaviour : EnemyBase
         _startingPosition = _blinkyStartingPosition;
         _scatterPositions = _blinkyScatterPositions;
         _pacmanTargetPos = _blinkyTargetPacmanPos;
+        _newRoundRoutine = null;
     }
 
     protected sealed override void CheckState()        
@@ -82,6 +85,13 @@ public class BlinkyBehaviour : EnemyBase
         base.RoundCompleted();
         _exitCube.SetActive(true);
         _blinkyExitCube.enabled = true;
+        if(_newRoundRoutine != null)
+            StartCoroutine(NewRoundRoutine());
+    }
+
+    IEnumerator NewRoundRoutine()
+    {
+        yield return null;
         _agent.speed = _minSpeed;
     }
 }

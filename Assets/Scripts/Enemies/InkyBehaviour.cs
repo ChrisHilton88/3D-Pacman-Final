@@ -42,9 +42,10 @@ public class InkyBehaviour : EnemyBase
         _startingPosition = _inkyStartingPosition;
         _pacmanTargetPos = _inkyTargetPacmanPos;
         InkyCanMove = false;
-        _minStartValue = (240 * _minStartValue) / 100;
-        _maxStartValue = (240 * _maxStartValue) / 100;
-        StartRandomValue = RandomNumber(_minStartValue, _maxStartValue);
+        //_minStartValue = (240 * _minStartValue) / 100;
+        //_maxStartValue = (240 * _maxStartValue) / 100;
+        StartRandomValue = 10;
+        //StartRandomValue = RandomNumber(_minStartValue, _maxStartValue);
     }
 
     protected sealed override void CheckState()
@@ -91,6 +92,9 @@ public class InkyBehaviour : EnemyBase
     {
         _agent.SetDestination(_inkyScatterPositions[CurrentPosition].position);
         InkyCanMove = true;
+        float temp = _agent.speed;      // Agent speed at the time Inky is released (accumulated through Pellet collection)
+        temp += _minSpeed;
+        _agent.speed = temp;
     }
 
     private int RandomNumber(int min, int max)
@@ -101,8 +105,11 @@ public class InkyBehaviour : EnemyBase
 
     protected override void RoundCompleted()
     {
+        Debug.Log("Agent Speed 1: " + _agent.speed);
         base.RoundCompleted();
+        Debug.Log("Agent Speed 2: " + _agent.speed);
         InkyCanMove = false;
         StartRandomValue = RandomNumber(_minStartValue, _maxStartValue);
+        Debug.Log("Agent Speed 3: " + _agent.speed);
     }
 }

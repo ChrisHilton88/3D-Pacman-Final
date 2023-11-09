@@ -4042,31 +4042,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7309600024253872996, guid: e0f2a0391ae67c24f894519f0573951d, type: 3}
   m_PrefabInstance: {fileID: 6622280416909122726}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1159438089 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9006580976227398854, guid: 81843d583dfb15e4091cf615cdd75665, type: 3}
-  m_PrefabInstance: {fileID: 9005141290807555693}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1159438097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1159438089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_StartPoint: {x: 0, y: 0, z: -2.5}
-  m_EndPoint: {x: 0, y: 0, z: 2.5}
-  m_Width: 0
-  m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
-  m_Area: 0
 --- !u!1 &1161594901 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1769421614784038392, guid: c9b533602b8354a469855f3233c46239, type: 3}

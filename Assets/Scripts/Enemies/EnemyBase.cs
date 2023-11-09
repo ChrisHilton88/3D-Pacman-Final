@@ -27,6 +27,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected NavMeshAgent _agent;
     protected Coroutine _frightenedRoutine;
+    protected Coroutine _roundCompletedRoutine;
     protected WaitForSeconds _frightenedTimer = new WaitForSeconds(6f);
     protected Transform _pacmanTargetPos;
 
@@ -61,6 +62,7 @@ public abstract class EnemyBase : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _currentState = EnemyState.Chase;
         _frightenedRoutine = null;
+        _roundCompletedRoutine = null;
         _agent.speed = _stopSpeed;
         CurrentPosition = 0;
         _agent.destination = _scatterPositions[CurrentPosition].position;
@@ -130,6 +132,17 @@ public abstract class EnemyBase : MonoBehaviour
         _agent.destination = previousDestination;
         _frightenedRoutine = null;
     }
+
+    IEnumerator RoundCompletedRoutine()
+    {
+        yield return new WaitForEndOfFrame();
+        _agent.speed = _stopSpeed;
+        _agent.Warp(_startingPosition);
+        CurrentPosition = 0;
+        _currentState = EnemyState.Chase;
+        _agent.SetDestination(_scatterPositions[CurrentPosition].position);
+        _roundCompletedRoutine = null;
+    }
     #endregion
 
     #region Events
@@ -177,14 +190,13 @@ public abstract class EnemyBase : MonoBehaviour
     }
 
     // Event that handles the successful completion of a round
+
     protected virtual void RoundCompleted()
     {
-        _agent.speed = _stopSpeed;
-        _agent.Warp(_startingPosition);
-        _frightenedRoutine = null;
-        CurrentPosition = 0;
-        _currentState = EnemyState.Chase;
-        _agent.SetDestination(_scatterPositions[CurrentPosition].position);
+        if (_roundCompletedRoutine == null)
+            _roundCompletedRoutine = StartCoroutine(RoundCompletedRoutine());
+        else
+            Debug.Log("Round Completed Routine is NOT NULL - EnemyBase class");
     }
     #endregion
 }

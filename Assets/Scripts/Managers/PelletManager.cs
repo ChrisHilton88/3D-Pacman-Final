@@ -5,9 +5,12 @@ using UnityEngine;
 // Respsonsible for all things related to the Pellet GameObject
 public class PelletManager : MonoSingleton<PelletManager>
 {
-    private int _maxPellets = 10;
+    private int _maxPellets = 20;
     private int _totalPellets;       
     private int _pelletTally;
+
+    private bool _inkySpawned = false;
+    private bool _clydeSpawned = false;
 
     Coroutine _activatePelletsRoutine;
     AudioSource _audioSource;   
@@ -21,16 +24,12 @@ public class PelletManager : MonoSingleton<PelletManager>
     [SerializeField] private ClydeBehaviour _clydeBehaviour;
 
     #region Properties
-    public int TotalPellets
-    {
-        get { return _totalPellets; }
-        private set { _totalPellets = value; }
-    }
-    public int PelletTally
-    {
-        get { return _pelletTally; }
-        private set { _pelletTally = value; }
-    }
+    public int TotalPellets { get { return _totalPellets; } private set { _totalPellets = value; } }
+    public int PelletTally { get { return _pelletTally; } private set { _pelletTally = value; } }   
+    public bool InkySpawned { get { return _inkySpawned; } private set { _inkySpawned = value; } }
+    public bool ClydeSpawned { get { return _clydeSpawned; } private set { _clydeSpawned = value; } }
+
+
     #endregion
 
 
@@ -80,9 +79,11 @@ public class PelletManager : MonoSingleton<PelletManager>
     // Inky can start moving
     void InkyStartMoving(int value)
     {
-        if (PelletTally >= _inkyBehaviour.StartRandomValue)
+        if (PelletTally >= _inkyBehaviour.StartRandomValue && InkySpawned == false)
         {
+            Debug.Log("Test 2");
             _inkyBehaviour.StartMovement();
+            InkySpawned = true; 
         }
         else
             return;
@@ -91,9 +92,11 @@ public class PelletManager : MonoSingleton<PelletManager>
     // Clyde can start moving
     void ClydeStartMoving(int value)
     {
-        if (PelletTally >= _clydeBehaviour.MovePelletCount)
+        if (PelletTally >= _clydeBehaviour.MovePelletCount && ClydeSpawned == false)
         {
+            Debug.Log("Test 3");
             _clydeBehaviour.StartMovement();
+            ClydeSpawned = true;    
         }
         else
             return;
@@ -102,9 +105,11 @@ public class PelletManager : MonoSingleton<PelletManager>
     // Reset the values
     void RoundEnd()
     {
-        TotalPellets = 240;
+        TotalPellets = 20;
         PelletTally = 0;
         _activatePelletsRoutine = null;
+        InkySpawned = false;
+        ClydeSpawned = false;
     }
 
     // Activate all the pellets

@@ -32,20 +32,20 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
 
 
-    void OnEnable()
+    private void OnEnable()
     {
         ItemCollection.OnFrightened += FrightenedStateOn;
         OnNewState += CycleIncrement;
         RoundManager.OnRoundEnd += NewRoundStart;
     }
-    void OnDisable()
+    private void OnDisable()
     {
         ItemCollection.OnFrightened -= FrightenedStateOn;
         OnNewState -= CycleIncrement;
         RoundManager.OnRoundEnd -= NewRoundStart;
     }
 
-    void Start()
+    private void Start()
     {
         ScriptableObjectHandler();
         CycleTimer = 0;
@@ -54,7 +54,7 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
         StartTime = Time.time;
     }
 
-    void Update()
+    private void Update()
     {
         CycleTimer += Time.deltaTime;
 
@@ -67,19 +67,17 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
 
     // Handles deciding which timer to use depending on the round
     // TODO: Call this at the start of a new round
-    void ScriptableObjectHandler()
+    private void ScriptableObjectHandler()
     {
         switch (RoundManager.Instance.CurrentRound)     // Checks current round
         {
             case 1:
                 _currentSO = _enemyStateRoundTimer[0];       // Assigns appropriate enemy state round SO data
                 break;
-            case 2:
-            case 3:
-            case 4:
+            case int round when round >= 2 && round <=4:
                 _currentSO = _enemyStateRoundTimer[1];
                 break;
-            case 5:
+            case int round when round >= 5 && round <= 21:
                 _currentSO = _enemyStateRoundTimer[2];
                 break;
             default:
