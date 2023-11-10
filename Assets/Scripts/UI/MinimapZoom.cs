@@ -4,20 +4,17 @@ using UnityEngine.InputSystem;
 
 public class MinimapZoom : MonoBehaviour
 {
-    private int _minZoomLevel = 30, _maxZoomLevel = 50;     // Variables to let the camera follow the player depending on orthographic size
-    private int[] _zoomLevel = { 60, 50, 40, 30 };
     private int _currentFOVIndex;
+    private int[] _zoomLevel = { 60, 50, 40, 30 };
 
     private float _lerpDuration = 1f;
 
-    private bool _lerpComplete;
-
     private readonly Vector3 _defaultCamPosition = new Vector3(0, 96.5f, -4f);
-
 
     PlayerInputActions _playerInputActions;
     Coroutine _lerpCoroutine;
     Camera _cam;
+
     [SerializeField] private Transform _playerPos;
 
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class EnemyStateManager : MonoSingleton<EnemyStateManager>
@@ -48,8 +49,8 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     private void Start()
     {
         ScriptableObjectHandler();
-        CycleTimer = 0;
-        EnemyCycleTimer = 0;     
+        CycleTimer = 0;     // Start timer at 0 at start of game
+        EnemyCycleTimer = 0;     // Start timer at 0 at start of game
         CycleCount = 0;
         StartTime = Time.time;
     }
@@ -57,16 +58,19 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     private void Update()
     {
         CycleTimer += Time.deltaTime;
+        Debug.Log("Bool: " + HasChangedState);
 
-        if(CycleTimer >= EnemyCycleTimer && HasChangedState == false)     
+        if(CycleTimer > EnemyCycleTimer && HasChangedState == false)     
         {
+            Debug.LogError("Cycle Timer: " + CycleTimer);
+            Debug.LogError("EnemyCycleTimer: " + EnemyCycleTimer);
+            Debug.LogError("State: " + HasChangedState);
             HasChangedState = true;
-            EnemyCycleTimer += EnemyStateTimer(); 
+            EnemyCycleTimer += EnemyStateTimer();       
         }    
     }
 
     // Handles deciding which timer to use depending on the round
-    // TODO: Call this at the start of a new round
     private void ScriptableObjectHandler()
     {
         switch (RoundManager.Instance.CurrentRound)     // Checks current round
@@ -74,14 +78,13 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
             case 1:
                 _currentSO = _enemyStateRoundTimer[0];       // Assigns appropriate enemy state round SO data
                 break;
-            case int round when round >= 2 && round <=4:
+            case int round when round >= 2 && round <= 4:
                 _currentSO = _enemyStateRoundTimer[1];
                 break;
             case int round when round >= 5 && round <= 21:
                 _currentSO = _enemyStateRoundTimer[2];
                 break;
             default:
-                Debug.Log("Incorrect Round Number - EnemyStateManager class, ScriptableObjectHandler()");
                 break;
         }
     }
@@ -90,9 +93,13 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
     {
         float newTime = 0;
 
+        Debug.LogError("CurrentSO: " + _currentSO);
+        Debug.LogError("CycleCount: " + CycleCount);
+        Debug.LogError("Length: " + _currentSO.stateTimers.Length);
+
         if (_currentSO != null && CycleCount >= 0 && CycleCount < _currentSO.stateTimers.Length)
         {
-            newTime = _currentSO.stateTimers[CycleCount];
+            newTime = _currentSO.stateTimers[CycleCount];      
             OnNewState?.Invoke();
             HasChangedState = false;
         }
@@ -119,20 +126,26 @@ public class EnemyStateManager : MonoSingleton<EnemyStateManager>
         CycleCount++;
     }
 
+    // TODO: Update this to a bool switch
     void FrightenedStateOn()
     {
         FrightenedStateActive = true;    
     }
 
-    // TODO: Need to find a way to reset the Time.time value
     void NewRoundStart()
     {
+        StartCoroutine(TestRoutine());
+    }
+    #endregion
+
+    IEnumerator TestRoutine()
+    {
         ScriptableObjectHandler();
+        yield return null;
         CycleTimer = 0;
-        CycleCount = 0;
         EnemyCycleTimer = 0;
+        CycleCount = 0;
         HasChangedState = false;
         FrightenedStateActive = false;
     }
-    #endregion
 }
